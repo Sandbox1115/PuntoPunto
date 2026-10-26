@@ -1,0 +1,13 @@
+Dati cromatici DMC (489 voci): craft-color-codes by MakeBead
+https://github.com/makebead/craft-color-codes
+https://makebead.com/dmc-color-chart/
+Licenza dichiarata dall'autore dei dati: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+La copia del catalogo installata con setup-vendor.py non è un campionario
+ufficiale DMC. I valori RGB/HEX sono approssimazioni visive.
+DMC e gli altri nomi commerciali appartengono ai rispettivi titolari.
+PuntoPunto non è affiliato né approvato da DMC.
+
+La fonte, la dimensione e l'impronta SHA-256 dell'esatta copia installata
+sono registrate in ASSET_LOCK.json.

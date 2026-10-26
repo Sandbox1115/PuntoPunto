@@ -1,0 +1,22 @@
+{
+  "format": "PuntoPunto-Asset-Lock",
+  "version": 1,
+  "created": "2026-10-22T13:49:25.840718+00:00",
+  "assets": {
+    "vendor/pdf.min.js": {
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
+      "bytes": 320004,
+      "sha256": "5b5799e6f8c680663207ac5b42ee14eed2a406fa7af48f50c154f0c0b1566946"
+    },
+    "vendor/pdf.worker.min.js": {
+      "url": "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js",
+      "bytes": 1087212,
+      "sha256": "feabdf309770ed24bba31a5467836cdc8cf639c705af27d52b585b041bb8527b"
+    },
+    "data/dmc-floss.json": {
+      "url": "https://raw.githubusercontent.com/makebead/craft-color-codes/main/data/json/dmc-floss.json",
+      "bytes": 40941,
+      "sha256": "dd173705a0b871219915e6b73328fa8eebb752b699b99474879751d8a70b574a"
+    }
+  }
+}

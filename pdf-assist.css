@@ -1,0 +1,114 @@
+/* PuntoPunto 0.9 — manual PDF grid setup and pre-existing interactive tracker. */
+.pp-manual-dialog{width:min(1000px,100%)}
+.pp-manual-steps{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.pp-manual-steps span{padding:7px 9px;background:#ecf5ee;color:#2b6b56;font-size:11px;font-weight:700;border-radius:8px}
+.pp-manual-fields{align-items:end}
+.pp-manual-fields input{width:118px}
+.pp-manual-fields select{width:160px}
+.pp-manual-cell-info{flex:1;min-width:190px;font-size:11px;color:#668276;padding-bottom:6px}
+.pp-manual-guide{font-size:12px;color:#496b5f;background:#f3f8f4;padding:8px 11px;margin-bottom:9px;border-radius:7px;line-height:1.65}
+.pp-manual-preview{width:min(100%,760px);max-height:470px;overflow:auto;border:1px solid #d4e2d8;touch-action:none;cursor:crosshair}
+.pp-manual-preview .pp-pdf-page{position:relative;width:100%;line-height:0}
+.pp-manual-preview #pdfPreview{display:block;width:100%;height:auto;max-width:none;max-height:none}
+.pp-manual-preview #pdfGridOverlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pp-manual-precise{margin-top:12px;color:#4a7160;font-size:12px}
+.pp-manual-precise summary{cursor:pointer;font-weight:700;padding:5px 0}
+.pp-manual-review{font-size:11px;color:#668275;line-height:1.4;flex:1;margin-right:8px}
+@media(max-width:650px){.pp-manual-preview{max-height:380px}.pp-manual-steps span{font-size:10px;padding:5px 6px}.pp-manual-review{flex-basis:100%}.pp-pdf-footer{flex-wrap:wrap}.pp-manual-fields input{width:90px}}
+/* Original v0.8.1 PDF tracker stays unchanged in behavior. */
+.pp-tracker{display:flex;flex-direction:column;height:100%;min-height:0;background:#f4f7f4}
+.pp-tracker.hidden{display:none}
+.pp-tracker-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:white;padding:9px 12px;border-bottom:1px solid #dce9df}
+.pp-tracker-bar strong{font-size:12px;color:#315749}.pp-tracker-name{flex:1;min-width:120px;font-size:10px;color:#82998c;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+.pp-tracker-bar .btn{font-size:10px;padding:7px 9px}
+.pp-tracker-bar #trackerZoomLabel{font-size:11px;color:#577366;font-variant-numeric:tabular-nums}
+.pp-tracker-details{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:9px 12px;font-size:11px;color:#60796f}
+.pp-tracker-details span:first-child{font-weight:800;color:#157758}
+.pp-tracker-scroller{flex:1;min-height:0;overflow:auto;background:#dae5de;padding:15px;touch-action:pan-x pan-y}
+.pp-tracker-page{position:relative;margin:0 auto;box-shadow:0 8px 26px #19332d33;line-height:0;max-width:none}
+.pp-tracker-page canvas{display:block;width:100%;height:100%}
+#trackerGrid{position:absolute;inset:0;cursor:crosshair;touch-action:manipulation}
+.pp-tracker-mode .layout{grid-template-columns:minmax(0,1fr)}
+.pp-tracker-mode .left-panel,.pp-tracker-mode .right-panel{display:none}
+.pp-tracker-mode .main-panel{max-width:none}
+.pp-tracker-mode .project-actions{display:none}
+.pp-c-legend{background:white;border-bottom:1px solid #d8e8dd;padding:9px 14px}
+.pp-c-legend-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:7px;color:#2d654f;font-size:12px}
+.pp-c-legend-head span{color:#648077;font-size:10px}
+.pp-c-legend-actions{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:7px 0;font-size:11px}
+.pp-c-legend-actions label{display:inline-flex;align-items:center;gap:5px}
+.pp-c-legend-actions input[type=text]{padding:5px 7px;width:120px;border:1px solid #bdd0c4;border-radius:6px}
+.pp-c-legend-actions input[type=color]{width:36px;height:27px;border:1px solid #bdd0c4;border-radius:5px;padding:2px}
+.pp-c-legend-actions .btn{padding:6px 8px}
+.pp-c-legend-list{display:flex;gap:6px;flex-wrap:wrap;max-height:114px;overflow:auto}
+.pp-c-thread{border:1px solid #cfddd2;padding:6px 9px;border-radius:7px;display:flex;gap:7px;align-items:center;font-size:11px;background:#fafcfa;cursor:pointer;color:#2a5345}
+.pp-c-thread.is-active{background:#d9eee3;border-color:#31936a;outline:2px solid #31936a}
+.pp-c-thread-swatch{width:17px;height:17px;border:1px solid #78998c;border-radius:3px}
+@media(max-width:620px){.pp-c-legend{padding:7px}.pp-c-legend-list{max-height:94px}.pp-c-legend-actions{gap:5px}.pp-tracker-scroller{padding:8px}}
+
+/* PuntoPunto 0.9.1 — digitalization and inline tutorial */
+.pp-digital-summary{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 0 2px;color:#2c6751;font-size:11px;border-top:1px solid #e0ece4}
+.pp-digital-summary strong{font-weight:800}.pp-digital-summary span{color:#7b8e82;font-size:10px}
+.pp-digital-tools select{max-width:190px;padding:5px;border:1px solid #c5d9cd;border-radius:6px;background:white}
+.pp-tracker-bar{gap:5px}.pp-tracker-bar .btn{padding:6px 8px}
+.pp-tracker-bar #trackerExportOXS:disabled{opacity:.4;cursor:not-allowed}
+.pp-tutorial-overlay{position:fixed;inset:0;background:rgba(22,39,31,.64);z-index:999;display:flex;align-items:center;justify-content:center;padding:18px}
+.pp-tutorial-overlay.hidden{display:none}
+.pp-tutorial-card{position:relative;width:min(660px,100%);max-height:90vh;overflow:auto;padding:24px 30px 22px;background:#fff;border-radius:16px;box-shadow:0 15px 65px #08191166;color:#234a3b}
+.pp-tutorial-card .pp-pdf-close{position:absolute;right:15px;top:13px}
+.pp-tutorial-card h2{font-size:22px;margin:8px 0 12px}.pp-tutorial-card ol{padding-left:22px;font-size:13px;line-height:1.65}.pp-tutorial-card li{margin-bottom:10px}
+.pp-tutorial-note{background:#f2f6ef;border-left:3px solid #6a9b82;padding:10px 12px;font-size:12px;line-height:1.5}
+@media(max-width:650px){.pp-tutorial-card{padding:20px 16px}.pp-digital-tools label{font-size:11px}.pp-c-legend-list{max-height:130px}}
+/* Keep the document viewport scrollable even when the source PDF is enormous. */
+#pdfTracker.pp-tracker{height:clamp(600px,78dvh,920px);max-height:none;min-height:0}
+#pdfTracker .pp-tracker-scroller{flex:1 1 auto;min-height:100px;overflow:auto;overscroll-behavior:contain}
+/* v0.9.2: filati DMC da MakeBead e palette personalizzata */
+.pp-thread-catalog{padding:9px 11px;background:#f6faf7;border:1px solid #e0eae1;border-radius:10px;margin:8px 0;display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.pp-thread-catalog-top{display:flex;gap:12px;flex-wrap:wrap;align-items:center;width:100%;font-size:11px;color:#607d70}
+.pp-thread-catalog-top label{display:flex;align-items:center;gap:9px;font-weight:750}
+.pp-thread-catalog-top select{padding:7px;background:white;border:1px solid #bcd4c2;border-radius:7px;color:#244f3d}
+.pp-catalog-form{display:flex;flex-wrap:wrap;gap:7px;align-items:center;flex:1 1 560px;min-width:0}
+.pp-catalog-form.hidden{display:none!important}
+.pp-catalog-form label{font-size:11px;font-weight:750;color:#456c57}
+.pp-catalog-form input[type=search],.pp-catalog-form input[type=text]{padding:7px 9px;border:1px solid #c4d8c8;border-radius:7px;background:white;color:#263f33;min-width:90px;max-width:200px;width:150px}
+.pp-catalog-form input[type=color]{width:40px;height:34px;padding:3px;border:1px solid #c4d8c8;border-radius:7px}
+.pp-catalog-form .btn{font-size:11px;padding:8px}
+#trackerDMCStatus{font-size:11px;color:#537464;flex:1 1 240px;line-height:1.45}
+.pp-dmc-results{width:100%;display:flex;gap:5px;flex-wrap:wrap;max-height:135px;overflow:auto}
+.pp-dmc-item{cursor:pointer;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #d8e5d9;border-radius:7px;padding:5px 7px;text-align:left;color:#2d4e3f;min-width:115px;max-width:190px}
+.pp-dmc-item:hover,.pp-dmc-item-active{border-color:#2c9a6a;background:#e9f7ee}
+.pp-dmc-item span:not(.pp-c-thread-swatch){display:flex;flex-direction:column;gap:2px;min-width:0}
+.pp-dmc-item small{font-size:9px;color:#778d7c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px}
+.pp-thread-licence{font-size:10px;color:#356c53;text-decoration:underline;margin-left:auto;align-self:center}
+.pp-thread-desc{font-size:10px;max-width:150px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#668978}
+.bottomline a{color:inherit;text-decoration:underline}
+@media(max-width:620px){.pp-thread-catalog{padding:8px;gap:6px}.pp-catalog-form input[type=search]{flex:1 1 120px}.pp-dmc-results{max-height:95px}.pp-dmc-item{min-width:104px}.pp-thread-licence{margin-right:auto}}
+
+.legal-toplink{color:#3d7966;font-size:12px;font-weight:750;text-decoration:underline;white-space:nowrap;text-underline-offset:3px}
+@media(max-width:620px){.legal-toplink{font-size:10px;padding:4px}}
+
+/* v0.9.4: same-size actions, adjacent in the PDF editor on desktop and mobile. */
+.pp-tracker-mode-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:8px;width:min(100%,356px)}
+.pp-tracker-mode-buttons .btn{box-sizing:border-box;width:100%;min-width:0;min-height:36px;white-space:normal;text-align:center;display:flex;align-items:center;justify-content:center;line-height:1.3}
+
+/* 0.9.8.8 — area PDF espandibile e scelta dei filati a scomparsa. */
+.pp-c-legend-head{justify-content:space-between}
+.pp-collapse-btn{margin-left:auto;font-size:11px!important;padding:6px 10px!important}
+.pp-tracker-catalog-wrap{display:block}
+.pp-c-legend.pp-compact .pp-tracker-catalog-wrap{display:none}
+.pp-tracker-compact-note{display:none;margin:2px 0 0;font-size:10px;color:#577c6c}
+.pp-c-legend.pp-compact .pp-tracker-compact-note{display:block}
+.pp-c-legend.pp-compact{padding:6px 12px}
+.pp-c-legend.pp-compact .pp-c-legend-head{margin:0}
+.pp-tracker-details{padding:5px 12px}
+.pp-rights-notice{font-size:11px;color:#47685a;background:#f9fcf9;border-bottom:1px solid #e1ece4;padding:5px 12px;line-height:1.55}
+.pp-rights-notice summary{cursor:pointer;font-weight:750;color:#3c7864}
+.pp-rights-notice p{max-width:1050px;margin:8px 0 4px}
+.pp-rights-notice a{color:#176b56}
+body.pp-tracker-focus{overflow:hidden}
+body.pp-tracker-focus #stage{position:fixed;inset:0;z-index:3000;width:100vw;height:100dvh;border:0;border-radius:0;box-shadow:none}
+body.pp-tracker-focus #pdfTracker.pp-tracker{height:100dvh;max-height:none}
+body.pp-tracker-focus .pp-tracker-scroller{min-height:0}
+@media(max-width:700px){.pp-tracker-bar{gap:4px}.pp-tracker-bar .btn{font-size:10px}.pp-rights-notice{font-size:10px}}
+
+.pp-c-legend.pp-compact .pp-c-legend-list{display:none}

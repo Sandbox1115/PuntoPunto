@@ -1,0 +1,66 @@
+/* v0.9.8.7 — Informazioni privacy, stessa palette e design della UI principale. */
+.pp-privacy-page{margin:0;min-height:100vh;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
+.pp-privacy-page a:focus-visible{outline:3px solid #80bdb1;outline-offset:3px;border-radius:5px}
+.pp-privacy-topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:75px;padding:14px max(26px,calc((100vw - 1160px)/2));background:#fff;border-bottom:1px solid var(--line)}
+.pp-privacy-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-weight:850;font-size:22px;letter-spacing:-1.1px;line-height:1}
+.pp-privacy-brand img{flex-shrink:0;border-radius:11px}
+.pp-privacy-brand small{display:block;font-size:8px;letter-spacing:3px;color:#94a6a5;font-weight:750;margin-top:6px}
+.pp-privacy-nav{display:flex;align-items:center;gap:25px}
+.pp-privacy-nav a{text-decoration:none;font-size:12px;font-weight:750;color:#628077;white-space:nowrap}
+.pp-privacy-nav a:hover,.pp-privacy-nav a.current{color:var(--green-d)}
+.pp-privacy-nav .pp-privacy-back{border:1px solid #d8e7df;background:#fff;border-radius:9px;padding:10px 13px;color:#315c51}
+.pp-privacy-main{max-width:1130px;margin:auto;padding:38px 24px 58px}
+.pp-privacy-hero{border-radius:24px;background:linear-gradient(115deg,#f0f7f2 0%,#eaf4ee 65%,#deefe7 100%);border:1px solid #e0eee5;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(180px,.7fr);align-items:center;gap:40px;padding:58px clamp(25px,5vw,68px);overflow:hidden}
+.pp-privacy-eyebrow{display:inline-flex;align-items:center;gap:8px;font-weight:850;letter-spacing:1.8px;font-size:10px;color:#338d79;margin:0 0 18px}
+.pp-privacy-dot{width:7px;height:7px;border-radius:50%;background:#2c9a7b}
+.pp-privacy-hero h1{font-size:clamp(33px,4vw,54px);line-height:1.12;letter-spacing:-2px;margin:0 0 21px;font-weight:850}
+.pp-privacy-hero h1 em{font-style:normal;color:var(--green)}
+.pp-privacy-lead{font-size:15px;line-height:1.9;color:#536e63;margin:0 0 27px;max-width:630px}
+.pp-privacy-lead strong{color:#315449}
+.pp-privacy-cta,.pp-privacy-end a{display:inline-flex;align-items:center;gap:14px;text-decoration:none;background:var(--green);color:white;padding:12px 17px;border-radius:11px;font-size:12px;font-weight:770}
+.pp-privacy-cta:hover,.pp-privacy-end a:hover{background:var(--green-d)}
+.pp-privacy-illustration{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;min-height:250px}
+.pp-privacy-illustration img{position:relative;z-index:1;width:min(170px,85%);height:auto;filter:drop-shadow(0 12px 18px #144a3e22)}
+.pp-privacy-illustration p{font-family:Georgia,serif;font-size:14px;line-height:1.5;text-align:center;color:#638477;margin:16px 0 0}
+.pp-privacy-mini-grid{position:absolute;top:5px;display:grid;grid-template-columns:repeat(3,18px);gap:43px;transform:rotate(-10deg);opacity:.15;color:#16836f;font-size:20px}
+.pp-privacy-values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin:20px 0 38px}
+.pp-privacy-values>div{border:1px solid var(--line);border-radius:15px;background:white;padding:23px 22px;min-height:150px}
+.pp-value-symbol{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:var(--green-pale);color:var(--green-d);font-size:21px;font-weight:800}
+.pp-privacy-values h2{font-size:16px;letter-spacing:-.45px;margin:15px 0 7px}
+.pp-privacy-values p{font-size:12px;line-height:1.7;color:#72897f;margin:0}
+.pp-privacy-content{background:white;border:1px solid var(--line);border-radius:19px;padding:4px clamp(20px,4vw,52px)}
+.pp-privacy-section{display:grid;grid-template-columns:52px minmax(0,1fr);gap:25px;padding:32px 0}
+.pp-privacy-section+.pp-privacy-section{border-top:1px solid #e8eee8}
+.pp-privacy-number{font-size:13px;color:#9eb7ac;letter-spacing:1px;font-weight:800;padding-top:5px}
+.pp-privacy-section h2{font-size:21px;letter-spacing:-.6px;margin:0 0 12px}
+.pp-privacy-section p{font-size:13.5px;line-height:1.85;color:#617a6f;margin:0 0 12px;max-width:810px}
+.pp-privacy-section p:last-child{margin-bottom:0}
+.pp-privacy-section strong{color:#355e51}
+.pp-privacy-end{text-align:center;padding:52px 20px 12px}
+.pp-privacy-end .pp-privacy-eyebrow{display:block}
+.pp-privacy-end h2{font-family:Georgia,'Times New Roman',serif;font-size:clamp(25px,3vw,35px);font-weight:500;letter-spacing:-.8px;margin:0 0 12px}
+.pp-privacy-end p{font-size:13px;color:#789188;margin:0 0 23px}
+.pp-privacy-footer{border-top:1px solid var(--line);max-width:1130px;padding:19px 24px 35px;margin:0 auto;display:flex;justify-content:space-between;gap:12px;font-size:11px;color:#90a49b}
+.pp-privacy-footer a{color:#477e6d;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:700px){.pp-privacy-topbar{min-height:66px;padding:12px 17px}.pp-privacy-brand{font-size:19px}.pp-privacy-brand img{width:32px;height:32px}.pp-privacy-nav{gap:11px}.pp-privacy-nav a{font-size:11px}.pp-privacy-nav .pp-privacy-back{padding:8px}.pp-privacy-main{padding:16px 12px 40px}.pp-privacy-hero{grid-template-columns:1fr;gap:8px;padding:35px 24px 22px}.pp-privacy-hero h1{letter-spacing:-1.3px}.pp-privacy-lead{font-size:14px}.pp-privacy-illustration{min-height:150px}.pp-privacy-illustration img{width:90px}.pp-privacy-illustration p{font-size:12px;margin:7px 0 0}.pp-privacy-mini-grid{display:none}.pp-privacy-values{grid-template-columns:1fr;gap:9px;margin:11px 0 23px}.pp-privacy-values>div{min-height:unset;padding:16px 17px}.pp-privacy-values h2{margin:8px 0 3px}.pp-privacy-section{grid-template-columns:30px minmax(0,1fr);gap:12px;padding:25px 0}.pp-privacy-section h2{font-size:18px}.pp-privacy-section p{font-size:13px}.pp-privacy-footer{flex-wrap:wrap;padding:16px 13px 24px}}
+@media(max-width:380px){.pp-privacy-nav a:not(.pp-privacy-back){display:none}.pp-privacy-brand{font-size:18px}.pp-privacy-hero{padding:27px 17px}}
+@media(max-width:490px){.pp-privacy-nav a[href="licenze.html"]{display:none}}
+
+/* Link esplicativi nella nota di hosting, leggibili e accessibili. */
+.pp-privacy-section a{color:#11695e;text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere}
+
+@media(max-width:620px){.pp-privacy-topbar>.pp-language-switch>span{display:none}.pp-privacy-topbar>.pp-language-switch{margin:0 6px 0 auto;float:none}.pp-privacy-topbar>.pp-language-switch select{min-width:40px}}
+/* 0.9.8.8.3: avoid overflow from brand + language selector + back link at 320px. */
+@media(max-width:380px){
+ .pp-privacy-topbar{padding:10px 9px;gap:6px;flex-wrap:nowrap}
+ .pp-privacy-brand{font-size:16px;min-width:0;gap:6px;letter-spacing:-.8px}
+ .pp-privacy-brand img{width:28px;height:28px}
+ .pp-privacy-nav{gap:4px;flex-shrink:0}
+ .pp-privacy-nav .pp-privacy-back{padding:6px 5px;font-size:10px}
+ .pp-privacy-topbar>.pp-language-switch{margin:0 1px 0 auto;min-width:0;flex-shrink:0}
+}
+@media(min-width:381px) and (max-width:490px){
+ .pp-privacy-topbar{gap:8px;padding-inline:11px}
+ .pp-privacy-nav a.current{display:none}
+ .pp-privacy-nav .pp-privacy-back{padding:7px 7px}
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; connect-src 'self'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-src 'none'">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f7f3">
+  <meta name="description" content="Attribuzioni, licenze e marchi dei componenti impiegati da PuntoPunto.">
+  <title>Licenze e attribuzioni — PuntoPunto</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{background:#f7f8f5;color:#244336;min-height:100vh;margin:0}
+    .lic-wrap{max-width:860px;margin:0 auto;padding:34px 24px 64px}
+    .lic-wrap h1{font-size:30px;letter-spacing:-.9px;margin:12px 0 9px}
+    .lic-wrap h2{font-size:19px;margin:0 0 9px}
+    .lic-wrap p,.lic-wrap li{font-size:14px;line-height:1.72;color:#516b5f}
+    .lic-wrap section{border:1px solid #dfe9e2;border-radius:14px;background:#fff;margin:18px 0;padding:22px 25px}
+    .lic-wrap .eyebrow{font-size:10px;letter-spacing:1.3px;color:#548473;font-weight:800}
+    .lic-wrap a{color:#137457;text-decoration:underline;text-underline-offset:2px}
+    .lic-wrap .lic-back{display:inline-flex;align-items:center;gap:6px;background:#e7f3eb;text-decoration:none;border-radius:8px;padding:10px 13px;font-size:13px;font-weight:700}
+    .lic-wrap .lic-disclaimer{background:#f4f7ee;border-left:3px solid #77a38d;padding:12px;border-radius:7px}
+    @media(max-width:650px){.lic-wrap{padding:20px 12px 40px}.lic-wrap section{padding:16px}}
+  </style>
+<script src="i18n.js" defer></script>
+</head>
+<body><main class="lic-wrap">
+  <label class="pp-language-switch pp-language-inline"><span>Lingua</span><select data-pp-language aria-label="Lingua del sito"><option value="it">IT</option><option value="en">EN</option></select></label>
+
+  <a class="lic-back" href="index.html">← Torna a PuntoPunto</a>
+  <a class="lic-back" href="privacy.html" style="margin-left:8px">La nostra privacy →</a>
+  <p class="eyebrow">TRASPARENZA DELLE FONTI · VERSIONE 0.9.8.8.6</p>
+  <h1>Licenze e attribuzioni</h1>
+  <p>Questa pagina indica le banche dati e le librerie di terzi effettivamente impiegate in PuntoPunto, la provenienza dei colori e le condizioni per riutilizzarli.</p>
+  <p>Per feedback e assistenza tecnica durante la beta utilizza le <a href="https://github.com/Sandbox1115/PuntoPunto/issues" target="_blank" rel="noopener noreferrer">GitHub Issues di PuntoPunto</a>. Le segnalazioni sono pubbliche: non pubblicare dati personali o progetti riservati. Non usare questo canale per richieste privacy confidenziali.</p>
+  <section><h2>Catalogo dei filati DMC</h2>
+    <p><strong>Origine dei dati:</strong> <a href="https://github.com/makebead/craft-color-codes" target="_blank" rel="noopener noreferrer">craft-color-codes di MakeBead</a>, catalogo «DMC Six-Strand Embroidery Floss» con 489 codici, nomi e approssimazioni cromatiche sRGB/HEX. Il catalogo è distribuito dal relativo autore con licenza <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International (CC BY 4.0)</a>.</p>
+    <p><strong>Attribuzione richiesta:</strong> Color data: <a href="https://makebead.com/" target="_blank" rel="noopener noreferrer">craft-color-codes by MakeBead</a> (<a href="https://github.com/makebead/craft-color-codes/blob/main/LICENSE-DATA.md" target="_blank" rel="noopener noreferrer">licenza e condizioni dei dati</a>).</p>
+    <p><strong>Adattamento:</strong> PuntoPunto estrae dal catalogo i campi codice, nome e HEX, li verifica e li visualizza come selettore ricercabile. Non altera intenzionalmente i colori della fonte. Il catalogo è incluso in <code>data/dmc-floss.json</code> e la sua integrità è documentata in <code>ASSET_LOCK.json</code>. Il programma non effettua richieste automatiche a CDN né a cataloghi remoti. Non viene inviato il PDF ad alcun servizio di catalogazione.</p>
+    <p><strong>Tracciabilità:</strong> per conoscere le fonti originali dei valori DMC e i limiti di calibrazione, consulta <a href="https://github.com/makebead/craft-color-codes/blob/main/SOURCES.md" target="_blank" rel="noopener noreferrer">SOURCES.md</a> e la <a href="https://makebead.com/dmc-color-chart/" target="_blank" rel="noopener noreferrer">cartella colori MakeBead</a>.</p>
+    <p class="lic-disclaimer">I colori RGB/HEX sono indicativi: la resa dipende dallo schermo e non corrisponde necessariamente all'aspetto dei filati fisici. Il codice del filato è l'identificativo da seguire quando è presente sul PDF.</p>
+  </section>
+  <section><h2>Motore PDF.js</h2>
+    <p><strong>Componente:</strong> <a href="https://mozilla.github.io/pdf.js/" target="_blank" rel="noopener noreferrer">PDF.js</a> di Mozilla e contributori, versione 3.11.174, distribuito esclusivamente dalla cartella locale vendor/.</p>
+    <p><strong>Licenza:</strong> <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer">Apache License, Version 2.0</a>. Consulta anche il <a href="vendor/LICENSE-PDFJS.txt">file LICENSE incluso</a> e gli eventuali avvisi dei pacchetti distribuiti da Mozilla.</p>
+    <p>PDF.js renderizza i documenti sul dispositivo. La versione inclusa imposta esplicitamente <code>isEvalSupported: false</code>, <code>enableScripting: false</code> e <code>enableXfa: false</code>; non è previsto un CDN alternativo. La libreria resta datata e richiederà una migrazione controllata a una release più recente.</p>
+  </section>
+  <section><h2>Codice, editor OXS e personalizzazioni</h2>
+    <p>Le funzioni specifiche di PuntoPunto (editor OXS, strumenti PDF manuali, progetti JSON e conversione OXS) sono codice del progetto. <strong>Non vengono automaticamente distribuite con la licenza di MakeBead o con quella di PDF.js.</strong> La disponibilità pubblica dei file per il funzionamento del sito non concede automaticamente permessi di riutilizzo, modifica o redistribuzione del codice: le condizioni per tali utilizzi non sono ancora state specificate.</p>
+    <p>I filati personalizzati sono creati dall'utente e non provengono dal catalogo di MakeBead. Non vengono caricati sui server di PuntoPunto.</p>
+  </section>
+  <section><h2>Marchi e contenuti degli utenti</h2>
+    <p><strong>DMC</strong> è un marchio del rispettivo titolare. Il marchio viene nominato esclusivamente per identificare i filati. PuntoPunto è indipendente e non è affiliato, sponsorizzato né approvato da DMC.</p>
+    <p>I PDF e gli schemi caricati rimangono soggetti ai diritti dei rispettivi autori e editori: la disponibilità degli strumenti di visualizzazione e digitalizzazione non conferisce diritti di redistribuzione dei pattern.</p>
+    <p>Questa pagina è una dichiarazione delle fonti software e dati utilizzate; non costituisce un parere legale individuale. Per la beta con GitHub Pages, le informazioni sul trattamento tecnico degli IP sono riportate nella pagina Privacy. Prima della pubblicazione definitiva occorre completare i dati e i recapiti del titolare della piattaforma.</p>
+  </section>
+  <a class="lic-back" href="index.html">← Torna all'editor</a>
+<section class="pp-legal-section" aria-labelledby="pp-third-party-rights"><h2 id="pp-third-party-rights">Schemi e opere di terzi</h2><p>Le biblioteche e le licenze del software non sostituiscono i diritti degli autori degli schemi importati. La conversione di un PDF in OXS non trasferisce diritti sul disegno originale. L’uso personale è soggetto alle licenze e alla normativa applicabile; non pubblicare, condividere o rivendere copie convertite senza i permessi necessari. Il sito non autorizza né favorisce lo sfruttamento di opere altrui non consentito.</p></section>
+</main></body></html>
