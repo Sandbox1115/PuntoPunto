@@ -190,7 +190,7 @@
       state.saveAt=Date.parse(stored.savedAt)||Date.now();
     }else state.saveAt=0;
     state.activeColor=null;state.activeKind=null;state.mono=false;filterKindEl.value='';viewModeEl.value='color';state.mode='mark';state.showSymbols=true;el.symbols.checked=true;el.search.value='';
-    setMode('mark');el.welcome.classList.add('hidden');el.editor.classList.remove('hidden');
+    setMode('mark');$('closeOXSProject').classList.remove('hidden');el.welcome.classList.add('hidden');el.editor.classList.remove('hidden');
     state.oxsFilename=filename;el.title.setAttribute('data-i18n-ignore','');el.title.textContent=pattern.title;
     el.meta.setAttribute('data-i18n-ignore','');el.meta.textContent=`${pattern.width} × ${pattern.height} ${window.PuntoPuntoI18n?.language==='en'?'cells':'caselle'} · ${filename}`;
     el.summary.textContent=`${[...pattern.palette.values()].filter(c=>!c.isCloth&&pattern.stitches.some(s=>s.palIndex===c.index)).length} colori nello schema`;
@@ -205,6 +205,46 @@
     else if(restoring)notify('Bentornato! Ho ripristinato il tuo progetto.');
     else if(stored)notify('Schema aperto. Ho recuperato i tuoi progressi salvati.');
     else notify('Schema aperto! Puoi iniziare a segnare le crocette.');
+  }
+  // Return every OXS-only legend, filter and summary control to its initial home state.
+  // Do not clear persisted backups: closing a view is not deleting a saved project.
+  function resetHomeProjectUI(){
+    state.activeColor=null;state.activeKind=null;state.mono=false;state.showSymbols=true;
+    state.saveAt=0;state.oxsFilename='';state.drag=null;
+    el.search.value='';el.summary.textContent='Apri uno schema per vedere tutti i colori.';
+    el.filterInfo.textContent='';el.all.classList.add('active');
+    el.legend.replaceChildren();
+    const emptyThreads=document.createElement('div');emptyThreads.className='empty-side';
+    emptyThreads.textContent='I tuoi filati appariranno qui, con quantità e avanzamento.';
+    el.legend.appendChild(emptyThreads);
+    filterKindEl.replaceChildren(new Option('Tutti i tipi di punto',''));
+    filterKindEl.value='';
+    el.kinds.replaceChildren();
+    const emptyKinds=document.createElement('span');emptyKinds.className='muted';
+    emptyKinds.textContent='I tipi di punto presenti nello schema.';
+    el.kinds.appendChild(emptyKinds);
+    viewModeEl.value='color';el.symbols.checked=true;
+    el.donut.style.background='conic-gradient(#25887b 0%, #e7efea 0%)';
+    el.percent.textContent='0%';el.done.textContent='0';el.remaining.textContent='0';
+    el.dimensions.textContent='—';el.colorCount.textContent='—';
+    el.stitchCount.textContent='—';el.lastSaved.textContent='—';
+    setMode('mark');
+    window.PuntoPuntoI18n?.refresh();
+  }
+  function closeOXSProject({confirmExit=true,showHome=true}={}){
+    if(!state.pattern)return true;
+    if(confirmExit&&!window.ppConfirm('Vuoi chiudere il progetto OXS e tornare alla home? Prima di uscire esporta il JSON dei progressi e, se hai modificato lo schema, scarica anche l’OXS aggiornato. I salvataggi già presenti nel browser non verranno eliminati.'))return false;
+    if(state.dirty)saveNow();
+    clearTimeout(state.savedTimer);state.savedTimer=null;
+    closeStitchPicker();closePanels();
+    edits.load(null);
+    state.pattern=null;currentFileText='';state.completed.clear();state.dirty=false;
+    resetHomeProjectUI();
+    try{localStorage.removeItem('pp-last-project');}catch(_){}
+    el.editor.classList.add('hidden');$('closeOXSProject').classList.add('hidden');
+    ['saveProgress','loadProgress','resetProgress','exportOXS'].forEach(id=>$(id).disabled=true);
+    if(showHome){el.welcome.classList.remove('hidden');el.title.removeAttribute('data-i18n-ignore');el.meta.removeAttribute('data-i18n-ignore');el.title.textContent='Il tuo prossimo ricamo';el.meta.textContent='Carica un OXS o un PDF interattivo per iniziare a lavorare';}
+    return true;
   }
   async function handleOXS(file){
     if(!file)return;
@@ -592,6 +632,7 @@
     $('exportOXS').onclick=downloadOXS;$('saveProgress').onclick=downloadJSON;$('loadProgress').onclick=()=>el.progressInput.click();
     el.progressInput.onchange=async()=>{await importProgress(el.progressInput.files[0]);el.progressInput.value='';};
     $('openExample').onclick=()=>loadPattern(DEMO_OXS,'esempio-fiore.oxs').catch(e=>notify(e.message,true));
+    $('closeOXSProject').onclick=()=>closeOXSProject();
     $('showAllColors').onclick=()=>{state.activeColor=null;renderLegends();draw();};
     filterKindEl.onchange=()=>{state.activeKind=filterKindEl.value||null;renderLegends();draw();};
     viewModeEl.onchange=()=>{state.mono=viewModeEl.value==='mono';state.showSymbols=state.mono||el.symbols.checked;draw();};
@@ -631,7 +672,9 @@
       const rec=await dbGet(last);if(rec?.text)await loadPattern(rec.text,rec.filename,{restoring:true});
     }catch{/* Private mode or disabled storage: the manual file importer still works. */}
   }
+  const startupReady=restore();
+  window.PuntoPuntoOXSNavigation=Object.freeze({hasProject:()=>!!state.pattern,close:closeOXSProject,ready:startupReady});
   window.PuntoPuntoImport={loadPattern,notify}; // accesso limitato per il modulo PDF, senza modificare editor/stato
   document.addEventListener('puntopunto:languagechange',()=>{if(!state.pattern)return;const p=state.pattern;el.meta.textContent=`${p.width} × ${p.height} ${window.PuntoPuntoI18n?.language==='en'?'cells':'caselle'} · ${state.oxsFilename}`;renderLegends();updateSavedLabel();});
-  buildHeroArt();events();restore();
+  buildHeroArt();events();
 })();

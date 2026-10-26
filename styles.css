@@ -146,3 +146,27 @@
 .pp-quarter-button:hover,.pp-quarter-button.is-active{background:#e6f3ee;border-color:#25887b;color:#11695e}
 .pp-quarter-button:focus-visible{outline:2px solid #25887b;outline-offset:2px}
 @media(max-width:620px){.pp-quarter-picker{gap:4px}.pp-quarter-heading{width:100%}.pp-quarter-button{padding:4px 5px;font-size:10px;gap:3px}.pp-quarter-button svg{width:20px;height:20px}}
+
+/* v0.9.8.8.8 — keep every grid cell inside the rotated illustration frame. */
+.hero-art .art-frame{overflow:hidden}
+.hero-art .art-grid{grid-template-columns:repeat(13,minmax(0,1fr));grid-template-rows:repeat(11,minmax(0,1fr));min-width:0;min-height:0;overflow:hidden}
+.hero-art .art-cell{min-width:0;min-height:0;line-height:1;overflow:hidden}
+/* v0.9.8.8.8 — artwork cannot overlap the home title or nearby copy on phones. */
+.hero-art-badges{display:contents}
+.pp-home-help{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:42px;max-width:100%;margin:0 auto 17px;padding:10px 17px;
+  white-space:normal;text-align:center;font-weight:750;cursor:pointer}
+@media(max-width:620px){
+  .welcome-inner{min-width:0}
+  .hero-art{height:auto;min-height:0;display:flex;flex-direction:column;
+    gap:16px;margin:16px auto 20px;align-items:center;justify-content:center}
+  .hero-art .art-frame{flex:none;transform:rotate(-4deg);box-shadow:6px 9px 0 #e7ede7}
+  .hero-art-badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:7px;width:min(100%,336px);align-items:center;margin-top:5px}
+  .hero-art .floating-label{position:static;inset:auto;transform:none;box-shadow:none;
+    min-width:0;display:flex;justify-content:center;gap:4px;white-space:normal;
+    padding:7px 6px;text-align:center;line-height:1.25;font-size:10px}
+  .welcome h2{margin-top:8px}
+  .pp-home-help{min-height:42px;width:min(100%,320px);font-size:12px;padding:10px 12px}
+}
+@media(max-width:350px){.hero-art .floating-label{font-size:9px;padding:6px 4px}}

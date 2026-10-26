@@ -1,3 +1,18 @@
+# v0.9.8.8.8 — Optional guide, complete home reset and mobile layout
+
+- The home guide is opt-in, with an ordinary, prominent PuntoPunto-styled button; no automatic modal on first visit or reload.
+- Closing an OXS clears the thread legend, stitch-type filter/list, search, selection, progress and pattern statistics back to the genuine empty-home state. This does not delete saved backups or progress.
+- Home hero artwork and its labels use a non-overlapping vertical layout on narrow screens, including Xiaomi-size viewports.
+- IT/EN tutorial CTA, docs and distribution manifests updated. GitHub has not been changed; deployment requires owner approval.
+
+# v0.9.8.8.7 — Guided home and safe project exit
+
+- Home-page onboarding in Italian and English for OXS tracking, PDF manual grid/digitization, saving, backups, copyright and help. Reopen from home.
+- OXS editor: explicit Close project and return home, confirmation before leaving, in-memory state cleanup, auto-resume pointer removal; existing saved browser projects/progress are not deleted.
+- PDF editor: brand/logo and Close show a save/export warning before returning home; Cancel preserves the editor.
+- Navigation is handled in-app rather than reloading via the logo, reducing accidental state loss.
+- Keep both GitHub Pages and direct-index offline distributions, without changing the published repository.
+
 # 0.9.8.8.6 — GitHub Issues as the official beta support channel
 
 - Added public GitHub Issues feedback/support links to the app footer, Privacy, Licenses, and English/Italian guides.

@@ -32,3 +32,11 @@ The interface opens in Italian by default. Use the IT/EN selector to change lang
 ## Feedback and support
 
 During the beta, use [PuntoPunto GitHub Issues](https://github.com/Sandbox1115/PuntoPunto/issues) to report bugs or suggest improvements. Issues are public and require a GitHub account: do not share personal information, confidential patterns or private project files. Issues are not suitable for confidential privacy requests.
+
+## Welcome guide and returning home (0.9.8.8.8)
+
+A detailed IT/EN guide is available on demand from a prominent home button. Reopen it from the home screen with **How does PuntoPunto work?**. In the OXS editor, **Close project and return home** asks for confirmation but does not delete saved progress. In the PDF editor, clicking the PuntoPunto logo or **Close** asks for confirmation and recommends exporting **Save project** (JSON with the PDF and digitization) before leaving.
+
+### v0.9.8.8.8 — Usability update
+
+The home tutorial is available via a visible button and never pops up automatically. Closing an OXS resets the legend, stitch types and project statistics. Narrow-screen hero artwork and captions no longer overlap text. The GitHub Pages release is pending explicit approval.

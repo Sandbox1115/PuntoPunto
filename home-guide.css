@@ -1,0 +1,18 @@
+/* First-open illustrated workflow guide; works on desktop and mobile. */
+.pp-home-guide-overlay{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;padding:clamp(10px,3vw,28px);background:rgba(15,35,30,.69)}
+.pp-home-guide-overlay.hidden{display:none}
+.pp-home-guide-open{overflow:hidden}
+.pp-home-guide-card{background:#fff;color:#27463e;border-radius:17px;box-shadow:0 22px 80px #001b1666;width:min(770px,100%);max-height:min(92dvh,920px);display:flex;flex-direction:column;position:relative;padding:24px 26px 0;overflow:hidden}
+.pp-home-guide-card h2{font-family:Georgia,serif;font-weight:500;font-size:clamp(24px,3vw,32px);line-height:1.15;margin:11px 36px 11px 0}
+.pp-home-guide-card>p{margin:0 32px 14px 0;color:#526d62;font-size:13px;line-height:1.6}
+.pp-home-guide-x{position:absolute;right:13px;top:13px}
+.pp-home-guide-sections{overflow-y:auto;scrollbar-width:thin;min-height:0;padding:1px 4px 14px 0}
+.pp-home-guide-sections section{border-top:1px solid #e2ece6;padding:15px 0 4px}
+.pp-home-guide-sections h3{font-size:15px;color:#216c5f;margin:0 0 9px}
+.pp-home-guide-sections p{font-size:12px;line-height:1.7;color:#52675f;margin:0 0 11px}
+.pp-home-guide-sections strong{color:#28493f}
+.pp-home-guide-sections code{background:#eef7f1;border-radius:4px;padding:1px 5px}
+.pp-home-guide-sections a{color:#167d69}
+.pp-home-guide-footer{background:#fff;border-top:1px solid #e2ece6;display:flex;align-items:center;gap:12px;justify-content:space-between;padding:15px 0 18px;color:#667e74;font-size:11px}
+.pp-home-guide-footer .btn{font-size:12px}
+@media(max-width:600px){.pp-home-guide-overlay{padding:8px}.pp-home-guide-card{max-height:calc(100dvh - 16px);padding:20px 17px 0}.pp-home-guide-card h2{font-size:23px}.pp-home-guide-footer{flex-direction:column;align-items:stretch}.pp-home-guide-footer .btn{width:100%}.project-actions{flex-wrap:wrap}.project-actions #closeOXSProject{white-space:normal}}

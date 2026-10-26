@@ -183,6 +183,7 @@
     ui.image.width=ui.grid.width=sw;ui.image.height=ui.grid.height=sh;ui.image.getContext('2d').drawImage(info.image,sx,sy,sw,sh,0,0,sw,sh);
     try{localStorage.setItem('pp-pdf-tracker-last-v1:'+state.hash,JSON.stringify({page:state.page,cols:state.cols,rows:state.rows,rect:state.rect}));}catch(e){console.warn('Griglia recente non salvata',e);notify('La griglia potrebbe non essere ripristinata automaticamente: esporta il progetto JSON.',true);}
     await load();ui.dmcSearch.value='';ui.addDMC.disabled=true;ui.name.textContent=`${info.name} · pagina ${info.page} · ${info.cols} × ${info.rows}`;
+    window.PuntoPuntoOXSNavigation?.close({confirmExit:false,showHome:false});
     document.body.classList.add('pp-tracker-mode');$('welcome').classList.add('hidden');$('editor').classList.add('hidden');ui.root.classList.remove('hidden');
     $('projectTitle').textContent=info.name.replace(/\.pdf$/i,'')+' · PDF';$('projectMeta').textContent='Digitalizzazione manuale e avanzamento separati';
     ['exportOXS','saveProgress','loadProgress'].forEach(id=>$(id).disabled=true);
@@ -195,7 +196,15 @@
   collapse.addEventListener('click',()=>setCompact(!compact));focus.addEventListener('click',()=>setFocus(!focusMode));
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&focusMode&&!document.getElementById('pdfTutorial')?.classList.contains('hidden'))return;if(e.key==='Escape'&&focusMode){setFocus(false);focus.focus();}});
   function closeBeforeOXS(){setFocus(false);if(ui.root.classList.contains('hidden'))return;save();flushSave();ui.root.classList.add('hidden');document.body.classList.remove('pp-tracker-mode');}
-  function close(){setFocus(false);save();flushSave();ui.root.classList.add('hidden');document.body.classList.remove('pp-tracker-mode');$('welcome').classList.remove('hidden');$('projectTitle').textContent='Il tuo prossimo ricamo';$('projectMeta').textContent='Carica un file OXS o PDF per iniziare a lavorare';}
+  function close({confirmExit=true}={}){
+    if(ui.root.classList.contains('hidden'))return true;
+    if(confirmExit&&!window.ppConfirm('Stai per tornare alla home e uscire dal lavoro PDF in corso. Prima di procedere usa «Salva progetto» per scaricare una copia JSON con il PDF e la digitalizzazione: il salvataggio automatico del browser potrebbe non essere sufficiente. Vuoi uscire comunque?'))return false;
+    setFocus(false);save();flushSave();
+    ui.root.classList.add('hidden');document.body.classList.remove('pp-tracker-mode');
+    $('welcome').classList.remove('hidden');$('projectTitle').removeAttribute('data-i18n-ignore');$('projectMeta').removeAttribute('data-i18n-ignore');
+    $('projectTitle').textContent='Il tuo prossimo ricamo';$('projectMeta').textContent='Carica un OXS o un PDF interattivo per iniziare a lavorare';
+    state.pdfBytes=null;state.key=null;state.name='';return true;
+  }
   function activate(e){
     if(e.button!==0&&e.pointerType==='mouse')return;
     const rect=ui.grid.getBoundingClientRect(),x=Math.floor((e.clientX-rect.left)/rect.width*state.cols),y=Math.floor((e.clientY-rect.top)/rect.height*state.rows);
@@ -289,7 +298,7 @@
   ui.oxs.addEventListener('click',exportOXS);
   $('openProject').addEventListener('click',()=>$('projectInput').click());
   $('projectInput').addEventListener('change',async()=>{await importProject($('projectInput').files[0]);$('projectInput').value='';});
-  $('trackerClose').addEventListener('click',close);
+  $('trackerClose').addEventListener('click',()=>close());
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&pendingPayload)persistPending();});
   window.addEventListener('beforeunload',event=>{if((!state.saveOK||!!pendingPayload)&&!ui.root.classList.contains('hidden')){event.preventDefault();event.returnValue='';}});
   // The tutorial remains an in-page dialog so it is easy to open at any time.
@@ -315,5 +324,5 @@
       });
     }).catch(e=>console.warn('Riapertura ultimo PDF indisponibile',e));
   }
-  window.PuntoPuntoPDFTracker={open,closeBeforeOXS,restoreProject,importProject,inspect:()=>({...getStats(),source:source()})};
+  window.PuntoPuntoPDFTracker={open,close,closeBeforeOXS,restoreProject,importProject,inspect:()=>({...getStats(),source:source()})};
 })();

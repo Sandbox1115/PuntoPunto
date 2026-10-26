@@ -31,3 +31,11 @@ Apri `index.html` tramite un sito HTTPS o un server locale. Il selettore IT/EN n
 ## Feedback e assistenza
 
 Durante la beta usa le [GitHub Issues di PuntoPunto](https://github.com/Sandbox1115/PuntoPunto/issues) per segnalare problemi o proporre miglioramenti. Le segnalazioni sono pubbliche e richiedono un account GitHub: non condividere dati personali, schemi riservati o progetti privati. Le Issues non sono adatte a richieste privacy confidenziali.
+
+## Guida iniziale e ritorno alla home (0.9.8.8.8)
+
+Il tutorial non si apre automaticamente: premi il pulsante «Scopri come funziona PuntoPunto» dalla home per leggere la guida. Il pulsante resta sempre disponibile quando torni alla home. Nell’editor OXS il pulsante **Chiudi progetto e torna alla home** richiede conferma e non cancella i progressi già salvati nel browser. Nell’editor PDF il logo PuntoPunto e **Chiudi** chiedono conferma e raccomandano di esportare prima **Salva progetto** (JSON con PDF e digitalizzazione).
+
+### v0.9.8.8.8 — Migliorie home
+
+Tutorial facoltativo tramite pulsante ben visibile, nessuna apertura automatica. Alla chiusura di un progetto OXS tornano vuote legenda filati, filtri e statistiche. Illustrazione della home mobile sistemata per evitare sovrapposizioni. Nessuna pubblicazione su GitHub senza autorizzazione.

@@ -2,11 +2,11 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **Private beta — v0.9.8.8.6.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
+> **Private beta — v0.9.8.8.8.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
 
 ## Use the application
 
-After GitHub Pages is enabled, the intended project address is:
+The public beta is available at:
 
 **https://sandbox1115.github.io/PuntoPunto/**
 
@@ -46,3 +46,14 @@ For deployment instructions see [GitHub Pages setup](PUBBLICAZIONE_GITHUB.md) an
 The bundled PDF.js version is **3.11.174**. Existing security mitigations are enabled, but upgrading this dependency remains a priority. The current manual PDF-to-OXS workflow may not reproduce special stitch types that have not been explicitly digitized. Always verify exported patterns against their original sources.
 
 A confidential privacy contact and formal data-controller information have **not yet been supplied**. These must be addressed before opening the public-hosted beta to testers; do not put personal contact details in the public repository without the owner's express permission.
+
+### Version 0.9.8.8.8 usability changes
+
+- A detailed IT/EN guide is available on demand from a prominent home button.
+- Explicit, confirmed return-to-home control for OXS projects.
+- Confirmed return-to-home using the logo or Close from a PDF project, with a reminder to export the full JSON project backup.
+- Both GitHub Pages and self-contained local distributions are supported.
+
+### v0.9.8.8.8 — Usability update
+
+The home tutorial is available via a visible button and never pops up automatically. Closing an OXS resets the legend, stitch types and project statistics. Narrow-screen hero artwork and captions no longer overlap text. The GitHub Pages release is pending explicit approval.
