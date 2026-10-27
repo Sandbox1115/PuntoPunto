@@ -1,3 +1,5 @@
+> **Mobile (v0.9.8.8.12):** from the home screen, tap **Open OXS** or **Open PDF** to choose a file from your device; drag-and-drop remains available on desktop.
+
 # PuntoPunto — User guide (English)
 
 ## Open your pattern
@@ -33,10 +35,18 @@ The interface opens in Italian by default. Use the IT/EN selector to change lang
 
 During the beta, use [PuntoPunto GitHub Issues](https://github.com/Sandbox1115/PuntoPunto/issues) to report bugs or suggest improvements. Issues are public and require a GitHub account: do not share personal information, confidential patterns or private project files. Issues are not suitable for confidential privacy requests.
 
-## Welcome guide and returning home (0.9.8.8.8)
+## Welcome guide and returning home (0.9.8.8.9)
 
 A detailed IT/EN guide is available on demand from a prominent home button. Reopen it from the home screen with **How does PuntoPunto work?**. In the OXS editor, **Close project and return home** asks for confirmation but does not delete saved progress. In the PDF editor, clicking the PuntoPunto logo or **Close** asks for confirmation and recommends exporting **Save project** (JSON with the PDF and digitization) before leaving.
 
-### v0.9.8.8.8 — Usability update
+### v0.9.8.8.9 — Usability update
 
 The home tutorial is available via a visible button and never pops up automatically. Closing an OXS resets the legend, stitch types and project statistics. Narrow-screen hero artwork and captions no longer overlap text. The GitHub Pages release is pending explicit approval.
+
+### Mobile OXS gestures (v0.9.8.8.9)
+- Use two fingers to zoom and pan without marking any stitches.
+- Tap or drag with one finger to mark stitches as usual.
+- **Hide interface** expands the pattern; **Show controls** restores the complete editor.
+- The plus, minus and Fit buttons remain available in the standard view.
+
+**OXS on phones (v0.9.8.8.12):** scroll below the canvas to find Progress and Thread legend. Two large shortcuts take you directly to each section. Color and stitch filters update the pattern immediately. Focus mode hides the lower panels until you return to the normal view.

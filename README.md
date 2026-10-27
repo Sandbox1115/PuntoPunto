@@ -2,7 +2,7 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **Private beta — v0.9.8.8.8.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
+> **Public beta — v0.9.8.8.12.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
 
 ## Use the application
 
@@ -47,13 +47,20 @@ The bundled PDF.js version is **3.11.174**. Existing security mitigations are en
 
 A confidential privacy contact and formal data-controller information have **not yet been supplied**. These must be addressed before opening the public-hosted beta to testers; do not put personal contact details in the public repository without the owner's express permission.
 
-### Version 0.9.8.8.8 usability changes
+### Version 0.9.8.8.9 usability changes
 
 - A detailed IT/EN guide is available on demand from a prominent home button.
 - Explicit, confirmed return-to-home control for OXS projects.
 - Confirmed return-to-home using the logo or Close from a PDF project, with a reminder to export the full JSON project backup.
 - Both GitHub Pages and self-contained local distributions are supported.
 
-### v0.9.8.8.8 — Usability update
+### v0.9.8.8.9 — Usability update
 
 The home tutorial is available via a visible button and never pops up automatically. Closing an OXS resets the legend, stitch types and project statistics. Narrow-screen hero artwork and captions no longer overlap text. The GitHub Pages release is pending explicit approval.
+
+### Mobile pattern navigation (v0.9.8.8.9)
+Two-finger pinch-to-zoom and pan work in the OXS canvas. Use **Hide interface** for a distraction-free, full-screen editing area, then **Show controls** to restore the toolbars. Touch-based marking is committed on finger release so pinching never marks stitches.
+
+## Mobile file opening (v0.9.8.8.12)
+
+On phones, use the **Open OXS** or **Open PDF** button on the home screen. File drag-and-drop remains available in desktop browsers.

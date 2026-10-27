@@ -1,3 +1,5 @@
+> **Mobile (v0.9.8.8.12):** nella home usa **Apri OXS** oppure **Apri PDF** per scegliere un file dal dispositivo; il trascinamento dei file resta disponibile su desktop.
+
 # Guida d’uso — PuntoPunto
 
 PuntoPunto è gratuito, senza account e pensato per il punto croce. Le modifiche e i progressi restano nel browser; conserva sempre una copia esportata dei progetti.
@@ -32,10 +34,18 @@ Apri `index.html` tramite un sito HTTPS o un server locale. Il selettore IT/EN n
 
 Durante la beta usa le [GitHub Issues di PuntoPunto](https://github.com/Sandbox1115/PuntoPunto/issues) per segnalare problemi o proporre miglioramenti. Le segnalazioni sono pubbliche e richiedono un account GitHub: non condividere dati personali, schemi riservati o progetti privati. Le Issues non sono adatte a richieste privacy confidenziali.
 
-## Guida iniziale e ritorno alla home (0.9.8.8.8)
+## Guida iniziale e ritorno alla home (0.9.8.8.9)
 
 Il tutorial non si apre automaticamente: premi il pulsante «Scopri come funziona PuntoPunto» dalla home per leggere la guida. Il pulsante resta sempre disponibile quando torni alla home. Nell’editor OXS il pulsante **Chiudi progetto e torna alla home** richiede conferma e non cancella i progressi già salvati nel browser. Nell’editor PDF il logo PuntoPunto e **Chiudi** chiedono conferma e raccomandano di esportare prima **Salva progetto** (JSON con PDF e digitalizzazione).
 
-### v0.9.8.8.8 — Migliorie home
+### v0.9.8.8.9 — Migliorie home
 
 Tutorial facoltativo tramite pulsante ben visibile, nessuna apertura automatica. Alla chiusura di un progetto OXS tornano vuote legenda filati, filtri e statistiche. Illustrazione della home mobile sistemata per evitare sovrapposizioni. Nessuna pubblicazione su GitHub senza autorizzazione.
+
+### Navigazione OXS su smartphone (v0.9.8.8.9)
+- Due dita sullo schema: ingrandisci, riduci e sposta senza segnare crocette.
+- Un dito: tocca o trascina per segnare i punti come prima.
+- Pulsante **Nascondi interfaccia** nell’editor: visualizza il progetto a schermo pieno; **Mostra strumenti** ripristina i comandi.
+- I bottoni +, − e Adatta restano disponibili nella vista normale.
+
+**Mobile OXS (v0.9.8.8.12):** sotto lo schema scorri per vedere Avanzamento e Legenda filati. I due pulsanti grandi permettono di raggiungere subito questi pannelli; i filtri agiscono sullo schema in tempo reale. La modalità concentrata nasconde temporaneamente anche i pannelli inferiori.

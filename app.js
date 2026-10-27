@@ -19,6 +19,57 @@
   const kindDefs = {full:['×','Croce intera'],part:['◩','Punto parziale'],half:['╱','Mezzo punto'],quarter:['◢','Quarto di punto'],tent:['╱','Punto diagonale'],verticalhalf:['▐','Mezza croce verticale'],horizontalhalf:['▂','Mezza croce orizzontale'],back:['━','Punto scritto'],knot:['●','Nodo francese'],bead:['◆','Perlina'],fullcross:['×','Croce decorativa']};
   const state = {pattern:null,completed:new Set(),activeColor:null,activeKind:null,mono:false,mode:'mark',showSymbols:true,cell:16,ox:0,oy:0,drag:null,picker:null,pickerTimer:null,savedTimer:null,saveAvailable:true,saveAt:0,dirty:false,lastStorageWarning:0,oxsFilename:''};
   const ctx = el.canvas.getContext('2d',{alpha:false});
+  const touchGesture={points:new Map(),pinching:false,lastDistance:0,lastCenter:null};
+  let oxsFocusMode=false;
+  // Mobile OXS: make the existing reactive panels readable *below* the canvas.
+  // Reparenting rather than cloning preserves filter actions, localization, and live counts.
+  const mobileInsights=$('oxsMobileInsights'),mobileQuickNav=$('oxsMobileQuickNav'),
+    workspaceLayout=document.querySelector('.layout'),workspaceMain=document.querySelector('.main-panel');
+  const compactMobile=window.matchMedia('(max-width:620px)');
+  let mobileInsightsActive=false;
+  function syncOXSInlinePanels(){
+    const enable=!!state.pattern&&!el.editor.classList.contains('hidden')&&compactMobile.matches;
+    if(enable===mobileInsightsActive)return;
+    closePanels();mobileInsightsActive=enable;
+    if(enable){
+      // Show progress first, then selectable threads and stitch-type filters.
+      mobileInsights.append(el.right,el.left);
+    }else{
+      workspaceLayout.insertBefore(el.left,workspaceMain);
+      workspaceLayout.append(el.right);
+    }
+    mobileInsights.classList.toggle('hidden',!enable);
+    mobileQuickNav.classList.toggle('hidden',!enable);
+    document.body.classList.toggle('pp-oxs-inline-mobile',enable);
+    requestAnimationFrame(()=>{if(state.pattern){resizeCanvas();}});
+  }
+  function jumpToOXSSection(node){
+    if(!mobileInsightsActive)return;
+    if(oxsFocusMode)setOXSFocus(false);
+    const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    node.scrollIntoView({behavior:reduceMotion?'instant':'smooth',block:'start'});
+    node.setAttribute('tabindex','-1');node.focus({preventScroll:true});
+  }
+
+  function resetTouchGesture(){touchGesture.points.clear();touchGesture.pinching=false;touchGesture.lastDistance=0;touchGesture.lastCenter=null;state.drag=null;el.wrap.classList.remove('grabbing');}
+  function setOXSFocus(enabled){
+    const active=!!enabled&&!!state.pattern&&!el.editor.classList.contains('hidden');
+    if(active===oxsFocusMode)return;
+    closeStitchPicker();closePanels();resetTouchGesture();
+    const old=dimensions();
+    const focusX=(old.w/2-state.ox)/state.cell,focusY=(old.h/2-state.oy)/state.cell;
+    oxsFocusMode=active;document.body.classList.toggle('pp-oxs-focus',active);
+    $('toggleOXSFocus').setAttribute('aria-pressed',String(active));
+    $('exitOXSFocus').setAttribute('aria-hidden',String(!active));
+    requestAnimationFrame(()=>{
+      resizeCanvas();const next=dimensions();
+      if(state.pattern&&next.w>0&&next.h>0){state.ox=next.w/2-focusX*state.cell;state.oy=next.h/2-focusY*state.cell;draw();}
+    });
+  }
+  function touchPinchGeometry(){
+    const [a,b]=[...touchGesture.points.values()];
+    return {center:{x:(a.x+b.x)/2,y:(a.y+b.y)/2},distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y))};
+  }
   let currentFileText='',toastTimer=0,resizeObserver=null;
   const edits=window.PuntoPuntoPatternEdits.create({state,refresh:refreshEditedView,queueSave,notify});
 
@@ -177,7 +228,7 @@
   async function dbGet(id){const db=await openDB();return new Promise((resolve,reject)=>{const tx=db.transaction('projects','readonly');const req=tx.objectStore('projects').get(id);req.onsuccess=()=>{db.close();resolve(req.result);};req.onerror=()=>{db.close();reject(req.error);};});}
 
   async function loadPattern(text,filename,{restoring=false}={}){
-    closeStitchPicker();
+    setOXSFocus(false);closeStitchPicker();
     window.PuntoPuntoPDFTracker?.closeBeforeOXS?.();
     const pattern=parseOXS(text,filename);pattern.id=await fingerprint(text);
     if(state.dirty)saveNow();
@@ -191,6 +242,7 @@
     }else state.saveAt=0;
     state.activeColor=null;state.activeKind=null;state.mono=false;filterKindEl.value='';viewModeEl.value='color';state.mode='mark';state.showSymbols=true;el.symbols.checked=true;el.search.value='';
     setMode('mark');$('closeOXSProject').classList.remove('hidden');el.welcome.classList.add('hidden');el.editor.classList.remove('hidden');
+    syncOXSInlinePanels();
     state.oxsFilename=filename;el.title.setAttribute('data-i18n-ignore','');el.title.textContent=pattern.title;
     el.meta.setAttribute('data-i18n-ignore','');el.meta.textContent=`${pattern.width} × ${pattern.height} ${window.PuntoPuntoI18n?.language==='en'?'cells':'caselle'} · ${filename}`;
     el.summary.textContent=`${[...pattern.palette.values()].filter(c=>!c.isCloth&&pattern.stitches.some(s=>s.palIndex===c.index)).length} colori nello schema`;
@@ -236,9 +288,10 @@
     if(confirmExit&&!window.ppConfirm('Vuoi chiudere il progetto OXS e tornare alla home? Prima di uscire esporta il JSON dei progressi e, se hai modificato lo schema, scarica anche l’OXS aggiornato. I salvataggi già presenti nel browser non verranno eliminati.'))return false;
     if(state.dirty)saveNow();
     clearTimeout(state.savedTimer);state.savedTimer=null;
-    closeStitchPicker();closePanels();
+    setOXSFocus(false);closeStitchPicker();closePanels();
     edits.load(null);
     state.pattern=null;currentFileText='';state.completed.clear();state.dirty=false;
+    syncOXSInlinePanels();
     resetHomeProjectUI();
     try{localStorage.removeItem('pp-last-project');}catch(_){}
     el.editor.classList.add('hidden');$('closeOXSProject').classList.add('hidden');
@@ -565,15 +618,32 @@
   function canvasPointerDown(e){
     if(!state.pattern)return;
     if(e.pointerType==='mouse'&&e.button!==0&&e.button!==1)return;
+    const point=pointInCanvas(e);
+    if(e.pointerType==='touch'){
+      touchGesture.points.set(e.pointerId,point);
+      try{el.canvas.setPointerCapture(e.pointerId);}catch{}
+      if(touchGesture.points.size>=2){
+        // A second finger cancels the pending single-touch stroke without saving edits.
+        touchGesture.pinching=true;state.drag=null;el.wrap.classList.remove('grabbing');closeStitchPicker();
+        const g=touchPinchGeometry();touchGesture.lastDistance=g.distance;touchGesture.lastCenter=g.center;
+        e.preventDefault();return;
+      }
+      if(touchGesture.pinching){e.preventDefault();return;}
+    }
     closeStitchPicker();
-    const point=pointInCanvas(e),pan=state.mode==='pan'||e.button===1||e.altKey||e.shiftKey;
+    const pan=state.mode==='pan'||e.button===1||e.altKey||e.shiftKey;
     const drag={id:e.pointerId,pan,last:point,start:point,target:null,seen:new Set(),pending:null,preferSpecial:!!e.ctrlKey};
     state.drag=drag;
     try{el.canvas.setPointerCapture(e.pointerId);}catch{}
     if(pan)el.wrap.classList.add('grabbing');
+    if(e.pointerType==='touch'){
+      // Defer mark/erase/paint until finger release. The gesture may become a pinch.
+      drag.touchTrace=[point];e.preventDefault();return;
+    }
+    if(pan){}
     else if(['paint','erase','restore'].includes(state.mode))edits.at(localToGrid(point.x,point.y),state.mode,drag);
     else if(!drag.preferSpecial){
-      const g=localToGrid(point.x,point.y),choices=stitchChoices(g.x,g.y,e.pointerType==='touch'||e.pointerType==='pen');
+      const g=localToGrid(point.x,point.y),choices=stitchChoices(g.x,g.y,false);
       if(choices.length>1)drag.pending={point,choices};
       else markAt(point,drag);
     }else markAt(point,drag,true);
@@ -583,26 +653,74 @@
     if(!state.pattern)return;
     const pt=pointInCanvas(e),g=localToGrid(pt.x,pt.y);
     el.coords.textContent=g.x>=0&&g.y>=0&&g.x<state.pattern.width&&g.y<state.pattern.height?`Casella ${Math.floor(g.x)+1}, ${Math.floor(g.y)+1}`:'Fuori schema';
+    if(e.pointerType==='touch'&&touchGesture.points.has(e.pointerId)){
+      touchGesture.points.set(e.pointerId,pt);
+      if(touchGesture.pinching){
+        if(touchGesture.points.size>=2){
+          const current=touchPinchGeometry(),before=touchGesture.lastCenter;
+          if(before){
+            const factor=current.distance/touchGesture.lastDistance;
+            zoomAt(factor,before.x,before.y);
+            state.ox+=current.center.x-before.x;
+            state.oy+=current.center.y-before.y;
+            draw();
+          }
+          touchGesture.lastDistance=current.distance;touchGesture.lastCenter=current.center;
+        }
+        e.preventDefault();return;
+      }
+    }
     if(!state.drag||state.drag.id!==e.pointerId)return;
     const drag=state.drag;
     if(drag.pan){state.ox+=pt.x-drag.last.x;state.oy+=pt.y-drag.last.y;draw();}
+    else if(drag.touchTrace){
+      const prev=drag.touchTrace[drag.touchTrace.length-1];
+      if(Math.hypot(pt.x-prev.x,pt.y-prev.y)>=2)drag.touchTrace.push(pt);
+    }
     else if(['paint','erase','restore'].includes(state.mode))edits.at(g,state.mode,drag);
     else if(drag.pending){
       if(Math.hypot(pt.x-drag.start.x,pt.y-drag.start.y)>9){
-        // A drag retains the normal v0.9.6 cross-first behaviour; a tap opens choices.
         const origin=drag.pending.point;drag.pending=null;
         markAt(origin,drag);markAt(pt,drag);
       }
     }else markAt(pt,drag,drag.preferSpecial);
     drag.last=pt;
+    if(e.pointerType==='touch')e.preventDefault();
   }
   function canvasPointerUp(e){
+    if(e.pointerType==='touch'&&touchGesture.points.has(e.pointerId)){
+      touchGesture.points.delete(e.pointerId);
+      if(touchGesture.pinching){
+        // Never interpret fingers lifted after a pinch as stitch taps.
+        state.drag=null;el.wrap.classList.remove('grabbing');
+        if(touchGesture.points.size===0){touchGesture.pinching=false;touchGesture.lastCenter=null;touchGesture.lastDistance=0;}
+        e.preventDefault();return;
+      }
+    }
     if(state.drag?.id!==e.pointerId)return;
     const drag=state.drag;state.drag=null;el.wrap.classList.remove('grabbing');
+    if(drag.touchTrace){
+      if(e.type!=='pointerup')return;
+      const tail=pointInCanvas(e),trace=drag.touchTrace;
+      if(Math.hypot(tail.x-trace[trace.length-1].x,tail.y-trace[trace.length-1].y)>2)trace.push(tail);
+      if(drag.pan)return;
+      const moved=Math.hypot(tail.x-drag.start.x,tail.y-drag.start.y)>9;
+      if(!moved){
+        const point=drag.start;
+        if(['paint','erase','restore'].includes(state.mode))edits.at(localToGrid(point.x,point.y),state.mode,drag);
+        else{
+          const g=localToGrid(point.x,point.y),choices=stitchChoices(g.x,g.y,true);
+          if(choices.length>1){
+            const pattern=state.pattern;
+            state.pickerTimer=setTimeout(()=>{state.pickerTimer=null;if(pattern===state.pattern&&state.mode==='mark')openStitchPicker(point,choices);},85);
+          }else markAt(point,drag);
+        }
+      }else if(['paint','erase','restore'].includes(state.mode)){
+        for(const point of trace)edits.at(localToGrid(point.x,point.y),state.mode,drag);
+      }else for(const point of trace)markAt(point,drag);
+      return;
+    }
     if(e.type==='pointerup'&&drag.pending){
-      // Wait until the browser has delivered the synthetic click generated by a
-      // physical touch. Otherwise that click can accidentally activate a newly
-      // inserted picker option before the user has chosen anything.
       const pattern=state.pattern,selection=drag.pending;
       state.pickerTimer=setTimeout(()=>{
         state.pickerTimer=null;
@@ -611,7 +729,8 @@
     }
   }
   function closePanels(){el.left.classList.remove('open');el.right.classList.remove('open');el.backdrop.classList.remove('visible');}
-  function togglePanel(which){const panel=which==='left'?el.left:el.right,other=which==='left'?el.right:el.left;
+  function togglePanel(which){if(mobileInsightsActive){jumpToOXSSection(which==='left'?el.left:el.right);return;}
+    const panel=which==='left'?el.left:el.right,other=which==='left'?el.right:el.left;
     other.classList.remove('open');panel.classList.toggle('open');el.backdrop.classList.toggle('visible',panel.classList.contains('open'));}
   function buildHeroArt(){
     const hero=$('heroArt');hero.replaceChildren();
@@ -627,6 +746,8 @@
   }
   function events(){
     $('openFile').onclick=()=>el.oxsInput.click();$('dropArea').onclick=()=>el.oxsInput.click();
+    $('mobileOpenOXS').onclick=()=>$('openFile').click();
+    $('mobileOpenPDF').onclick=()=>$('openPDF').click();
     $('dropArea').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.oxsInput.click();}};
     el.oxsInput.onchange=async()=>{await handleOXS(el.oxsInput.files[0]);el.oxsInput.value='';};
     $('exportOXS').onclick=downloadOXS;$('saveProgress').onclick=downloadJSON;$('loadProgress').onclick=()=>el.progressInput.click();
@@ -642,6 +763,8 @@
     $('zoomIn').onclick=()=>{closeStitchPicker();const d=dimensions();zoomAt(1.25,d.w/2,d.h/2);};
     $('zoomOut').onclick=()=>{closeStitchPicker();const d=dimensions();zoomAt(.8,d.w/2,d.h/2);};
     $('zoomFit').onclick=()=>{closeStitchPicker();fit();};
+    $('toggleOXSFocus').onclick=()=>setOXSFocus(!oxsFocusMode);
+    $('exitOXSFocus').onclick=()=>setOXSFocus(false);
     el.symbols.onchange=e=>{state.showSymbols=state.mono||e.target.checked;draw();};
     el.canvas.addEventListener('pointerdown',canvasPointerDown);
     el.canvas.addEventListener('pointermove',canvasPointerMove);
@@ -649,6 +772,7 @@
     el.canvas.addEventListener('pointercancel',canvasPointerUp);
     el.canvas.addEventListener('wheel',e=>{if(!state.pattern)return;closeStitchPicker();e.preventDefault();const pt=pointInCanvas(e);zoomAt(e.deltaY<0?1.125:1/1.125,pt.x,pt.y);},{passive:false});
     $('toggleLegend').onclick=()=>togglePanel('left');$('toggleStats').onclick=()=>togglePanel('right');el.backdrop.onclick=closePanels;
+    $('oxsJumpProgress').onclick=()=>jumpToOXSSection(el.right);$('oxsJumpThreads').onclick=()=>jumpToOXSSection(el.left);
     document.querySelectorAll('.close-panel').forEach(b=>b.onclick=closePanels);
     el.reset.onclick=()=>{if(!state.pattern||!window.ppConfirm('Vuoi davvero azzerare TUTTI i punti completati in questo progetto?'))return;
       state.completed.clear();saveNow();renderLegends();updateStats();draw();notify('Tracciamento azzerato.');};
@@ -658,6 +782,7 @@
       target.addEventListener('dragleave',()=>drop.classList.remove('dragover'));
       target.addEventListener('drop',async e=>{if(e.dataTransfer?.files.length){e.preventDefault();e.stopPropagation();drop.classList.remove('dragover');await handleDroppedFile(e.dataTransfer.files[0]);}});
     }
+    window.addEventListener('resize',syncOXSInlinePanels);
     window.addEventListener('pagehide',()=>{if(state.dirty)saveNow();});
     window.addEventListener('beforeunload',event=>{if(state.dirty||(!state.saveAvailable&&state.pattern)){event.preventDefault();event.returnValue='';}});
     document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.dirty)saveNow();});

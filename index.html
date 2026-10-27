@@ -67,6 +67,13 @@
             <p>Apri il tuo schema OXS o PDF, segui i colori e tieni traccia di ogni crocetta. Tutto gratis, senza registrarti.</p>
             <button type="button" id="openHomeGuide" class="btn btn-soft pp-home-help" aria-haspopup="dialog" aria-controls="homeGuide">ⓘ <span>Scopri come funziona PuntoPunto</span></button>
             <div class="drop-area" id="dropArea" tabindex="0" role="button" aria-label="Trascina qui OXS o PDF; premi Invio per scegliere un OXS"><div class="drop-icon">↥</div><strong>Trascina qui il tuo file .oxs o .pdf</strong><span>oppure <span class="linklike">scegli un OXS</span> dal dispositivo; per i PDF usa «Apri PDF»</span></div>
+            <div class="pp-mobile-file-actions" role="group" aria-label="Scegli come aprire il tuo schema">
+              <p>Scegli come aprire il tuo schema</p>
+              <div class="pp-mobile-file-buttons">
+                <button type="button" id="mobileOpenOXS" class="btn btn-soft">▦ <span>Apri OXS</span></button>
+                <button type="button" id="mobileOpenPDF" class="btn btn-soft">▤ <span>Apri PDF</span></button>
+              </div>
+            </div>
             <button type="button" id="welcomePDF" class="demo-link">Hai uno schema PDF? <strong>Aprilo sulla griglia interattiva →</strong></button>
             <button type="button" id="openExample" class="demo-link">Non hai uno schema? <strong>Prova il progetto di esempio →</strong></button>
             <button type="button" id="resumeLastPDF" class="demo-link hidden" title="Riapri l’ultimo PDF conservato sul dispositivo">↻ <strong>Riprendi ultimo PDF locale →</strong></button>
@@ -83,6 +90,7 @@
             </div>
             <div class="tool-group right-tools">
               <button type="button" class="icon-btn" id="zoomOut" title="Riduci" aria-label="Riduci zoom">−</button><span id="zoomLabel" class="zoom-label">100%</span><button type="button" class="icon-btn" id="zoomIn" title="Ingrandisci" aria-label="Aumenta zoom">＋</button><button type="button" class="fit-btn" id="zoomFit">Adatta</button>
+              <button type="button" class="btn btn-outline pp-oxs-focus-toggle" id="toggleOXSFocus" aria-pressed="false" title="Nasconde pannelli e barre per mostrare lo schema a tutto schermo">⛶ Nascondi interfaccia</button>
               <label class="symbols-toggle"><input type="checkbox" id="showSymbols" checked><span>Simboli</span></label><label class="oxs-view-label" for="oxsViewMode">Vista <select id="oxsViewMode"><option value="color">Colori + simboli</option><option value="mono">Solo simboli</option></select></label>
             </div>
           </div>
@@ -100,6 +108,7 @@
             <button type="button" class="btn btn-outline" id="editUndo" disabled>↶ Annulla modifica</button>
             <span class="edit-count" id="editChangeCount">Nessuna modifica allo schema</span>
           </div>
+          <button type="button" id="exitOXSFocus" class="btn btn-soft pp-oxs-focus-restore" aria-hidden="true">☷ Mostra strumenti</button>
           <div id="canvasWrap" class="canvas-wrap" tabindex="0" aria-label="Griglia interattiva dello schema"><canvas id="patternCanvas"></canvas><div class="canvas-crosshair" id="hoverInfo" aria-hidden="true"></div><div id="stitchPicker" class="oxs-point-picker hidden" role="dialog" aria-labelledby="stitchPickerTitle" aria-modal="false" tabindex="-1"><div class="oxs-picker-head"><strong id="stitchPickerTitle">Quale punto vuoi segnare?</strong><button id="stitchPickerClose" type="button" aria-label="Chiudi selezione punti" class="oxs-picker-close">×</button></div><div id="stitchPickerList" class="oxs-picker-list" role="group" aria-label="Punti disponibili"></div><p class="oxs-picker-note">Seleziona un punto per cambiarne lo stato.</p></div></div>
           <div class="canvas-footer"><span id="canvasHint">Tocca una casella per segnare il punto; se ci sono punti sovrapposti, scegli quale. Trascina per segnare più punti.</span><span id="coords">—</span></div>
         </div>
@@ -139,6 +148,11 @@
           <input hidden type="file" id="trackerJSON" accept="application/json,.json"><input hidden type="file" id="trackerProjectFile" accept=".json,.puntopunto.json,application/json">
         </div>
       </section>
+      <nav id="oxsMobileQuickNav" class="pp-oxs-mobile-quick hidden" aria-label="Pannelli del progetto OXS">
+        <button class="btn btn-soft" id="oxsJumpProgress" type="button" aria-controls="rightPanel">◷ <span>Avanzamento</span></button>
+        <button class="btn btn-soft" id="oxsJumpThreads" type="button" aria-controls="leftPanel">☷ <span>Filati e filtri</span></button>
+      </nav>
+      <section id="oxsMobileInsights" class="pp-oxs-mobile-insights hidden" aria-label="Avanzamento e filati sotto lo schema OXS"></section>
       <footer class="bottomline"><span>✳ Fatto con cura per chi ama ricamare · <a href="licenze.html">Licenze e attribuzioni</a></span><span>Gratuito · Senza account · <a href="privacy.html">Privacy</a> · <a href="https://github.com/Sandbox1115/PuntoPunto/issues" target="_blank" rel="noopener noreferrer">Feedback e assistenza</a></span></footer>
     </main>
 
@@ -162,7 +176,7 @@
 <div class="pp-pdf-overlay hidden" id="pdfOverlay" role="dialog" aria-modal="true" aria-labelledby="pdfTitle">
   <div class="pp-pdf-dialog pp-manual-dialog">
     <div class="pp-pdf-heading">
-      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.8</span>
+      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.12</span>
         <h2 id="pdfTitle">Imposta la griglia del tuo schema</h2>
         <p id="pdfFilename" class="muted">Seleziona la pagina del diagramma. Le dimensioni della griglia le scegli tu.</p>
       </div>
@@ -225,7 +239,7 @@
     <h2 id="homeGuideTitle">Dall'apertura dello schema all'ultima crocetta</h2>
     <p id="homeGuideIntro">PuntoPunto è un editor e un tracciatore gratuito per il punto croce: lavora nel browser, senza account. Ecco cosa puoi fare e come iniziare.</p>
     <div class="pp-home-guide-sections">
-      <section><h3>1 · Apri uno schema OXS</h3><p>Premi <strong>Apri OXS</strong> e seleziona un file <code>.oxs</code> (oppure usa il progetto di esempio). Puoi anche trascinarlo sulla home.</p><p>Nell'editor seleziona <strong>Segna punti</strong> e tocca le caselle per registrare le crocette ricamate. Se ci sono punti sovrapposti, scegli quello giusto. Usa <strong>Sposta</strong> e lo zoom per navigare, la legenda per filtrare i filati, <strong>Vista</strong> per cambiare la rappresentazione e <strong>Modifica / Cancella / Originale</strong> per correggere lo schema.</p></section>
+      <section><h3>1 · Apri uno schema OXS</h3><p>Premi <strong>Apri OXS</strong> e seleziona un file <code>.oxs</code> (oppure usa il progetto di esempio). Da computer puoi anche trascinarlo sulla home.</p><p>Nell'editor seleziona <strong>Segna punti</strong> e tocca le caselle per registrare le crocette ricamate. Se ci sono punti sovrapposti, scegli quello giusto. Usa due dita per ingrandire, ridurre o spostare la vista su smartphone; un dito continua a segnare i punti. Puoi anche nascondere la UI con <strong>Nascondi interfaccia</strong> per concentrarti sullo schema, riaprendola con <strong>Mostra strumenti</strong>. Su smartphone scorri sotto lo schema per <strong>Avanzamento</strong> e <strong>Filati e filtri</strong>, oppure usa i due pulsanti grandi sotto il disegno. Usa <strong>Sposta</strong> e lo zoom per navigare, la legenda per filtrare i filati, <strong>Vista</strong> per cambiare la rappresentazione e <strong>Modifica / Cancella / Originale</strong> per correggere lo schema.</p></section>
       <section><h3>2 · Lavora su un PDF</h3><p>Premi <strong>Apri PDF</strong>, seleziona la pagina con il diagramma, delimita l'area dello schema e indica il numero reale di righe e colonne. Correggi la griglia fino ad allinearla ai quadretti originali, poi confermala.</p><p>Nell'editor PDF crea la legenda scegliendo i colori DMC o aggiungendo filati personalizzati; seleziona tipo di punto e casella per digitalizzare. Ogni casella deve essere classificata come <strong>punto, vuota o non definita</strong>. La funzione di completamento è separata dai dati dello schema. Non c'è riconoscimento automatico della legenda o dei simboli: il PDF è il riferimento visivo.</p></section>
       <section><h3>3 · Salva ed esporta correttamente</h3><p>Per un OXS usa <strong>Esporta progressi</strong> per scaricare il JSON da conservare insieme al file originale; <strong>Scarica OXS</strong> esporta invece lo schema con le eventuali modifiche, non sostituisce il backup dei progressi.</p><p>Per un PDF usa <strong>Salva progetto</strong> per esportare un JSON comprensivo del PDF e della digitalizzazione; <strong>Progressi JSON</strong> contiene le annotazioni per quel PDF. <strong>Esporta OXS</strong> si attiva solo dopo aver definito tutte le caselle, comprese quelle vuote. Il controllo tecnico non certifica la fedeltà allo schema stampato e non ricostruisce automaticamente tutti i punti speciali.</p></section>
       <section><h3>4 · Riprendi e chiudi un lavoro</h3><p>Puoi importare i progressi JSON riferiti allo stesso OXS, riaprire un progetto PDF JSON e, quando disponibile, riprendere il PDF archiviato localmente. I browser possono limitare o cancellare i salvataggi automatici: <strong>esporta periodicamente un backup</strong>. Prima di chiudere un progetto o tornare alla home, controlla di aver salvato.</p></section>

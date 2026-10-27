@@ -170,3 +170,113 @@
   .pp-home-help{min-height:42px;width:min(100%,320px);font-size:12px;padding:10px 12px}
 }
 @media(max-width:350px){.hero-art .floating-label{font-size:9px;padding:6px 4px}}
+
+/* v0.9.8.8.9 — OXS mobile gesture and distraction-free canvas. */
+.pp-oxs-focus-toggle{min-height:32px;padding:7px 9px;max-width:100%;font-size:11px}
+.pp-oxs-focus-restore{display:none;position:absolute;z-index:30;top:calc(12px + env(safe-area-inset-top, 0px));right:calc(12px + env(safe-area-inset-right, 0px));box-shadow:0 6px 22px #143f3959;min-height:44px;padding:10px 14px;font-size:12px}
+body.pp-oxs-focus{overflow:hidden}
+body.pp-oxs-focus .topbar,body.pp-oxs-focus .project-bar,body.pp-oxs-focus .bottomline,body.pp-oxs-focus #leftPanel,body.pp-oxs-focus #rightPanel,body.pp-oxs-focus #backdrop{display:none!important}
+body.pp-oxs-focus .layout{height:100dvh;min-height:0;grid-template-columns:minmax(0,1fr)}
+body.pp-oxs-focus .main-panel{padding:0;min-height:0}
+body.pp-oxs-focus .stage{border:0;border-radius:0;box-shadow:none;min-height:0}
+body.pp-oxs-focus #editor .editor-toolbar,body.pp-oxs-focus #editor .editor-edit-controls,body.pp-oxs-focus #editor .canvas-footer{display:none!important}
+body.pp-oxs-focus #editor .pp-oxs-focus-restore{display:inline-flex}
+body.pp-oxs-focus #editor .canvas-wrap{min-height:0}
+@media(max-width:620px){.pp-oxs-focus-toggle{font-size:10px;padding:6px 8px}}
+
+/* Ensure Brave/Chromium touch gestures stay inside the canvas instead of zooming the document. */
+#patternCanvas{touch-action:none}
+
+/* v0.9.8.8.11 — mobile OXS: accessible in-flow progress and thread legend. */
+.pp-oxs-mobile-quick,.pp-oxs-mobile-insights{display:none}
+@media(max-width:620px){
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus){overflow-y:auto}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .layout{
+    display:block;height:auto;min-height:0;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .main-panel{min-height:0;overflow:visible}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .stage{
+    flex:0 0 auto;height:max(510px,calc(100dvh - 114px));min-height:510px;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .pp-oxs-mobile-quick:not(.hidden){
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 1px 0;
+  }
+  .pp-oxs-mobile-quick .btn{
+    display:flex;justify-content:center;align-items:center;gap:7px;min-height:48px;
+    padding:11px 10px;font-size:13px;font-weight:750;white-space:normal;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .pp-oxs-mobile-insights:not(.hidden){
+    display:flex;flex-direction:column;gap:12px;padding:14px 0 10px;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #rightPanel,
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #leftPanel{
+    display:flex;position:static;z-index:auto;top:auto;right:auto;bottom:auto;left:auto;
+    width:100%;min-width:0;min-height:0;max-height:none;transform:none;
+    box-shadow:none;border:1px solid var(--line);border-radius:13px;
+    overflow:visible;transition:none;scroll-margin-top:12px;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #leftPanel{flex-direction:column}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #rightPanel{
+    display:block;padding:16px 14px;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .sidebar .close-panel{display:none}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #rightPanel h2{
+    font-size:19px;margin:8px 0 3px;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #rightPanel>p.muted{margin:0}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #rightPanel .progress-card{
+    display:flex;align-items:center;gap:14px;padding:12px;margin-top:12px;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .donut{
+    width:104px;height:104px;min-width:104px;margin:0;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .donut-inner{width:80px;height:80px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .donut-inner strong{font-size:23px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .progress-total{
+    display:grid;grid-template-columns:1fr 1fr;flex:1;min-width:0;margin:0;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .progress-total strong{font-size:19px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .progress-total span{font-size:10px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #rightPanel .details-card{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px;
+    padding:10px 2px 3px;border-bottom:0;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #rightPanel .details-card .eyebrow{grid-column:1/-1}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .detail-row{
+    display:flex;flex-wrap:wrap;align-content:start;gap:3px;margin:0;font-size:11px;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .detail-row strong{font-size:11px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #rightPanel .tips{display:none}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) #rightPanel .reset-link{margin:14px auto 2px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .sidebar-top{padding:18px 16px 12px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .legend-list{
+    flex:0 1 auto;max-height:360px;overflow-y:auto;padding:3px 12px 10px;
+    overscroll-behavior:contain;
+  }
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .legend-item{min-height:58px;padding:8px 7px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .legend-footer{padding:15px 16px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .kind-action{min-height:40px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .topbar-actions #toggleLegend,
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .topbar-actions #toggleStats{display:none!important}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .backdrop.visible{display:none!important}
+  body.pp-oxs-focus .pp-oxs-mobile-quick,body.pp-oxs-focus .pp-oxs-mobile-insights{display:none!important}
+}
+@media(max-width:350px){
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .progress-card{gap:9px!important}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .donut{width:86px;height:86px;min-width:86px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .donut-inner{width:68px;height:68px}
+  .pp-oxs-mobile-quick .btn{font-size:12px;padding:10px 5px}
+}
+
+
+/* v0.9.8.8.12 — Native file chooser actions replace misleading drag-and-drop guidance on phones. */
+.pp-mobile-file-actions{display:none}
+@media(max-width:620px){
+  .welcome .drop-area{display:none}
+  .welcome .pp-mobile-file-actions{display:block;margin:14px 0 5px}
+  .pp-mobile-file-actions p{margin:0 0 9px;color:var(--muted);font-size:12px;line-height:1.45}
+  .pp-mobile-file-buttons{display:flex;gap:10px;align-items:stretch}
+  .pp-mobile-file-buttons .btn{display:flex;align-items:center;justify-content:center;gap:7px;flex:1 1 0;min-width:0;min-height:48px;padding:10px 9px;font-size:13px;font-weight:700;white-space:nowrap}
+  .pp-mobile-file-buttons .btn span{display:inline}
+  .welcome #welcomePDF{display:none}
+}

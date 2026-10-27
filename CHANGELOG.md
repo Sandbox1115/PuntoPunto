@@ -1,3 +1,33 @@
+## v0.9.8.8.12 — Touch-friendly file import on the home screen (published 2026-10-27)
+- On phones (up to 620 px), replaced the desktop drag-and-drop panel with two accessible, full-size **Open OXS / Open PDF** buttons and a short prompt. Buttons use the existing file pickers, and PDF/OXS validation is unchanged.
+- On desktop, preserved the existing drop area and keyboard access. The welcome PDF quick link is hidden only on phones to avoid duplicate actions.
+- Added bilingual IT/EN wording and preserved the previous OXS mobile progress/threads layout, pinch-to-zoom, and focus mode.
+- Supplied separate GitHub Pages and double-clickable local packages. **Published on GitHub following explicit owner approval.**
+
+## v0.9.8.8.11 — OXS mobile progress and thread panels (preview; not published)
+- Replaced tiny phone-only header actions with two full-size buttons below the OXS canvas: Progress and Threads and filters.
+- On phones, moved the existing live progress and legend panels beneath the editor, accessible by natural vertical page scrolling. No duplicated project state or loss of color/stitch filtering.
+- Made progress concise (smaller donut, totals side by side), kept a scrollable color list and full filtering controls with readable touch targets.
+- Kept desktop/tablet sidebars unchanged; panels restore their original position when leaving OXS, switching to PDF, or resizing to a wider screen.
+- Focus mode still prioritizes the entire screen for the OXS canvas; pinch-to-zoom and JSON backups are unchanged.
+- Bilingual IT/EN mobile navigation. No changes to user files, OXS/PDF codecs, or external services.
+- **GitHub publication withheld pending explicit user approval.**
+
+## v0.9.8.8.10 — Complete English Licenses & Attributions (unpublished preview)
+- Fixed partially untranslated content in `licenze.html` by providing two complete, mutually exclusive IT/EN language versions. Every heading, paragraph, label, navigation link and the third-party pattern notice has an English equivalent.
+- The IT/EN switch updates the visible document immediately; inactive-language content is not displayed or exposed by assistive technology. The browser title and meta description also follow the selected language.
+- Kept source attributions, links, DMC/CC BY 4.0 and PDF.js/Apache 2.0 license information, legal qualifications, and the GitHub Issues disclosure aligned across languages.
+- No change to OXS/PDF project formats, touch controls, DMC dataset, library binaries, or user data processing.
+- This version is not published to GitHub without explicit approval.
+
+## v0.9.8.8.9 — Mobile OXS gestures and focus view (preview, not published)
+- Pinch-to-zoom with two fingers; midpoint anchored scaling and two-finger panning.
+- Touch edits/markings are deferred until release; when a second touch arrives, pending edits are canceled.
+- New Hide interface / Show controls buttons maximize canvas space on mobile and desktop.
+- Focus closes all side overlays, preserves zoom and pattern center, and resets when leaving the OXS editor.
+- Extended IT/EN labels, tutorials and guides. Server and local distributions remain separate.
+- Not published to GitHub pending approval.
+
 # v0.9.8.8.8 — Optional guide, complete home reset and mobile layout
 
 - The home guide is opt-in, with an ordinary, prominent PuntoPunto-styled button; no automatic modal on first visit or reload.

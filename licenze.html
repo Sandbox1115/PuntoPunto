@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f7f7f3">
-  <meta name="description" content="Attribuzioni, licenze e marchi dei componenti impiegati da PuntoPunto.">
+  <meta name="description" content="Attribuzioni, licenze e marchi dei componenti impiegati da PuntoPunto." data-pp-description-it="Attribuzioni, licenze e marchi dei componenti impiegati da PuntoPunto." data-pp-description-en="Sources, licenses, trademarks, and attributions for the third-party components used by PuntoPunto.">
   <title>Licenze e attribuzioni — PuntoPunto</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -23,15 +23,20 @@
     .lic-wrap .lic-back{display:inline-flex;align-items:center;gap:6px;background:#e7f3eb;text-decoration:none;border-radius:8px;padding:10px 13px;font-size:13px;font-weight:700}
     .lic-wrap .lic-disclaimer{background:#f4f7ee;border-left:3px solid #77a38d;padding:12px;border-radius:7px}
     @media(max-width:650px){.lic-wrap{padding:20px 12px 40px}.lic-wrap section{padding:16px}}
-  </style>
+
+    /* Complete, language-specific legal copy: never translate isolated fragments. */
+    html[lang="en"] [data-pp-locale="it"],html:not([lang="en"]) [data-pp-locale="en"]{display:none!important}
+    [data-pp-locale]{display:block}
+    </style>
 <script src="i18n.js" defer></script>
 </head>
 <body><main class="lic-wrap">
   <label class="pp-language-switch pp-language-inline"><span>Lingua</span><select data-pp-language aria-label="Lingua del sito"><option value="it">IT</option><option value="en">EN</option></select></label>
 
+  <div data-pp-locale="it" data-i18n-ignore lang="it">
   <a class="lic-back" href="index.html">← Torna a PuntoPunto</a>
   <a class="lic-back" href="privacy.html" style="margin-left:8px">La nostra privacy →</a>
-  <p class="eyebrow">TRASPARENZA DELLE FONTI · VERSIONE 0.9.8.8.8</p>
+  <p class="eyebrow">TRASPARENZA DELLE FONTI · VERSIONE 0.9.8.8.11</p>
   <h1>Licenze e attribuzioni</h1>
   <p>Questa pagina indica le banche dati e le librerie di terzi effettivamente impiegate in PuntoPunto, la provenienza dei colori e le condizioni per riutilizzarli.</p>
   <p>Per feedback e assistenza tecnica durante la beta utilizza le <a href="https://github.com/Sandbox1115/PuntoPunto/issues" target="_blank" rel="noopener noreferrer">GitHub Issues di PuntoPunto</a>. Le segnalazioni sono pubbliche: non pubblicare dati personali o progetti riservati. Non usare questo canale per richieste privacy confidenziali.</p>
@@ -58,4 +63,37 @@
   </section>
   <a class="lic-back" href="index.html">← Torna all'editor</a>
 <section class="pp-legal-section" aria-labelledby="pp-third-party-rights"><h2 id="pp-third-party-rights">Schemi e opere di terzi</h2><p>Le biblioteche e le licenze del software non sostituiscono i diritti degli autori degli schemi importati. La conversione di un PDF in OXS non trasferisce diritti sul disegno originale. L’uso personale è soggetto alle licenze e alla normativa applicabile; non pubblicare, condividere o rivendere copie convertite senza i permessi necessari. Il sito non autorizza né favorisce lo sfruttamento di opere altrui non consentito.</p></section>
+  </div>
+  <div data-pp-locale="en" data-i18n-ignore lang="en">
+
+  <a class="lic-back" href="index.html">← Back to PuntoPunto</a>
+  <a class="lic-back" href="privacy.html" style="margin-left:8px">Our privacy →</a>
+  <p class="eyebrow">SOURCE TRANSPARENCY · VERSION 0.9.8.8.11</p>
+  <h1>Licenses and attributions</h1>
+  <p>This page describes the third-party datasets and libraries actually used by PuntoPunto, the sources of its thread colors, and the terms governing their reuse.</p>
+  <p>For feedback and technical support during the beta, use <a href="https://github.com/Sandbox1115/PuntoPunto/issues" target="_blank" rel="noopener noreferrer">PuntoPunto GitHub Issues</a>. Issues are public: do not share personal information or confidential projects. Do not use this channel for confidential privacy requests.</p>
+  <section><h2>DMC thread catalog</h2>
+    <p><strong>Data source:</strong> <a href="https://github.com/makebead/craft-color-codes" target="_blank" rel="noopener noreferrer">MakeBead's craft-color-codes</a>, the “DMC Six-Strand Embroidery Floss” catalog containing 489 codes, names, and approximate sRGB/HEX color values. The data is distributed by its author under the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International (CC BY 4.0)</a> license.</p>
+    <p><strong>Required attribution:</strong> Color data: <a href="https://makebead.com/" target="_blank" rel="noopener noreferrer">craft-color-codes by MakeBead</a> (<a href="https://github.com/makebead/craft-color-codes/blob/main/LICENSE-DATA.md" target="_blank" rel="noopener noreferrer">data license and terms</a>).</p>
+    <p><strong>Adaptation:</strong> PuntoPunto extracts the code, name, and HEX fields from the catalog, checks them, and displays them in a searchable selector. It does not intentionally alter the source colors. The catalog is included in <code>data/dmc-floss.json</code>, and its integrity is documented in <code>ASSET_LOCK.json</code>. The application makes no automatic requests to CDNs or remote catalogs. PDFs are not sent to any cataloging service.</p>
+    <p><strong>Traceability:</strong> For the original sources of DMC color values and their calibration limitations, see <a href="https://github.com/makebead/craft-color-codes/blob/main/SOURCES.md" target="_blank" rel="noopener noreferrer">SOURCES.md</a> and the <a href="https://makebead.com/dmc-color-chart/" target="_blank" rel="noopener noreferrer">MakeBead color chart</a>.</p>
+    <p class="lic-disclaimer">RGB/HEX colors are approximate: appearance depends on the screen and may differ from physical embroidery threads. When a thread code is provided in the PDF, that code is the reference to follow.</p>
+  </section>
+  <section><h2>PDF.js engine</h2>
+    <p><strong>Component:</strong> <a href="https://mozilla.github.io/pdf.js/" target="_blank" rel="noopener noreferrer">PDF.js</a> by Mozilla and contributors, version 3.11.174, distributed exclusively from the local <code>vendor/</code> folder.</p>
+    <p><strong>License:</strong> <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer">Apache License, Version 2.0</a>. See also the <a href="vendor/LICENSE-PDFJS.txt">included LICENSE file</a> and any applicable notices in packages distributed by Mozilla.</p>
+    <p>PDF.js renders documents on your device. The included version explicitly sets <code>isEvalSupported: false</code>, <code>enableScripting: false</code>, and <code>enableXfa: false</code>; there is no fallback CDN. This library version is outdated and will require a controlled upgrade to a newer release.</p>
+  </section>
+  <section><h2>Project code, OXS editor, and customizations</h2>
+    <p>PuntoPunto-specific functionality (the OXS editor, manual PDF tools, JSON projects, and OXS conversion) is project code. <strong>It is not automatically distributed under either the MakeBead or PDF.js license.</strong> Public availability of the files needed to run the website does not automatically grant rights to reuse, modify, or redistribute the code; terms for those activities have not yet been specified.</p>
+    <p>Custom threads are created by users and do not come from the MakeBead catalog. They are not uploaded to PuntoPunto servers.</p>
+  </section>
+  <section><h2>Trademarks and user content</h2>
+    <p><strong>DMC</strong> is a trademark of its respective owner. The name is used solely to identify embroidery threads. PuntoPunto is independent and is not affiliated with, sponsored by, or endorsed by DMC.</p>
+    <p>Uploaded PDFs and patterns remain subject to their respective authors' and publishers' rights: the availability of viewing and digitization tools does not confer rights to redistribute the patterns.</p>
+    <p>This page identifies the software and data sources used; it is not individualized legal advice. For the GitHub Pages beta, information about technical handling of IP addresses is available on the Privacy page. Before the definitive public release, the platform controller's identification and contact details still need to be completed.</p>
+  </section>
+  <a class="lic-back" href="index.html">← Back to the editor</a>
+  <section class="pp-legal-section" aria-labelledby="pp-third-party-rights-en"><h2 id="pp-third-party-rights-en">Third-party patterns and works</h2><p>Software libraries and their licenses do not override the rights of the creators of imported patterns. Converting a PDF to OXS does not transfer rights to the original design. Personal use is subject to applicable licenses and laws; do not publish, share, or resell converted copies without the necessary permission. This website neither authorizes nor encourages unauthorized exploitation of others' works.</p></section>
+  </div>
 </main></body></html>

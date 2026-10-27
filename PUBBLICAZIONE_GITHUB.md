@@ -16,6 +16,10 @@ Repository target: `Sandbox1115/PuntoPunto` — intended URL: `https://sandbox11
 
 GitHub Issues is enabled as the official beta support and feedback channel: https://github.com/Sandbox1115/PuntoPunto/issues. Keep Discussions disabled for now. Do not publish confidential or personal data in issues.
 
-### v0.9.8.8.8 — Migliorie home
+### v0.9.8.8.9 — Migliorie home
 
 Tutorial facoltativo tramite pulsante ben visibile, nessuna apertura automatica. Alla chiusura di un progetto OXS tornano vuote legenda filati, filtri e statistiche. Illustrazione della home mobile sistemata per evitare sovrapposizioni. Nessuna pubblicazione su GitHub senza autorizzazione.
+
+### Published v0.9.8.8.12 — 2026-10-27
+
+Mobile home now offers prominent Open OXS and Open PDF buttons instead of desktop drag-and-drop instructions. Desktop drag-and-drop remains unchanged. Released following the owner’s explicit approval.

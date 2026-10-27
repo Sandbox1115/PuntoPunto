@@ -6,6 +6,10 @@ const DICT={
   "Licenze": "Licenses",
   "Legenda": "Legend",
   "Progressi": "Progress",
+  "Avanzamento": "Progress",
+  "Filati e filtri": "Threads and filters",
+  "Pannelli del progetto OXS": "OXS project panels",
+  "Avanzamento e filati sotto lo schema OXS": "Progress and threads below the OXS pattern",
   "Apri PDF": "Open PDF",
   "Apri OXS": "Open OXS",
   "Progetto PDF": "PDF project",
@@ -32,6 +36,7 @@ const DICT={
   "nasce da": "starts with",
   "un punto.": "one stitch.",
   "Apri il tuo schema OXS o PDF, segui i colori e tieni traccia di ogni crocetta. Tutto gratis, senza registrarti.": "Open your OXS or PDF pattern, follow the colors and track every stitch. Completely free, with no sign-up.",
+  "Scegli come aprire il tuo schema": "Choose how to open your pattern",
   "Trascina qui il tuo file .oxs o .pdf": "Drop your .oxs or .pdf file here",
   "oppure": "or",
   "sfoglia i file": "browse files",
@@ -50,6 +55,9 @@ const DICT={
   "Cancella": "Erase",
   "Originale": "Original",
   "Adatta": "Fit",
+  "⛶ Nascondi interfaccia": "⛶ Hide interface",
+  "☷ Mostra strumenti": "☷ Show controls",
+  "Nasconde pannelli e barre per mostrare lo schema a tutto schermo": "Hide panels and toolbars to maximize pattern space",
   "Simboli": "Symbols",
   "Vista": "View",
   "Colori + simboli": "Colors + symbols",
@@ -559,8 +567,13 @@ const DICT={
   "Vuoi interrompere l’apertura del PDF e tornare alla home? La griglia non confermata andrà persa.": "Cancel PDF setup and return home? The unconfirmed grid will be lost.",
   "Premi": "Click",
   "e seleziona un file": "and select a file",
-  "(oppure usa il progetto di esempio). Puoi anche trascinarlo sulla home.": "(or use the sample project). You can also drop it onto the home page.",
+  "(oppure usa il progetto di esempio). Da computer puoi anche trascinarlo sulla home.": "(or use the sample project). On desktop you can also drop it onto the home page.",
   "Nell'editor seleziona": "In the editor, choose",
+  "e tocca le caselle per registrare le crocette ricamate. Se ci sono punti sovrapposti, scegli quello giusto. Usa due dita per ingrandire, ridurre o spostare la vista su smartphone; un dito continua a segnare i punti. Puoi anche nascondere la UI con": "and tap squares to mark stitched points. For overlapping stitches, choose the right one. On a smartphone, use two fingers to zoom or move the pattern; one finger still marks stitches. You can also hide the interface with",
+  "per concentrarti sullo schema, riaprendola con": "to focus on the pattern, and restore it with",
+  ". Usa": ". Use",
+  "Nascondi interfaccia": "Hide interface",
+  "Mostra strumenti": "Show controls",
   "e tocca le caselle per registrare le crocette ricamate. Se ci sono punti sovrapposti, scegli quello giusto. Usa": "and tap squares to mark stitches as finished. For overlapping stitches, choose the correct one. Use",
   "e lo zoom per navigare, la legenda per filtrare i filati,": "and zoom to navigate, the thread legend to filter colors,",
   "per cambiare la rappresentazione e": "to change the view, and",
@@ -629,6 +642,8 @@ function update(){if(!document.body)return;
  document.documentElement.lang=language;
  translateNode(document.head.querySelector('title'));
  translateNode(document.body);
+ const meta=document.querySelector('meta[name="description"][data-pp-description-en][data-pp-description-it]');
+ if(meta)meta.setAttribute('content',meta.getAttribute(language==='en'?'data-pp-description-en':'data-pp-description-it'));
  for(const select of document.querySelectorAll('[data-pp-language]'))select.value=language;
 }
 function setLanguage(lang){if(lang!=='en'&&lang!=='it')return;
