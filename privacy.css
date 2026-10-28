@@ -64,3 +64,6 @@
  .pp-privacy-nav a.current{display:none}
  .pp-privacy-nav .pp-privacy-back{padding:7px 7px}
 }
+
+/* Complete legal copy in each language; avoid fragment-by-fragment translations. */
+html[lang="en"] .pp-privacy-main[data-pp-locale="it"],html:not([lang="en"]) .pp-privacy-main[data-pp-locale="en"]{display:none!important}
