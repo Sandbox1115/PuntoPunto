@@ -41,7 +41,7 @@ A detailed IT/EN guide is available on demand from a prominent home button. Reop
 
 ### v0.9.8.8.9 — Usability update
 
-The home tutorial is available via a visible button and never pops up automatically. Closing an OXS resets the legend, stitch types and project statistics. Narrow-screen hero artwork and captions no longer overlap text. The GitHub Pages release is pending explicit approval.
+The home tutorial is available via a visible button and never pops up automatically. Closing an OXS resets the legend, stitch types and project statistics. Narrow-screen hero artwork and captions no longer overlap text. This describes a historical preview. Version 0.9.8.8.18 is published; the 0.9.8.8.19 localization review is not.
 
 ### Mobile OXS gestures (v0.9.8.8.9)
 - Use two fingers to zoom and pan without marking any stitches.
@@ -55,10 +55,14 @@ The home tutorial is available via a visible button and never pops up automatica
 
 Wait for the save confirmation after editing. If a warning appears, export a JSON backup before closing. If an older snapshot is recovered, verify it and immediately export a new JSON file. Preserve the source OXS alongside its progress JSON; for PDF use “Save project” to include the source document. Browser storage is not permanent and may be cleared or unavailable on file://. Avoid editing the same project simultaneously in multiple tabs.
 
-### Mobile PDF editor — v0.9.8.8.17
+### Mobile PDF editor — v0.9.8.8.16 (incorporated into later versions)
 
 On phones, the PDF workspace opens automatically in wide view. The quick tools (**Progress**, **Stitches**, **Empty**, **Undefined**) stay visible. Open **Threads** to pick DMC or custom floss and return to the chart. **Actions** contains Help, project import, progress JSON import/export, OXS export and Close; **Save project** remains directly accessible. Tap once to edit; use two fingers to zoom and pan without touching cells. Keep exporting JSON backups.
 
 ### OXS editor keyboard controls (v0.9.8.8.18)
 
 Press Tab to focus the grid. Use arrow keys to select a cell, Shift+arrows to move 10 cells, Home/End to reach the beginning/end of the row. Press Enter or Space to mark, or select a stitch when stitches overlap. Press Esc to close the stitch selector.
+
+### Localization review — v0.9.8.8.19
+
+Use the IT/EN control on the home page, PDF editor, Privacy and Licenses pages. Check tooltips, validation errors, PDF/OXS recovery messages and assistive labels as well as visible buttons. Uploaded pattern titles, filenames and user-provided floss names remain unchanged by design. This version is a review candidate and must not replace the public site without approval.
