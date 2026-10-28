@@ -165,7 +165,7 @@
     if(!state.palette.length)ui.info.textContent='Aggiungi i filati riportati sulla legenda del PDF.';
     else ui.info.textContent=legendInfo();
     const s=getStats(),pct=s.total?Math.round(s.resolved/s.total*100):0;
-    ui.digital.textContent=`Digitalizzate ${s.resolved.toLocaleString('it-IT')} / ${s.total.toLocaleString('it-IT')} caselle (${pct}%) · ${s.stitches} punti · ${s.empty} vuote · ${s.unknown} da verificare`;
+    ui.digital.textContent=`Digitalizzate ${s.resolved.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT')} / ${s.total.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT')} caselle (${pct}%) · ${s.stitches} punti · ${s.empty} vuote · ${s.unknown} da verificare`;
     ui.oxs.disabled=s.unknown!==0;
     ui.oxs.title=s.unknown?'Definisci tutte le caselle per esportare un OXS completo.':'Esporta e verifica l’OXS contro i dati digitalizzati.';
   }

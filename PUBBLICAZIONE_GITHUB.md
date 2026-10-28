@@ -1,6 +1,6 @@
 # Publishing PuntoPunto on GitHub Pages
 
-Repository target: `Sandbox1115/PuntoPunto` — published URL: `https://sandbox1115.github.io/PuntoPunto/`.
+Repository target: `Sandbox1115/PuntoPunto` — intended URL: `https://sandbox1115.github.io/PuntoPunto/`.
 
 1. Use the public GitHub repository `Sandbox1115/PuntoPunto` (already created). Before uploading, check **Settings → Emails → Keep my email addresses private** and the author identity exposed in the initial commit history. GitHub commit metadata may be public even if site files contain no personal details. Avoid including personal profile details in its description, README or commit content.
 2. Upload the **contents** of this distribution archive to the root of its `main` branch. Keep the `vendor/`, `data/`, `.nojekyll`, and both sample files in their original locations.
@@ -16,14 +16,10 @@ Repository target: `Sandbox1115/PuntoPunto` — published URL: `https://sandbox1
 
 GitHub Issues is enabled as the official beta support and feedback channel: https://github.com/Sandbox1115/PuntoPunto/issues. Keep Discussions disabled for now. Do not publish confidential or personal data in issues.
 
-### v0.9.8.8.9 — Home usability
+### v0.9.8.8.9 — Migliorie home
 
-The tutorial opens only when requested from a visible button; it never starts automatically. Closing an OXS project resets the thread legend, filters and statistics. The mobile hero illustration was adjusted to prevent overlap. Do not publish without the owner's approval.
+Tutorial facoltativo tramite pulsante ben visibile, nessuna apertura automatica. Alla chiusura di un progetto OXS tornano vuote legenda filati, filtri e statistiche. Illustrazione della home mobile sistemata per evitare sovrapposizioni. Nessuna pubblicazione su GitHub senza autorizzazione.
 
-### v0.9.8.8.12 — Previously published version (superseded by v0.9.8.8.18)
+### v0.9.8.8.12 — ultima pubblicazione verificata prima della preparazione 0.9.8.8.18
 
 Mobile home offers prominent Open OXS and Open PDF buttons instead of desktop drag-and-drop instructions. Desktop drag-and-drop remains unchanged. The v0.9.8.8.13 improvements were subsequently incorporated into later builds.
-
-### v0.9.8.8.19 — Review-only localization update
-
-The published GitHub Pages site and the `main` branch remain at v0.9.8.8.18. Review changes on `review/v0.9.8.8.19-it-en`. Do not merge or deploy the review branch until the owner explicitly approves it. Run IT/EN language and real-browser regression checks before release.

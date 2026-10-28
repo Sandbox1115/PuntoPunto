@@ -360,7 +360,7 @@
     el.meta.setAttribute('data-i18n-ignore','');el.meta.textContent=`${pattern.width} × ${pattern.height} ${window.PuntoPuntoI18n?.language==='en'?'cells':'caselle'} · ${filename}`;
     el.summary.textContent=`${[...pattern.palette.values()].filter(c=>!c.isCloth&&pattern.stitches.some(s=>s.palIndex===c.index)).length} colori nello schema`;
     el.dimensions.textContent=`${pattern.width} × ${pattern.height}`;
-    el.stitchCount.textContent=pattern.stitches.length.toLocaleString('it-IT');
+    el.stitchCount.textContent=pattern.stitches.length.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT');
     el.colorCount.textContent=[...new Set(pattern.stitches.map(s=>s.palIndex))].length;
     ['saveProgress','loadProgress','resetProgress','exportOXS'].forEach(id=>$(id).disabled=false);
     renderLegends();updateStats();resizeCanvas();fit();restoreOXSView();
@@ -485,7 +485,7 @@
     closeStitchPicker();
     const p=state.pattern;if(!p)return;
     lastMarkUndo=null;syncOXSWorkbar();
-    el.stitchCount.textContent=p.stitches.length.toLocaleString('it-IT');
+    el.stitchCount.textContent=p.stitches.length.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT');
     el.colorCount.textContent=new Set(p.stitches.map(s=>s.palIndex)).size;
     el.summary.textContent=`${new Set(p.stitches.map(s=>s.palIndex)).size} colori nello schema`;
     renderLegends();updateStats();draw();
@@ -531,7 +531,7 @@
     const p=state.pattern;if(!p)return;
     const done=state.completed.size,total=p.stitches.length,percent=total?100*done/total:0;
     el.donut.style.background=`conic-gradient(#25887b ${percent}%, #e7efea ${percent}%)`;
-    el.percent.textContent=Math.round(percent)+'%';el.done.textContent=done.toLocaleString('it-IT');el.remaining.textContent=(total-done).toLocaleString('it-IT');
+    el.percent.textContent=Math.round(percent)+'%';el.done.textContent=done.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT');el.remaining.textContent=(total-done).toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT');
     updateSavedLabel();
   }
 
@@ -614,7 +614,7 @@
     ctx.lineWidth=Math.max(.09,2.2/state.cell);ctx.lineCap='round';ctx.strokeStyle=done?'#afbbb3':(state.mono?'#234f43':c.color);
     if(done)ctx.setLineDash([.2,.17]);ctx.beginPath();ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);ctx.stroke();ctx.restore();
   }
-  // v0.9.8.8.18: render completion above EVERY overlapping layer.
+  // v0.9.8.8.19: render completion above EVERY overlapping layer.
   // The underlying stitched shapes are intentionally left unchanged. Without
   // this pass, a later uncompleted half stitch can paint over the checkmark of
   // an already-completed full cross (and vice versa for other combinations).

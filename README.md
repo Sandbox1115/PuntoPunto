@@ -2,7 +2,7 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **Review build 0.9.8.8.19 (IT/EN localization; NOT YET PUBLISHED).** The GitHub Pages beta and `main` branch remain at **0.9.8.8.18** until owner approval. This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
+> **GitHub Pages beta 0.9.8.8.18. Site publication requires completion of the deployment and browser checks.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
 
 ## Use the application
 
@@ -65,21 +65,16 @@ Two-finger pinch-to-zoom and pan work in the OXS canvas. Use **Hide interface** 
 
 On phones, use the **Open OXS** or **Open PDF** button on the home screen. File drag-and-drop remains available in desktop browsers.
 
-## Persistence notes — 0.9.8.8.19
+## Persistence notes — 0.9.8.8.18
 
 Automatic saves are checked for integrity and structural validity before recovery. PDF saves may fall back to localStorage; the newest valid copy is preferred on reopening. Keep independent JSON backups: browser data can still be cleared, and cross-tab edits are not merged.
 
-## Mobile PDF editor — 0.9.8.8.19
+## Mobile PDF editor — 0.9.8.8.18
 
 On phones, the PDF editor opens in wide view with a persistent tool dock. Use **Threads** to select DMC/custom floss, **Actions** for import/export and other controls, and two fingers to zoom and pan without editing cells. A single tap changes a cell on release. Always download a full project backup periodically.
 
 ## Roadmap backlog
 
-PWA/mobile installability is deferred until the saving/recovery and mobile PDF editor releases have completed real-device validation. Version 0.9.8.8.19 is **not** a PWA and does not install service workers or change offline caching.
+PWA/mobile installability is deferred until the saving/recovery and mobile PDF editor releases have completed real-device validation. Version 0.9.8.8.18 is **not** a PWA and does not install service workers or change offline caching.
 
-OXS quick filters, undo last marking, and jump to last stitch are available. The viewport position is stored as a local preference, not part of exported JSON backups.
-
-
-## Localization review
-
-Version 0.9.8.8.19 is staged on `review/v0.9.8.8.19-it-en`. Documentation is English by default; [Italian user guide](GUIDA_UTENTE.md) and [English user guide](USER_GUIDE_EN.md) are maintained separately. Historical Italian release notes are preserved in [CHANGELOG_IT.md](CHANGELOG_IT.md), with an English overview in [CHANGELOG.md](CHANGELOG.md). No changes to library binaries, project formats or uploaded user files were intended for this review.
+OXS 0.9.8.8.18: filtri rapidi, annulla marcatura, ritorna all’ultimo punto; posizione vista conservata come preferenza locale non inclusa nei backup JSON.
