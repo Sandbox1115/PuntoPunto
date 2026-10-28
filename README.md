@@ -2,7 +2,7 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **GitHub Pages beta 0.9.8.8.19 — IT/EN localization update, approved for publication.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
+> **GitHub Pages beta 0.9.8.8.19.1 — complete bilingual Privacy page (IT/EN).** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
 
 ## Use the application
 

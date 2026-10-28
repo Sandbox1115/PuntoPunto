@@ -1,5 +1,12 @@
 # PuntoPunto — Change log
 
+## v0.9.8.8.19.1 — 28 October 2026 (complete Privacy translation; approved for publication)
+
+- Provided independent, complete Italian and English Privacy documents, switching visibility with the IT/EN selector instead of translating legal paragraphs in fragments.
+- Preserved both languages' six Privacy sections, GitHub hosting disclosures, attribution links and outstanding private-contact/controller notice.
+- Aligned release version labels and metadata. No changes to PDF.js, project formats, stitch processing or browser storage.
+
+
 English-language release history. The original full Italian development log is preserved in [CHANGELOG_IT.md](CHANGELOG_IT.md), without changing or discarding its entries. Unpublished intermediate builds were incorporated into later published releases as noted below.
 
 ## v0.9.8.8.19 — 28 October 2026 (IT/EN localization audit; approved for GitHub Pages publication)
