@@ -24,6 +24,6 @@ The tutorial opens only when requested from a visible button; it never starts au
 
 Mobile home offers prominent Open OXS and Open PDF buttons instead of desktop drag-and-drop instructions. Desktop drag-and-drop remains unchanged. The v0.9.8.8.13 improvements were subsequently incorporated into later builds.
 
-### v0.9.8.8.19 — Review-only localization update
+### v0.9.8.8.19 — Approved IT/EN localization update
 
-The published GitHub Pages site and the `main` branch remain at v0.9.8.8.18. Review changes on `review/v0.9.8.8.19-it-en`. Do not merge or deploy the review branch until the owner explicitly approves it. Run IT/EN language and real-browser regression checks before release.
+The owner approved publication of the reviewed v0.9.8.8.19 from `review/v0.9.8.8.19-it-en`. The live GitHub Pages deployment and real-browser tests must be checked independently of a successful code push. Keep automated and manual IT/EN regression results distinct.

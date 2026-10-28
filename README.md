@@ -2,7 +2,7 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **Review build 0.9.8.8.19 (IT/EN localization; NOT YET PUBLISHED).** The GitHub Pages beta and `main` branch remain at **0.9.8.8.18** until owner approval. This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
+> **GitHub Pages beta 0.9.8.8.19 — IT/EN localization update, approved for publication.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
 
 ## Use the application
 
@@ -82,4 +82,4 @@ OXS quick filters, undo last marking, and jump to last stitch are available. The
 
 ## Localization review
 
-Version 0.9.8.8.19 is staged on `review/v0.9.8.8.19-it-en`. Documentation is English by default; [Italian user guide](GUIDA_UTENTE.md) and [English user guide](USER_GUIDE_EN.md) are maintained separately. Historical Italian release notes are preserved in [CHANGELOG_IT.md](CHANGELOG_IT.md), with an English overview in [CHANGELOG.md](CHANGELOG.md). No changes to library binaries, project formats or uploaded user files were intended for this review.
+Version 0.9.8.8.19 was prepared and reviewed on `review/v0.9.8.8.19-it-en` before publication. Documentation is English by default; [Italian user guide](GUIDA_UTENTE.md) and [English user guide](USER_GUIDE_EN.md) are maintained separately. Historical Italian release notes are preserved in [CHANGELOG_IT.md](CHANGELOG_IT.md), with an English overview in [CHANGELOG.md](CHANGELOG.md). No changes to library binaries, project formats or uploaded user files were intended for this review.

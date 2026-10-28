@@ -1,6 +1,6 @@
 # PuntoPunto v0.9.8.8.19 — IT/EN localization review report
 
-**Status:** REVIEW CANDIDATE — NOT RELEASED / NOT DEPLOYED  
+**Test status:** REVIEW CANDIDATE at the time of these checks; owner subsequently authorized GitHub Pages publication. This report records the **pre-release static checks**, not a live browser certification.  
 **Base:** published v0.9.8.8.18 (commit `35613ecf62e91c4391b49a5e43c478402e65a136`)  
 **Branch:** `review/v0.9.8.8.19-it-en`  
 **Scope:** language-only documentation, HTML metadata, translation dictionary, localized number formatting and displayed version.

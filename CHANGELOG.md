@@ -2,12 +2,12 @@
 
 English-language release history. The original full Italian development log is preserved in [CHANGELOG_IT.md](CHANGELOG_IT.md), without changing or discarding its entries. Unpublished intermediate builds were incorporated into later published releases as noted below.
 
-## v0.9.8.8.19 — 28 October 2026 (IT/EN localization audit — REVIEW ONLY; NOT PUBLISHED)
+## v0.9.8.8.19 — 28 October 2026 (IT/EN localization audit; approved for GitHub Pages publication)
 
 - Complete and verify English-facing interface copy, tooltips, accessible labels, errors, status summaries and technical metadata.
 - Normalize the public English documents while retaining a separate Italian user guide and complete historical Italian change log.
 - Add language-specific tests and prevent mixed Italian/English output in updated paths; preserve OXS/PDF formats, privacy handling, user files, and PDF.js 6.4.299.
-- This version is prepared on a separate review branch. The public GitHub Pages deployment remains v0.9.8.8.18 until explicit approval.
+- The update was prepared on a separate review branch and approved by the owner for publication; the previous public version was v0.9.8.8.18.
 
 ## v0.9.8.8.18 — 28 October 2026 (UX and accessibility; published to GitHub Pages)
 
