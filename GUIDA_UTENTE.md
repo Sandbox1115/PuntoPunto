@@ -1,4 +1,4 @@
-> **Mobile (v0.9.8.8.12):** nella home usa **Apri OXS** oppure **Apri PDF** per scegliere un file dal dispositivo; il trascinamento dei file resta disponibile su desktop.
+> **Mobile (v0.9.8.8.13):** nella home usa **Apri OXS** oppure **Apri PDF** per scegliere un file dal dispositivo; il trascinamento dei file resta disponibile su desktop.
 
 # Guida d’uso — PuntoPunto
 
@@ -48,4 +48,19 @@ Tutorial facoltativo tramite pulsante ben visibile, nessuna apertura automatica.
 - Pulsante **Nascondi interfaccia** nell’editor: visualizza il progetto a schermo pieno; **Mostra strumenti** ripristina i comandi.
 - I bottoni +, − e Adatta restano disponibili nella vista normale.
 
-**Mobile OXS (v0.9.8.8.12):** sotto lo schema scorri per vedere Avanzamento e Legenda filati. I due pulsanti grandi permettono di raggiungere subito questi pannelli; i filtri agiscono sullo schema in tempo reale. La modalità concentrata nasconde temporaneamente anche i pannelli inferiori.
+**Mobile OXS (v0.9.8.8.13):** sotto lo schema scorri per vedere Avanzamento e Legenda filati. I due pulsanti grandi permettono di raggiungere subito questi pannelli; i filtri agiscono sullo schema in tempo reale. La modalità concentrata nasconde temporaneamente anche i pannelli inferiori.
+
+### Salvataggio e recupero (v0.9.8.8.15)
+
+- Dopo le modifiche attendi la conferma di salvataggio. Se compare un avviso, esporta il JSON prima di chiudere.
+- Se viene recuperata una copia di sicurezza, controlla punti e filati e scarica subito una nuova copia JSON.
+- Per OXS conserva sempre il file originale insieme al JSON dei progressi; per PDF usa «Salva progetto» per includere PDF, filati e digitalizzazione.
+- I salvataggi del browser possono scomparire cancellando i dati del sito o cambiando browser/origine. Evita due schede che modificano contemporaneamente lo stesso progetto.
+
+### Editor PDF su smartphone — v0.9.8.8.17
+
+Su smartphone, dopo avere confermato la griglia, si apre automaticamente la vista ampia. La barra con **Avanzamento**, **Punti**, **Vuota** e **Non definita** resta sempre visibile. Per aggiungere un filato DMC o personalizzato tocca **Filati**, scegli il filato e torna allo schema. Con **Azioni** trovi Guida, apertura progetto, JSON progressi, esportazione OXS e chiusura; **Salva progetto** rimane in evidenza. Un tocco singolo assegna l'azione selezionata, mentre due dita ingrandiscono e spostano la griglia senza modificare le caselle. La vista mobile non sostituisce i backup JSON.
+
+### Tastiera nell’editor OXS (v0.9.8.8.18)
+
+Premi Tab fino alla griglia. Usa le frecce per scegliere una casella, Shift+frecce per spostarti di 10 caselle, Home/End per raggiungere il primo/ultimo punto della riga. Premi Invio o Spazio per segnare o, in caso di sovrapposizione, scegliere il punto nel pannello. Esc chiude il pannello. Non è necessario usare il mouse.

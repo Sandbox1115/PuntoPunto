@@ -20,6 +20,6 @@ GitHub Issues is enabled as the official beta support and feedback channel: http
 
 Tutorial facoltativo tramite pulsante ben visibile, nessuna apertura automatica. Alla chiusura di un progetto OXS tornano vuote legenda filati, filtri e statistiche. Illustrazione della home mobile sistemata per evitare sovrapposizioni. Nessuna pubblicazione su GitHub senza autorizzazione.
 
-### Published v0.9.8.8.12 — 2026-10-27
+### v0.9.8.8.12 — ultima pubblicazione verificata prima della preparazione 0.9.8.8.18
 
-Mobile home now offers prominent Open OXS and Open PDF buttons instead of desktop drag-and-drop instructions. Desktop drag-and-drop remains unchanged. Released following the owner’s explicit approval.
+Mobile home offers prominent Open OXS and Open PDF buttons instead of desktop drag-and-drop instructions. Desktop drag-and-drop remains unchanged. The v0.9.8.8.13 improvements were subsequently incorporated into later builds.

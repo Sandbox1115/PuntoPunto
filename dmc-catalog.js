@@ -7,6 +7,7 @@
   'use strict';
   const KEY='pp-dmc-craft-color-codes-v1';
   const SOURCES=['data/dmc-floss.json'];
+  const EXPECTED_SHA256='dd173705a0b871219915e6b73328fa8eebb752b699b99474879751d8a70b574a';
   let list=null, pending=null;
   const validHex=s=>typeof s==='string'&&/^#[0-9a-f]{6}$/i.test(s);
   function parse(raw){
@@ -23,9 +24,16 @@
   async function fetchOne(url){
     const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),9000);
     try{
-      const res=await fetch(url,{mode:'cors',signal:controller.signal,cache:'force-cache'});
+      // Revalidate on new releases instead of retaining a stale force-cached 404 or JSON.
+      const res=await fetch(url,{mode:'same-origin',signal:controller.signal,cache:'no-cache'});
       if(!res.ok)throw Error('HTTP '+res.status);
-      const json=await res.json(),items=parse(json);
+      const raw=await res.text();
+      if(window.crypto?.subtle){
+        const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(raw));
+        const value=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
+        if(value!==EXPECTED_SHA256)throw Error('Impronta SHA-256 del catalogo DMC non corrispondente.');
+      }
+      const json=JSON.parse(raw),items=parse(json);
       try{localStorage.setItem(KEY,JSON.stringify(json));}catch{}
       return items;
     }finally{clearTimeout(timeout);}

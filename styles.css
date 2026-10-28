@@ -280,3 +280,46 @@ body.pp-oxs-focus #editor .canvas-wrap{min-height:0}
   .pp-mobile-file-buttons .btn span{display:inline}
   .welcome #welcomePDF{display:none}
 }
+
+/* 0.9.8.8.17 — OXS tracking / navigation quality-of-life. */
+.pp-oxs-workbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 10px;background:#f8fbf9;border-bottom:1px solid #dce8e0}
+.pp-oxs-filter-status{color:#44695e;font-weight:700;font-size:11px;flex:1 1 130px;overflow-wrap:anywhere}
+.pp-oxs-tiny-btn{min-height:33px;padding:6px 9px;background:white;border:1px solid #cdded3;border-radius:8px;color:#315c4f;font-size:11px;font-weight:750;cursor:pointer}
+.pp-oxs-tiny-btn.is-active,.pp-oxs-tiny-btn[aria-pressed="true"]{background:#dcf1e6;border-color:#2c9878;color:#165843}
+.pp-oxs-tiny-btn:disabled{opacity:.48;cursor:default}
+.pp-oxs-tiny-btn:focus-visible,.pp-oxs-back-to-canvas:focus-visible{outline:3px solid #317fbe;outline-offset:2px}
+.pp-oxs-back-to-canvas{display:none}
+body.pp-oxs-focus #editor .pp-oxs-workbar{display:none!important}
+@media(max-width:620px){
+  .pp-oxs-workbar{gap:4px;padding:5px}
+  .pp-oxs-filter-status{flex-basis:100%;font-size:10px}
+  .pp-oxs-tiny-btn{flex:1 1 auto;min-height:36px;font-size:10px;padding:5px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .pp-oxs-mobile-quick:not(.hidden){grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+  .pp-oxs-mobile-quick .btn{font-size:11px;min-height:45px;padding:7px 3px;gap:2px}
+  body.pp-oxs-inline-mobile:not(.pp-oxs-focus) .pp-oxs-back-to-canvas{display:block;width:calc(100% - 28px);min-height:44px;margin:12px 14px}
+}
+
+/* v0.9.8.8.18 — consistent visible focus, keyboard discoverability, motion and contrast */
+:where(a[href],button:not(:disabled),input:not([type=hidden]),select,textarea,summary,[role="button"],[tabindex="0"]):focus-visible{
+  outline:3px solid #235caa;outline-offset:3px;
+}
+.searchbox:focus-within{outline:3px solid #235caa;outline-offset:2px;}
+.searchbox input:focus-visible{outline:0;}
+.pp-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;}
+.pp-oxs-keyboard-help{color:#435d55;line-height:1.4;}
+/* Small instructional text must remain distinguishable without relying on color alone. */
+.canvas-footer,.muted,.filter-info,.detail-row,.progress-total span,.pp-pdf-help,.pp-manual-cell-info{color:#425b55;}
+.canvas-footer{align-items:center;flex-wrap:wrap;}
+@media (hover:none) and (pointer:coarse){
+  .pp-oxs-keyboard-help{display:none;}
+  .pp-oxs-tiny-btn,.pp-oxs-mobile-quick button,.pp-pdf-close,.pp-mobile-tool,.pp-mobile-action-toggle,.pp-mobile-thread-toggle{min-height:44px;}
+  .pp-quarter-button,.tool,.icon-btn,.fit-btn,.close-panel,.oxs-picker-choice,.oxs-picker-close,.chip,.legend-item,.reset-link{min-height:44px;}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+}
+@media(forced-colors:active){
+  :where(a[href],button,input,select,textarea,summary,[tabindex="0"]):focus-visible{outline:3px solid Highlight!important;}
+  .tool.active,.chip.active,.legend-item.selected,.kind.is-active,.pp-oxs-tiny-btn[aria-pressed="true"]{border:2px solid Highlight!important;forced-color-adjust:auto;}
+  #patternCanvas{border:1px solid CanvasText;}
+}

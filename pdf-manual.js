@@ -11,8 +11,6 @@
     x:$('pdfLeft'),y:$('pdfTop'),w:$('pdfWidth'),h:$('pdfHeight')
   };
   if (!ui.overlay) return;
-  const PDFJS_LOCAL='vendor/pdf.min.js';
-  const WORKER_LOCAL='vendor/pdf.worker.min.js';
   const MAX_BYTES=30*1024*1024, MAX_CELLS=100000, MAX_SIDE=600;
   const initialRect=()=>({x:.08,y:.08,w:.84,h:.84});
   const state={doc:null,name:'',hash:'',page:1,rect:initialRect(),width:0,height:0,
@@ -21,8 +19,19 @@
   const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
   const notify=(message,error=false)=>window.PuntoPuntoImport?.notify?.(message,error);
   function message(s,error=false){ui.status.textContent=s;ui.status.classList.toggle('is-error',error);}
-  function openDialog(){ui.overlay.classList.remove('hidden');document.body.classList.add('pp-pdf-modal-open');}
-  function closeDialog(){ui.overlay.classList.add('hidden');document.body.classList.remove('pp-pdf-modal-open');state.drag=null;}
+  let dialogReturnFocus=null;
+  function openDialog(){
+    if(ui.overlay.classList.contains('hidden'))dialogReturnFocus=document.activeElement;
+    ui.overlay.classList.remove('hidden');document.body.classList.add('pp-pdf-modal-open');
+    $('pdfClose').focus({preventScroll:true});
+  }
+  function closeDialog(){
+    if(ui.overlay.classList.contains('hidden'))return;
+    ui.overlay.classList.add('hidden');document.body.classList.remove('pp-pdf-modal-open');state.drag=null;
+    const target=dialogReturnFocus;dialogReturnFocus=null;
+    if(target?.isConnected&&target.getClientRects().length)target.focus({preventScroll:true});
+    else $('openPDF')?.focus({preventScroll:true});
+  }
   function validDimensions(){
     const c=Number(ui.cols.value),r=Number(ui.rows.value);
     return ui.cols.value.trim()!==''&&ui.rows.value.trim()!==''&&Number.isInteger(c)&&Number.isInteger(r)&&c>0&&r>0&&c<=MAX_SIDE&&r<=MAX_SIDE&&c*r<=MAX_CELLS;
@@ -38,21 +47,26 @@
     else ui.info.textContent=`Griglia ${ui.cols.value} × ${ui.rows.value} · ${Number(ui.cols.value)*Number(ui.rows.value)} caselle`;
     return ready;
   }
-  function loadScript(src){return new Promise((resolve,reject)=>{const script=document.createElement('script');
-    script.src=src;script.async=true;script.onload=()=>window.pdfjsLib?resolve(window.pdfjsLib):reject(Error('PDF.js non valido: '+src));
-    script.onerror=()=>reject(Error('Risorsa non disponibile: '+src));document.head.appendChild(script);
+  function loadScript(src){return new Promise((resolve,reject)=>{
+    // Subresource Integrity checks the locally distributed PDF.js file in HTTPS mode.
+    const script=document.createElement('script');
+    script.src=src;script.async=true;script.integrity=PDFJS_SCRIPT_SRI;
+    script.onload=()=>{script.remove();window.pdfjsLib?resolve(window.pdfjsLib):reject(Error('PDF.js non valido: '+src));};
+    script.onerror=()=>{script.remove();reject(Error('PDF.js mancante o non integro: '+src));};
+    document.head.appendChild(script);
   });}
-  async function ensurePDFJS(){
-    if(window.pdfjsLib)return window.pdfjsLib;
-    if(pdfLoader)return pdfLoader;
-    pdfLoader=(async()=>{
-      const lib=await loadScript(PDFJS_LOCAL).catch(()=>{
-        throw Error('Motore PDF.js locale non disponibile. Verifica la cartella vendor e ripristina i file originali del sito.');
-      });
-      if(lib.GlobalWorkerOptions)lib.GlobalWorkerOptions.workerSrc=WORKER_LOCAL;
-      return lib;
-    })().catch(e=>{pdfLoader=null;throw e;});
-    return pdfLoader;
+  function validatePDFJS(lib){
+    if(!lib||lib.version!==PDFJS_VERSION||typeof lib.getDocument!=='function'||!lib.GlobalWorkerOptions){
+      throw Error('Versione PDF.js incompatibile o incompleta. Ripristina i due file originali nella cartella vendor.');
+    }
+    // Never accept an arbitrary replacement worker with a different library API.
+    lib.GlobalWorkerOptions.workerSrc=window.PuntoPuntoOfflinePDFWorker||WORKER_LOCAL;
+    return lib;
+  }
+  async function ensurePDFJS() {
+    if (!window.PuntoPuntoPDFJS || window.PuntoPuntoPDFJS.version !== '6.4.299')
+      throw Error('Adattatore PDF.js 6.4.299 mancante. Verifica l’integrità della distribuzione.');
+    return window.PuntoPuntoPDFJS.load();
   }
   // Keep the v0.8.1 document fingerprint algorithm to preserve previous
   // tracking and manually assigned colors for the same PDF and crop.
@@ -105,8 +119,12 @@
       }
       const lib=await ensurePDFJS();
       if(token!==state.renderToken)return;
-      const doc=await lib.getDocument({data:new Uint8Array(bytes),useSystemFonts:true,isEvalSupported:false,enableScripting:false,enableXfa:false}).promise;
+      const doc=await lib.getDocument({...window.PuntoPuntoPDFJS.documentOptions(),data:new Uint8Array(bytes),useSystemFonts:true,isEvalSupported:false,enableScripting:false,enableXfa:false}).promise;
       if(token!==state.renderToken){try{await doc.destroy();}catch{}return;}
+      if(!Number.isInteger(doc.numPages)||doc.numPages<1||doc.numPages>2000){
+        await doc.destroy();
+        throw Error('PDF con un numero di pagine non supportato (limite 2.000).');
+      }
       const previous=state.doc;state.doc=doc;
       if(previous){try{await previous.destroy();}catch{}}
       for(let n=1;n<=doc.numPages;n++){
@@ -275,7 +293,15 @@
   ui.shell.addEventListener('pointercancel',onUp);
   $('pdfClose').addEventListener('click',closeDialog);$('pdfCancel').addEventListener('click',closeDialog);
   ui.confirm.addEventListener('click',confirm);
-  ui.overlay.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();closeDialog();}});
+  ui.overlay.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeDialog();return;}
+    if(e.key!=='Tab')return;
+    const controls=[...ui.overlay.querySelectorAll('button:not(:disabled),input:not(:disabled):not([type="hidden"]),select:not(:disabled),[tabindex="0"]')]
+      .filter(item=>item.getClientRects().length&&!item.closest('.hidden'));
+    if(!controls.length)return;
+    if(e.shiftKey&&document.activeElement===controls[0]){e.preventDefault();controls[controls.length-1].focus();}
+    else if(!e.shiftKey&&document.activeElement===controls[controls.length-1]){e.preventDefault();controls[0].focus();}
+  });
   async function loadProject(payload){
     if(payload?.format!=='PuntoPunto-Project'||payload.version!==1||typeof payload.pdf?.data!=='string'||payload.pdf.data.length>43*1024*1024||
        !payload.source||payload.pdf.encoding!=='base64')throw Error('Progetto non valido.');

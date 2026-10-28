@@ -49,6 +49,19 @@ const DICT={
   "Non hai uno schema?": "Don't have a pattern?",
   "Prova il progetto di esempio →": "Try the sample project →",
   "Riprendi ultimo PDF locale →": "Resume your last local PDF →",
+  "Tastiera: frecce per spostarti, Invio o Spazio per segnare, Esc per chiudere la scelta.": "Keyboard: arrow keys to move, Enter or Space to mark, Esc to close stitch choices.",
+  "Griglia interattiva dello schema": "Interactive pattern grid",
+  "Mezzo punto": "Half stitch",
+  "Punto parziale": "Partial stitch",
+  "Punto diagonale": "Diagonal stitch",
+  "Punto scritto": "Backstitch",
+  "Mezza croce verticale": "Vertical half stitch",
+  "Mezza croce orizzontale": "Horizontal half stitch",
+  "Croce decorativa": "Decorative cross",
+  "Punti disponibili": "Available stitches",
+  "Chiudi selezione punti": "Close stitch selection",
+
+  "griglia interattiva": "interactive grid",
   "Segna punti": "Mark stitches",
   "Sposta": "Pan",
   "Modifica": "Edit",
@@ -89,8 +102,10 @@ const DICT={
   "↓ Progressi JSON": "↓ Progress JSON",
   "↥ Importa JSON": "↥ Import JSON",
   "⛶ Schermo ampio": "⛶ Wide view",
+  "⤡ Vista normale": "⤡ Normal view",
   "Chiudi": "Close",
   "0 di 0 caselle segnate": "0 of 0 cells marked",
+  "Digitalizzazione manuale e avanzamento separati": "Manual digitization and progress tracking are separate",
   "PDF originale come riferimento · definisci i punti senza alterare il tracciamento dei completati.": "Original PDF as a reference · define stitches without changing completion tracking.",
   "ⓘ Esportazione OXS e diritti sugli schemi di terzi": "ⓘ OXS exports and third-party pattern rights",
   "Licenze e informazioni": "Licenses and information",
@@ -142,7 +157,7 @@ const DICT={
   "Un piccolo consiglio": "A helpful tip",
   "Seleziona un colore nella legenda per isolare le crocette di quel filato. È più semplice non perdere il segno!": "Select a color in the legend to isolate stitches made with that thread. It makes keeping your place easier!",
   "↺ Ricomincia il tracciamento": "↺ Reset progress",
-  "PDF INTERATTIVO · VERSIONE 0.9.8.8.4": "INTERACTIVE PDF · VERSION 0.9.8.8.4",
+  "PDF INTERATTIVO · VERSIONE 0.9.8.8.18": "INTERACTIVE PDF · VERSION 0.9.8.8.18",
   "Imposta la griglia del tuo schema": "Set up your pattern grid",
   "Seleziona la pagina del diagramma. Le dimensioni della griglia le scegli tu.": "Select the chart page. You choose the grid dimensions.",
   "Il PDF resta originale.": "Your PDF stays unchanged.",
@@ -256,7 +271,7 @@ const DICT={
   "Licenze e attribuzioni — PuntoPunto": "Licenses and attributions — PuntoPunto",
   "← Torna a PuntoPunto": "← Back to PuntoPunto",
   "La nostra privacy →": "Our privacy →",
-  "TRASPARENZA DELLE FONTI · VERSIONE 0.9.8.8.5": "SOURCE TRANSPARENCY · VERSION 0.9.8.8.5",
+  "TRASPARENZA DELLE FONTI · VERSIONE 0.9.8.8.18": "SOURCE TRANSPARENCY · VERSION 0.9.8.8.18",
   "Questa pagina indica le banche dati e le librerie di terzi effettivamente impiegate in PuntoPunto, la provenienza dei colori e le condizioni per riutilizzarli.": "This page explains the third-party libraries and databases used by PuntoPunto, where color data comes from and the conditions for reusing it.",
   "Catalogo dei filati DMC": "DMC thread catalog",
   "Origine dei dati:": "Data source:",
@@ -273,7 +288,7 @@ const DICT={
   "I colori RGB/HEX sono indicativi: la resa dipende dallo schermo e non corrisponde necessariamente all'aspetto dei filati fisici. Il codice del filato è l'identificativo da seguire quando è presente sul PDF.": "RGB/HEX colors are approximate. Their appearance depends on the display and may differ from physical threads. Follow the thread code when the PDF provides one.",
   "Motore PDF.js": "PDF.js engine",
   "Componente:": "Component:",
-  "di Mozilla e contributori, versione 3.11.174, preferibilmente distribuito dalla cartella locale vendor/, con un servizio CDN di riserva quando la copia locale non è disponibile.": "by Mozilla and contributors, version 3.11.174, preferably served from the local vendor/ directory with a CDN fallback if the local copy is unavailable.",
+  "di Mozilla e contributori, versione 6.4.299, distribuito in locale senza CDN (oppure incorporato nella versione offline).": "by Mozilla and contributors, version 6.4.299, distributed locally without a CDN (or embedded in the offline edition).",
   "Licenza:": "License:",
   ". Consulta anche il": ". See also the",
   "file LICENSE ufficiale": "official LICENSE file",
@@ -545,7 +560,7 @@ const DICT={
   "GitHub gestisce le informazioni associate all'account e alle segnalazioni secondo la propria informativa. Le Issues non sono un canale confidenziale per l'esercizio dei diritti privacy: un recapito privato e l'identificazione formale del titolare devono ancora essere definiti prima della beta.": "GitHub processes account and issue data according to its privacy policy. Issues are not a confidential channel for privacy-rights requests: a private contact method and formal controller identification still need to be defined before the beta.",
   "Per feedback e assistenza tecnica durante la beta utilizza le": "For feedback and technical support during the beta, use",
   ". Le segnalazioni sono pubbliche: non pubblicare dati personali o progetti riservati. Non usare questo canale per richieste privacy confidenziali.": ". Issues are public: do not post personal data or confidential projects. Do not use this channel for confidential privacy requests.",
-  "VERSIONE 0.9.8.8.6": "VERSION 0.9.8.8.6",
+  "VERSIONE 0.9.8.8.18": "VERSION 0.9.8.8.18",
   "← Chiudi progetto e torna alla home": "← Close project and return home",
   "Esporta OXS": "Export OXS",
   "ⓘ": "ⓘ",
@@ -597,13 +612,42 @@ const DICT={
   "punto, vuota o non definita": "stitch, empty or undefined",
   "esporta periodicamente un backup": "export a backup regularly"
 };
+// 0.9.8.8.16: compact mobile PDF controls.
+Object.assign(DICT, {
+  "⋯ Azioni": "⋯ Actions",
+  "☷ Filati": "☷ Threads",
+  "Filati e digitalizzazione": "Threads and digitization",
+  "✕ Chiudi": "✕ Close",
+  "Chiudi pannello filati": "Close thread panel",
+  "Strumenti rapidi PDF": "PDF quick tools",
+  "Punti": "Stitches",
+  "Vuota": "Empty",
+  "Non definita": "Undefined",
+  "Azioni": "Actions"
+});
+// 0.9.8.8.17: OXS quick navigation and filters.
+Object.assign(DICT,{
+  "Nessun filtro attivo": "No filters active",
+  "Solo da ricamare": "Unfinished only",
+  "✕ Azzera filtri": "✕ Clear filters",
+  "↶ Annulla segno": "↶ Undo mark",
+  "◎ Ultimo punto": "◎ Last stitch",
+  "▦ Schema": "▦ Chart",
+  "↑ Torna allo schema": "↑ Back to chart",
+  "Strumenti rapidi OXS": "OXS quick tools",
+  "Ultima marcatura annullata.": "Last marking undone.",
+  "Ricerca": "Search",
+  "Da ricamare": "Unfinished",
+  "Filtri:": "Filters:",
+  "Filato ": "Thread "
+});
 const LONG=Object.keys(DICT).filter(x=>x.length>=8 && !['PuntoPunto'].includes(x)).sort((a,b)=>b.length-a.length);
 const STORAGE='puntopunto.language';
 let language='it';
 try{if(localStorage.getItem(STORAGE)==='en')language='en';}catch(_){}
 const sourceText=new WeakMap(), lastOutput=new WeakMap();
 const sourceAttrs=new WeakMap(), lastAttrs=new WeakMap();
-const attrs=['placeholder','title','aria-label','alt'];
+const attrs=['placeholder','title','aria-label','aria-roledescription','alt'];
 const exempt='script,style,svg,code,pre,[data-i18n-ignore],#trackerName,#searchPalette,#trackerDMCQuery,#trackerThreadCode,#trackerCustomName,.pp-thread-desc,.pp-dmc-item,.legend-text';
 function translate(value){
   if(language!=='en'||typeof value!=='string')return value;

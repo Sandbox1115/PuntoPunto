@@ -2,7 +2,7 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **Public beta — v0.9.8.8.12.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
+> **GitHub Pages beta 0.9.8.8.18. Site publication requires completion of the deployment and browser checks.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
 
 ## Use the application
 
@@ -43,7 +43,7 @@ For deployment instructions see [GitHub Pages setup](PUBBLICAZIONE_GITHUB.md) an
 
 ### Beta limitations
 
-The bundled PDF.js version is **3.11.174**. Existing security mitigations are enabled, but upgrading this dependency remains a priority. The current manual PDF-to-OXS workflow may not reproduce special stitch types that have not been explicitly digitized. Always verify exported patterns against their original sources.
+The bundled PDF.js version is now **6.4.299**. `isEvalSupported:false`, `enableScripting:false` and `enableXfa:false` mitigate known PDF execution risks; the bundled ESM library and module worker are locally integrity-checked. Runtime compatibility on real HTTPS and file:// browsers must still be verified before approval. Consult `SECURITY_NOTES.md`. The current manual PDF-to-OXS workflow may not reproduce special stitch types that have not been explicitly digitized. Always verify exported patterns against their original sources.
 
 A confidential privacy contact and formal data-controller information have **not yet been supplied**. These must be addressed before opening the public-hosted beta to testers; do not put personal contact details in the public repository without the owner's express permission.
 
@@ -56,11 +56,25 @@ A confidential privacy contact and formal data-controller information have **not
 
 ### v0.9.8.8.9 — Usability update
 
-The home tutorial is available via a visible button and never pops up automatically. Closing an OXS resets the legend, stitch types and project statistics. Narrow-screen hero artwork and captions no longer overlap text. The GitHub Pages release is pending explicit approval.
+The home tutorial is available via a visible button and never pops up automatically. Closing an OXS resets the legend, stitch types and project statistics. Narrow-screen hero artwork and captions no longer overlap text. This historical note refers to the original 0.9.8.8.9 preview, since incorporated into later releases.
 
 ### Mobile pattern navigation (v0.9.8.8.9)
 Two-finger pinch-to-zoom and pan work in the OXS canvas. Use **Hide interface** for a distraction-free, full-screen editing area, then **Show controls** to restore the toolbars. Touch-based marking is committed on finger release so pinching never marks stitches.
 
-## Mobile file opening (v0.9.8.8.12)
+## Mobile file opening (v0.9.8.8.13)
 
 On phones, use the **Open OXS** or **Open PDF** button on the home screen. File drag-and-drop remains available in desktop browsers.
+
+## Persistence notes — 0.9.8.8.18
+
+Automatic saves are checked for integrity and structural validity before recovery. PDF saves may fall back to localStorage; the newest valid copy is preferred on reopening. Keep independent JSON backups: browser data can still be cleared, and cross-tab edits are not merged.
+
+## Mobile PDF editor — 0.9.8.8.18
+
+On phones, the PDF editor opens in wide view with a persistent tool dock. Use **Threads** to select DMC/custom floss, **Actions** for import/export and other controls, and two fingers to zoom and pan without editing cells. A single tap changes a cell on release. Always download a full project backup periodically.
+
+## Roadmap backlog
+
+PWA/mobile installability is deferred until the saving/recovery and mobile PDF editor releases have completed real-device validation. Version 0.9.8.8.18 is **not** a PWA and does not install service workers or change offline caching.
+
+OXS 0.9.8.8.18: filtri rapidi, annulla marcatura, ritorna all’ultimo punto; posizione vista conservata come preferenza locale non inclusa nei backup JSON.

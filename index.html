@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; connect-src 'self'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' blob:; connect-src 'self'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-src 'none'">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#f7f7f3">
@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="pdf-assist.css">
   <link rel="stylesheet" href="home-guide.css">
+<script src="vendor/pp-pdfjs-bridge.js" defer></script>
 </head>
 <body>
 <div class="app">
@@ -27,8 +28,8 @@
       <span class="privacy"><span class="privacy-dot"></span> I file restano sul tuo dispositivo</span>
       <a class="legal-toplink pp-privacy-header-link" href="privacy.html" title="Come PuntoPunto tutela i tuoi dati">Privacy</a>
       <a class="legal-toplink" href="licenze.html" title="Licenze delle librerie e dei dati DMC">Licenze</a>
-      <button class="btn btn-plain mobile-legend" id="toggleLegend" type="button" aria-label="Apri legenda">☷ <span>Legenda</span></button>
-      <button class="btn btn-plain mobile-stats" id="toggleStats" type="button" aria-label="Apri progressi">◷ <span>Progressi</span></button>
+      <button class="btn btn-plain mobile-legend" id="toggleLegend" type="button" aria-label="Apri legenda" aria-controls="leftPanel" aria-expanded="false">☷ <span>Legenda</span></button>
+      <button class="btn btn-plain mobile-stats" id="toggleStats" type="button" aria-label="Apri progressi" aria-controls="rightPanel" aria-expanded="false">◷ <span>Progressi</span></button>
       <button class="btn btn-soft" id="openPDF" type="button" aria-label="Apri PDF">▤ <span>Apri PDF</span></button>
       <button class="btn btn-soft" id="openFile" type="button" aria-label="Apri OXS">▦ <span>Apri OXS</span></button><button class="btn btn-outline" id="openProject" type="button" aria-label="Apri progetto PDF" title="Riapri un progetto PDF PuntoPunto con il suo PDF e la digitalizzazione"><span class="project-open-icon" aria-hidden="true">▣</span><span class="project-open-label">Progetto PDF</span></button>
     </div>
@@ -41,7 +42,7 @@
         <h2>Legenda filati</h2>
         <p id="paletteSummary" class="muted">Apri uno schema per vedere tutti i colori.</p>
         <label class="searchbox"><span aria-hidden="true">⌕</span><input id="searchPalette" type="search" placeholder="Cerca DMC, nome, colore…" autocomplete="off" aria-label="Cerca un colore"></label>
-        <div class="legend-filter"><button id="showAllColors" class="chip active" type="button">Tutti i colori</button><span id="filterInfo" class="filter-info"></span></div>
+        <div class="legend-filter"><button id="showAllColors" class="chip active" type="button" aria-pressed="true">Tutti i colori</button><span id="filterInfo" class="filter-info"></span></div>
       </div>
       <div class="legend-list" id="legendList"><div class="empty-side">I tuoi filati appariranno qui, con quantità e avanzamento.</div></div>
       <div class="legend-footer"><label class="eyebrow" for="filterKind">TIPO DI PUNTO</label><select id="filterKind" class="oxs-kind-filter" aria-label="Isola un tipo di punto"><option value="">Tutti i tipi di punto</option></select><span class="oxs-filter-hint">Combina questo filtro con un filato della legenda. Tocca un tipo qui sotto per isolarlo.</span><span class="eyebrow">SIMBOLOGIA</span><div id="stitchKinds" class="kind-list"><span class="muted">I tipi di punto presenti nello schema.</span></div></div>
@@ -109,8 +110,15 @@
             <span class="edit-count" id="editChangeCount">Nessuna modifica allo schema</span>
           </div>
           <button type="button" id="exitOXSFocus" class="btn btn-soft pp-oxs-focus-restore" aria-hidden="true">☷ Mostra strumenti</button>
-          <div id="canvasWrap" class="canvas-wrap" tabindex="0" aria-label="Griglia interattiva dello schema"><canvas id="patternCanvas"></canvas><div class="canvas-crosshair" id="hoverInfo" aria-hidden="true"></div><div id="stitchPicker" class="oxs-point-picker hidden" role="dialog" aria-labelledby="stitchPickerTitle" aria-modal="false" tabindex="-1"><div class="oxs-picker-head"><strong id="stitchPickerTitle">Quale punto vuoi segnare?</strong><button id="stitchPickerClose" type="button" aria-label="Chiudi selezione punti" class="oxs-picker-close">×</button></div><div id="stitchPickerList" class="oxs-picker-list" role="group" aria-label="Punti disponibili"></div><p class="oxs-picker-note">Seleziona un punto per cambiarne lo stato.</p></div></div>
-          <div class="canvas-footer"><span id="canvasHint">Tocca una casella per segnare il punto; se ci sono punti sovrapposti, scegli quale. Trascina per segnare più punti.</span><span id="coords">—</span></div>
+          <div class="pp-oxs-workbar" id="oxsWorkbar" aria-label="Strumenti rapidi OXS">
+            <span class="pp-oxs-filter-status" id="oxsActiveFilters" aria-live="polite">Nessun filtro attivo</span>
+            <button type="button" class="pp-oxs-tiny-btn" id="oxsPendingOnly" aria-pressed="false">Solo da ricamare</button>
+            <button type="button" class="pp-oxs-tiny-btn" id="oxsClearFilters" disabled>✕ Azzera filtri</button>
+            <button type="button" class="pp-oxs-tiny-btn" id="oxsUndoMark" disabled>↶ Annulla segno</button>
+            <button type="button" class="pp-oxs-tiny-btn" id="oxsGoLast" disabled>◎ Ultimo punto</button>
+          </div>
+          <div id="canvasWrap" class="canvas-wrap" tabindex="0" role="group" aria-roledescription="griglia interattiva" aria-label="Griglia interattiva dello schema" aria-describedby="canvasHint oxsKeyboardHelp"><canvas id="patternCanvas"></canvas><div class="canvas-crosshair" id="hoverInfo" aria-hidden="true"></div><div id="stitchPicker" class="oxs-point-picker hidden" role="dialog" aria-labelledby="stitchPickerTitle" aria-modal="false" tabindex="-1"><div class="oxs-picker-head"><strong id="stitchPickerTitle">Quale punto vuoi segnare?</strong><button id="stitchPickerClose" type="button" aria-label="Chiudi selezione punti" class="oxs-picker-close">×</button></div><div id="stitchPickerList" class="oxs-picker-list" role="group" aria-label="Punti disponibili"></div><p class="oxs-picker-note">Seleziona un punto per cambiarne lo stato.</p></div></div>
+          <div class="canvas-footer"><span id="canvasHint">Tocca una casella per segnare il punto; se ci sono punti sovrapposti, scegli quale. Trascina per segnare più punti.</span><span class="pp-oxs-keyboard-help" id="oxsKeyboardHelp">Tastiera: frecce per spostarti, Invio o Spazio per segnare, Esc per chiudere la scelta.</span><span id="coords">—</span></div><p class="pp-sr-only" id="oxsKeyboardStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         </div>
         <div id="pdfTracker" class="pp-tracker hidden" aria-label="PDF interattivo senza conversione">
           <div class="pp-tracker-bar">
@@ -119,12 +127,23 @@
             <button type="button" class="btn btn-outline" id="trackerMinus" aria-label="Riduci zoom">−</button>
             <span id="trackerZoomLabel">100%</span>
             <button type="button" class="btn btn-outline" id="trackerPlus" aria-label="Aumenta zoom">＋</button>
-            <button type="button" class="btn btn-outline" id="trackerTutorial" title="Guida rapida all’editor PDF">ⓘ Come funziona</button><button type="button" class="btn btn-outline" id="trackerExportProject">↓ Salva progetto</button><button type="button" class="btn btn-outline" id="trackerImportProject">↥ Apri progetto</button><button type="button" class="btn btn-outline" id="trackerExportOXS" disabled>↓ Esporta OXS</button><button type="button" class="btn btn-outline" id="trackerExport">↓ Progressi JSON</button>
+            <button type="button" class="btn btn-outline pp-mobile-action-toggle" id="trackerMobileActions" aria-controls="trackerActionsMenu" aria-expanded="false" aria-haspopup="true">⋯ Azioni</button>
+            <button type="button" class="btn btn-soft pp-mobile-thread-toggle" id="trackerMobileThreads" aria-expanded="false" aria-controls="trackerControlPanel">☷ Filati</button>
+            <button type="button" class="btn btn-outline" id="trackerExportProject">↓ Salva progetto</button>
+            <div class="pp-tracker-actions-menu" id="trackerActionsMenu">
+            <button type="button" class="btn btn-outline" id="trackerTutorial" title="Guida rapida all’editor PDF">ⓘ Come funziona</button><button type="button" class="btn btn-outline" id="trackerImportProject">↥ Apri progetto</button><button type="button" class="btn btn-outline" id="trackerExportOXS" disabled>↓ Esporta OXS</button><button type="button" class="btn btn-outline" id="trackerExport">↓ Progressi JSON</button>
             <button type="button" class="btn btn-outline" id="trackerImport">↥ Importa JSON</button><button type="button" class="btn btn-outline" id="trackerFocus" aria-pressed="false" title="Espandi la vista di lavoro PDF">⛶ Schermo ampio</button>
-            <button type="button" class="btn btn-outline" id="trackerClose">Chiudi</button>
+            <button type="button" class="btn btn-outline" id="trackerClose">Chiudi</button></div>
           </div>
           <div class="pp-tracker-details"><span id="trackerCount">0 di 0 caselle segnate</span><span>PDF originale come riferimento · definisci i punti senza alterare il tracciamento dei completati.</span></div><details class="pp-rights-notice"><summary>ⓘ Esportazione OXS e diritti sugli schemi di terzi</summary><p>PuntoPunto è uno strumento gratuito e non commerciale per seguire e completare i propri ricami. La digitalizzazione e l’esportazione di schemi PDF di terzi sono destinate all’uso personale, nei limiti consentiti dalle licenze e dalla legge applicabile. La conversione non trasferisce diritti d’autore: pubblicare, condividere o rivendere file OXS derivati da opere altrui può richiedere l’autorizzazione dei titolari. L’utente risponde dell’impiego dei materiali importati ed esportati; PuntoPunto non autorizza né promuove distribuzioni o vendite non consentite. <a href="licenze.html" target="_blank" rel="noopener">Licenze e informazioni</a>.</p></details>
-          <div class="pp-c-legend" id="trackerControlPanel"><div class="pp-c-legend-head"><strong>Legenda e digitalizzazione · manuali</strong><span id="trackerLegendInfo">Scegli il filato e il tipo di punto da assegnare.</span><button type="button" id="trackerCollapse" class="btn btn-outline pp-collapse-btn" aria-expanded="true" aria-controls="trackerCatalogWrap">▴ Riduci pannello filati</button></div><div id="trackerCatalogWrap" class="pp-tracker-catalog-wrap">
+          <div class="pp-mobile-quick-tools" id="trackerMobileTools" role="group" aria-label="Strumenti rapidi PDF">
+            <button type="button" class="pp-mobile-tool is-active" data-mobile-tool="progress" aria-pressed="true">✓ <span>Avanzamento</span></button>
+            <button type="button" class="pp-mobile-tool" data-mobile-tool="stitch" aria-pressed="false">× <span>Punti</span></button>
+            <button type="button" class="pp-mobile-tool" data-mobile-tool="empty" aria-pressed="false">□ <span>Vuota</span></button>
+            <button type="button" class="pp-mobile-tool" data-mobile-tool="unknown" aria-pressed="false">? <span>Non definita</span></button>
+          </div>
+          <button type="button" class="pp-mobile-panel-backdrop" id="trackerMobilePanelBackdrop" aria-label="Chiudi il pannello filati" tabindex="-1"></button>
+          <div class="pp-c-legend" id="trackerControlPanel"><div class="pp-mobile-panel-header"><strong>Filati e digitalizzazione</strong><button type="button" class="btn btn-outline" id="trackerMobilePanelClose" aria-label="Chiudi pannello filati">✕ Chiudi</button></div><div class="pp-c-legend-head"><strong>Legenda e digitalizzazione · manuali</strong><span id="trackerLegendInfo">Scegli il filato e il tipo di punto da assegnare.</span><button type="button" id="trackerCollapse" class="btn btn-outline pp-collapse-btn" aria-expanded="true" aria-controls="trackerCatalogWrap">▴ Riduci pannello filati</button></div><div id="trackerCatalogWrap" class="pp-tracker-catalog-wrap">
             <div class="pp-thread-catalog">
               <div class="pp-thread-catalog-top"><label>Origine del filato <select id="trackerThreadSource"><option value="dmc">Catalogo DMC</option><option value="custom">Colore personalizzato</option></select></label><span>Il codice identifica il filato; i colori visualizzati sono indicativi.</span></div>
               <div id="trackerDMCFields" class="pp-catalog-form"><label for="trackerDMCQuery">Cerca codice DMC o nome</label><input id="trackerDMCQuery" type="search" placeholder="Es. 310, 666, Blanc, violet…" autocomplete="off" aria-describedby="trackerDMCStatus"><button id="trackerAddDMC" class="btn btn-soft" type="button" disabled>+ Aggiungi DMC</button><span id="trackerDMCStatus" role="status" aria-live="polite">Caricamento del catalogo…</span><div id="trackerDMCResults" class="pp-dmc-results" aria-label="Risultati catalogo DMC"></div></div>
@@ -149,6 +168,7 @@
         </div>
       </section>
       <nav id="oxsMobileQuickNav" class="pp-oxs-mobile-quick hidden" aria-label="Pannelli del progetto OXS">
+        <button class="btn btn-soft" id="oxsJumpCanvas" type="button" aria-controls="stage">▦ <span>Schema</span></button>
         <button class="btn btn-soft" id="oxsJumpProgress" type="button" aria-controls="rightPanel">◷ <span>Avanzamento</span></button>
         <button class="btn btn-soft" id="oxsJumpThreads" type="button" aria-controls="leftPanel">☷ <span>Filati e filtri</span></button>
       </nav>
@@ -173,10 +193,10 @@
 <input type="file" id="pdfInput" accept=".pdf,application/pdf" hidden><input type="file" id="projectInput" accept=".json,.puntopunto.json,application/json" hidden>
 
 <!-- v0.9.1: griglia manuale PDF e digitalizzazione progressiva; nessun riconoscimento automatico. -->
-<div class="pp-pdf-overlay hidden" id="pdfOverlay" role="dialog" aria-modal="true" aria-labelledby="pdfTitle">
+<div class="pp-pdf-overlay hidden" id="pdfOverlay" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" aria-describedby="pdfStatus">
   <div class="pp-pdf-dialog pp-manual-dialog">
     <div class="pp-pdf-heading">
-      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.12</span>
+      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.18</span>
         <h2 id="pdfTitle">Imposta la griglia del tuo schema</h2>
         <p id="pdfFilename" class="muted">Seleziona la pagina del diagramma. Le dimensioni della griglia le scegli tu.</p>
       </div>

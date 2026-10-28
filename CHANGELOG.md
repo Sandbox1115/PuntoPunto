@@ -1,3 +1,67 @@
+## 0.9.8.8.18 — 28 ottobre 2026 (UX e accessibilità; distribuzione GitHub Pages)
+
+- Navigazione da tastiera della griglia OXS: frecce, Shift+frecce (10 caselle), Home/End, Invio/Spazio per segnare. La scelta dei punti sovrapposti rimane esplicita; il cursore tastiera non modifica progressi o backup.
+- Focus visibile per link, pulsanti, menu, campi e aree interattive. Casella attiva evidenziata sulla tela OXS; posizione comunicata anche in testo accessibile IT/EN.
+- Stato `aria-expanded` coerente sulle barre laterali, selezione «Tutti i colori» esposta tramite `aria-pressed`; comunicazione degli errori più urgente per tecnologie assistive.
+- Ripristino del focus e navigazione Tab contenuta nella finestra iniziale PDF e nella guida PDF, conservando il comportamento Escape.
+- Preferenza sistema «riduci movimento», supporto ai colori forzati e dimensione minima dei controlli principali sui touchscreen.
+- Nessuna modifica ai formati OXS/JSON, ai backup, alla semantica dei punti sovrapposti o a PDF.js 6.4.299.
+
+## 0.9.8.8.17.1 — 28 ottobre 2026 (correzione spunte OXS sovrapposte; non pubblicata)
+
+- Corretto il rendering dei punti sovrapposti nell'editor OXS: marcando la seconda voce (per esempio croce intera e mezzo punto) compare una spunta visibile anche se l'altro punto viene disegnato successivamente sopra la casella.
+- A zoom sufficiente gli indicatori di completamento occupano posizioni distinte per i punti sovrapposti; il pannello di scelta mantiene l'indicazione esatta per ciascun punto. A zoom molto basso rimane un indicatore generale di completamento, per evitare badge illeggibili.
+- Invariati identificatori dei punti, formato OXS/JSON, salvataggi, filtri, funzionalità mobile, PDF.js 6.4.299 e catalogo DMC. Nessuna modifica al repository GitHub.
+
+## 0.9.8.8.17 — 28 ottobre 2026 (rifiniture OXS; non pubblicata)
+
+- Barra rapida OXS: filtri attivi visibili, solo punti da ricamare, azzeramento filtri, annullamento ultimo gesto di marcatura e ritorno all'ultimo punto lavorato.
+- Su smartphone pulsante «Schema» per tornare alla tela e pulsante di rientro dai pannelli Avanzamento e Filati.
+- Vista OXS conservata per impronta del progetto (centro, zoom, ultimo punto) in una preferenza localStorage indipendente; nessuna alterazione ai progressi salvati e ai JSON/OXS.
+- La funzione annulla agisce esclusivamente sulla marcatura dei progressi, non sulle modifiche allo schema; non è una cronologia persistente.
+- Nessuna modifica al motore PDF.js 6.4.299, ai salvataggi della 0.9.8.8.15, al catalogo DMC o agli esempi; release non pubblicata.
+
+## 0.9.8.8.16 — 28 ottobre 2026 (editor PDF ottimizzato per smartphone; non pubblicata)
+
+- Su telefoni (max 700 px) l'editor PDF apre in vista ampia, con strumenti rapidi persistenti sopra lo schema e palette filati apribile da un pannello dedicato.
+- Le azioni secondarie sono raccolte in un menu mobile; «Salva progetto» e zoom restano sempre visibili. Nessuna perdita di accesso a JSON, OXS, guida e uscita.
+- Una pressione singola modifica soltanto al rilascio; il pinch con due dita ingrandisce e sposta lo schema senza contrassegnare involontariamente caselle.
+- Selezionando «Punti» senza filato si apre la legenda; dopo la scelta del filato torna la visualizzazione dello schema. Etichette bilingui, touch target e flusso della schermata di impostazione griglia migliorati.
+- Nessuna modifica ai dati, al formato OXS, ai salvataggi rinforzati v15, a PDF.js 6.4.299 o alla logica di import/export. Nessun deploy senza approvazione.
+
+## 0.9.8.8.15 — 27 ottobre 2026 (affidabilità salvataggi e recupero; non pubblicata)
+
+- I salvataggi locali OXS e PDF ora verificano struttura e riferimenti prima del ripristino, oltre ai checksum: in caso di copia principale danneggiata si tenta quella valida precedente senza cancellarla.
+- Il lettore PDF seleziona la copia più recente fra IndexedDB e fallback locale, purché valida; il ripristino indica all'utente quando conviene esportare subito il progetto JSON.
+- I salvataggi PDF non vengono indicati come completati fino alla conferma della scrittura; segnalazione di operazioni ancora in corso prima della chiusura della pagina. I PDF recenti possono recuperare il precedente archivio integro.
+- Ripristino OXS reso esplicito in caso di errore di archivio, evitando che una richiesta di recupero iniziale prevalga sull'apertura manuale dell'utente.
+- Nessuna modifica ai formati OXS e PDF/JSON esportati, alla digitalizzazione, al catalogo DMC e al motore PDF.js 6.4.299. Privacy e salvataggio solo sul dispositivo invariati.
+- Le copie del browser non sono backup permanenti: test su HTTPS reale, file:// e interruzioni del processo ancora richiesti prima del deploy. Eventuali conflitti tra schede restano da verificare su browser fisici.
+
+## 0.9.8.8.14.1 — 27 ottobre 2026 (correzione traduzioni; non pubblicata)
+
+- Tradotti i due testi mancanti nell’editor PDF: «⤡ Vista normale» / «⤡ Normal view» e «Digitalizzazione manuale e avanzamento separati» / «Manual digitization and progress tracking are separate».
+- Ripristinata la traducibilità del sottotitolo PDF dopo il passaggio da un progetto OXS (rimozione selettiva di `data-i18n-ignore`).
+- Non modificati PDF.js 6.4.299, i file dei progetti, il catalogo DMC, il tracciamento, lo zoom o le funzionalità di salvataggio.
+- Build da collaudare su browser reali prima di pubblicare.
+
+## 0.9.8.8.14 — 27 ottobre 2026 (non pubblicata)
+
+- PDF.js 3.11.174 sostituito da PDF.js 6.4.299, modulo ES + worker module verificati tramite SHA-256.
+- Compatibilità GitHub Pages e standalone `file://` senza CDN e senza account.
+- CMap, standard fonts e decoder WASM disponibili localmente; CSP aggiornata per moduli `blob:` verificati.
+- Rimangono invariati formato OXS, coordinate griglia, salvataggi e logiche dell'editor.
+- Build da convalidare con i test E2E della release originale prima di approvare la pubblicazione.
+
+## v0.9.8.8.13 — Stability and security audit (pre-release, not published)
+- Audited all shipped assets and documented the current PDF.js risk profile and a separate migration plan (see `SECURITY_NOTES.md`). PDF.js 3.11.174 is **not** upgraded in this release; known CVE-2024-4367 remains mitigated by `isEvalSupported:false`.
+- Enforced same-origin PDF.js script integrity via SRI and strict library/worker version expectations; no CDN fallback.
+- Added SHA-256 comparison for the 489-color bundled DMC JSON when WebCrypto is available; revalidate instead of force-cache to avoid stale catalogs. Cached structurally valid catalog remains a fallback when the network is unavailable.
+- Improved IndexedDB transaction completion and handling of blocked/version-change connections; preserved existing project schemas and JSON backups.
+- Capped supported PDF page counts to prevent huge page selectors consuming resources; input size limits unchanged.
+- Updated release copy and regression checks without changing the OXS/PDF data format or the touch UI.
+- Deliver both GitHub Pages and standalone `index.html` builds for approval; no GitHub publication without consent.
+
 ## v0.9.8.8.12 — Touch-friendly file import on the home screen (published 2026-10-27)
 - On phones (up to 620 px), replaced the desktop drag-and-drop panel with two accessible, full-size **Open OXS / Open PDF** buttons and a short prompt. Buttons use the existing file pickers, and PDF/OXS validation is unchanged.
 - On desktop, preserved the existing drop area and keyboard access. The welcome PDF quick link is hidden only on phones to avoid duplicate actions.

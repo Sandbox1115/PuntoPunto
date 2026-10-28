@@ -1,4 +1,4 @@
-> **Mobile (v0.9.8.8.12):** from the home screen, tap **Open OXS** or **Open PDF** to choose a file from your device; drag-and-drop remains available on desktop.
+> **Mobile (v0.9.8.8.13):** from the home screen, tap **Open OXS** or **Open PDF** to choose a file from your device; drag-and-drop remains available on desktop.
 
 # PuntoPunto — User guide (English)
 
@@ -49,4 +49,16 @@ The home tutorial is available via a visible button and never pops up automatica
 - **Hide interface** expands the pattern; **Show controls** restores the complete editor.
 - The plus, minus and Fit buttons remain available in the standard view.
 
-**OXS on phones (v0.9.8.8.12):** scroll below the canvas to find Progress and Thread legend. Two large shortcuts take you directly to each section. Color and stitch filters update the pattern immediately. Focus mode hides the lower panels until you return to the normal view.
+**OXS on phones (v0.9.8.8.13):** scroll below the canvas to find Progress and Thread legend. Two large shortcuts take you directly to each section. Color and stitch filters update the pattern immediately. Focus mode hides the lower panels until you return to the normal view.
+
+### Saving and recovery (v0.9.8.8.15)
+
+Wait for the save confirmation after editing. If a warning appears, export a JSON backup before closing. If an older snapshot is recovered, verify it and immediately export a new JSON file. Preserve the source OXS alongside its progress JSON; for PDF use “Save project” to include the source document. Browser storage is not permanent and may be cleared or unavailable on file://. Avoid editing the same project simultaneously in multiple tabs.
+
+### Mobile PDF editor — v0.9.8.8.17
+
+On phones, the PDF workspace opens automatically in wide view. The quick tools (**Progress**, **Stitches**, **Empty**, **Undefined**) stay visible. Open **Threads** to pick DMC or custom floss and return to the chart. **Actions** contains Help, project import, progress JSON import/export, OXS export and Close; **Save project** remains directly accessible. Tap once to edit; use two fingers to zoom and pan without touching cells. Keep exporting JSON backups.
+
+### OXS editor keyboard controls (v0.9.8.8.18)
+
+Press Tab to focus the grid. Use arrow keys to select a cell, Shift+arrows to move 10 cells, Home/End to reach the beginning/end of the row. Press Enter or Space to mark, or select a stitch when stitches overlap. Press Esc to close the stitch selector.

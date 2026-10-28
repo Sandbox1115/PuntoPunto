@@ -9,6 +9,34 @@
   const VISUALS=window.PuntoPuntoStitchVisuals;
   const KINDS={full:'Croce intera',halfForward:'Mezza croce ╱',halfBack:'Mezza croce ╲',quarterNW:'Quarto ◤ alto a sinistra',quarterNE:'Quarto ◥ alto a destra',quarterSW:'Quarto ◣ basso a sinistra',quarterSE:'Quarto ◢ basso a destra',tentForward:'Punto diagonale ╲•',tentBack:'Punto diagonale ╱•',knot:'Nodo francese',bead:'Perlina'};
   const controlPanel=$('trackerControlPanel'),collapse=$('trackerCollapse'),focus=$('trackerFocus'),quarterPicker=$('trackerQuarterPicker');
+  const mobileThreads=$('trackerMobileThreads'),mobileClose=$('trackerMobilePanelClose'),mobileBackdrop=$('trackerMobilePanelBackdrop');
+  const mobileActions=$('trackerMobileActions'),actionsMenu=$('trackerActionsMenu');
+  const mobileQuery=window.matchMedia('(max-width:700px)');
+  let mobilePanelOpen=false,mobileMenuOpen=false;
+  function setMobilePanel(value,{returnFocus=false}={}){
+    mobilePanelOpen=!!value&&mobileQuery.matches;
+    ui.root.classList.toggle('pp-mobile-threads-open',mobilePanelOpen);
+    mobileThreads.setAttribute('aria-expanded',String(mobilePanelOpen));
+    controlPanel.setAttribute('aria-hidden',mobileQuery.matches&&!mobilePanelOpen?'true':'false');
+    if(!mobilePanelOpen&&returnFocus)mobileThreads.focus();
+    if(mobilePanelOpen){setCompact(false);setMobileMenu(false);}
+  }
+  function setMobileMenu(value,{returnFocus=false}={}){
+    mobileMenuOpen=!!value&&mobileQuery.matches;
+    ui.root.classList.toggle('pp-mobile-actions-open',mobileMenuOpen);
+    mobileActions.setAttribute('aria-expanded',String(mobileMenuOpen));
+    if(!mobileMenuOpen&&returnFocus)mobileActions.focus();
+    if(mobileMenuOpen)setMobilePanel(false);
+  }
+  mobileThreads.addEventListener('click',()=>setMobilePanel(!mobilePanelOpen));
+  mobileClose.addEventListener('click',()=>setMobilePanel(false,{returnFocus:true}));
+  mobileBackdrop.addEventListener('click',()=>setMobilePanel(false,{returnFocus:true}));
+  mobileActions.addEventListener('click',()=>setMobileMenu(!mobileMenuOpen));
+  actionsMenu.addEventListener('click',event=>{if(event.target.closest('button'))setMobileMenu(false);});
+  document.addEventListener('pointerdown',event=>{
+    if(mobileMenuOpen&&!event.target.closest('#trackerActionsMenu,#trackerMobileActions'))setMobileMenu(false);
+  });
+  mobileQuery.addEventListener('change',()=>{setMobilePanel(false);setMobileMenu(false);});
   function syncQuarterPicker(){
     if(!quarterPicker)return;
     const isQuarter=ui.kind.value.startsWith('quarter');
@@ -35,50 +63,59 @@
   function payload(){return {version:4,completed:[...state.done],palette:state.palette,cells:[...state.cells],empty:[...state.empty]};}
   function warnUnsaved(){ui.projectStatus.textContent='⚠ Salvataggio automatico non riuscito: usa «Salva progetto» e conserva il JSON.';
     if(Date.now()-state.saveWarningAt>12000){notify('Attenzione: salvataggio locale non riuscito. Scarica una copia del progetto.',true);state.saveWarningAt=Date.now();}}
-  let pendingSave=null, pendingPayload=null, latestSave=Promise.resolve();
+  let pendingSave=null, pendingPayload=null, latestSave=Promise.resolve(), saveRevision=0;
+  const writesInFlight=new Set();
+  function validSnapshot(p,cols=state.cols,rows=state.rows){
+    if(!p||p.version!==4)return false;
+    try{codec.normalize({cols,rows,palette:p.palette,cells:p.cells,empty:p.empty,completed:p.completed});return true;}
+    catch{return false;}
+  }
+  const stamp=value=>{const n=Date.parse(value||'');return Number.isFinite(n)?n:0;};
   function persistPending(){
     if(!pendingPayload)return latestSave;
-    const {key,value}=pendingPayload;pendingPayload=null;
+    const {key,value,revision,cols,rows}=pendingPayload;pendingPayload=null;
     if(pendingSave){clearTimeout(pendingSave);pendingSave=null;}
     const store=window.PuntoPuntoPDFStore;
-    // Legacy safe snapshots are retained as a fallback on restricted browsers.
-    latestSave=(store?store.writeProgress(key,value):Promise.reject(Error('IndexedDB non disponibile')))
+    // A save is only acknowledged after the IndexedDB transaction commits.
+    const task=(store?store.writeProgress(key,value,p=>validSnapshot(p,cols,rows)):Promise.reject(Error('IndexedDB non disponibile')))
       .then(()=>{
-        if(state.key===key){state.saveOK=true;ui.projectStatus.textContent='Salvato sul dispositivo · esporta periodicamente una copia del progetto';}
+        if(state.key===key&&revision===saveRevision){state.saveOK=true;ui.projectStatus.textContent='Salvato sul dispositivo · esporta periodicamente una copia del progetto';}
       }).catch(e=>{
         console.warn('IndexedDB non disponibile, uso salvataggio precedente',e);
-        const result=window.PuntoPuntoStorage?.write(key,value);
-        if(state.key===key){state.saveOK=!!result?.ok;
+        const result=window.PuntoPuntoStorage?.write(key,value,p=>validSnapshot(p,cols,rows));
+        if(state.key===key&&revision===saveRevision){state.saveOK=!!result?.ok;
           if(result?.ok)ui.projectStatus.textContent='Salvato in memoria locale ridotta · esporta periodicamente il progetto';
           else warnUnsaved();}
+        else if(!result?.ok)notify('Un salvataggio PDF in chiusura non è riuscito. Conserva il progetto JSON.',true);
       });
-    return latestSave;
+    writesInFlight.add(task);
+    task.finally(()=>writesInFlight.delete(task)).catch(()=>{});
+    latestSave=task;return task;
   }
   function save(){if(!state.key)return;
-    pendingPayload={key:state.key,value:payload()};
-    ui.projectStatus.textContent='Salvataggio in corso…';
+    pendingPayload={key:state.key,value:payload(),revision:++saveRevision,cols:state.cols,rows:state.rows};
+    state.saveOK=false;ui.projectStatus.textContent='Salvataggio in corso…';
     if(pendingSave)clearTimeout(pendingSave);
     pendingSave=setTimeout(persistPending,150);
   }
-  async function flushSave(){if(pendingPayload)persistPending();await latestSave;}
+  async function flushSave(){if(pendingPayload)persistPending();await Promise.allSettled([...writesInFlight]);}
   async function load(){
     state.done=new Set();state.cells=new Map();state.empty=new Set();state.palette=[];state.legacy=false;state.dmcSelected=null;state.saveOK=true;
-    let snapshot=null;
-    try{snapshot=await window.PuntoPuntoPDFStore?.readProgress(state.key);}
-    catch(e){console.warn('Archivio PDF non leggibile',e);}
-    if(!snapshot?.found){
-      const legacy=window.PuntoPuntoStorage?.read(state.key);
-      if(legacy?.found){snapshot=legacy; /* migrate unchanged v0.9.x records */}
-      else if(legacy?.damaged) snapshot=legacy;
-    }
-
-    if(snapshot?.found){try{
-      const p=snapshot.value;if(p.version!==4)throw Error('Versione salvataggio non riconosciuta.');
-      const c=codec.normalize({cols:state.cols,rows:state.rows,palette:p.palette,cells:p.cells,empty:p.empty,completed:p.completed});
+    let database=null,local=null,readError=false;
+    try{database=await window.PuntoPuntoPDFStore?.readProgress(state.key,validSnapshot);}
+    catch(e){console.warn('Archivio PDF non leggibile',e);readError=true;}
+    try{local=window.PuntoPuntoStorage?.read(state.key,validSnapshot);}
+    catch(e){console.warn('Backup browser non leggibile',e);readError=true;}
+    // A fallback to localStorage can succeed after a previously valid IndexedDB
+    // save. Prefer the newest *valid* snapshot instead of silently losing edits.
+    const choices=[database,local].filter(s=>s?.found).sort((a,b)=>stamp(b.savedAt)-stamp(a.savedAt));
+    const snapshot=choices[0]||null;
+    const damaged=!!(readError||database?.damaged||local?.damaged);
+    if(snapshot){
+      const c=codec.normalize({cols:state.cols,rows:state.rows,palette:snapshot.value.palette,cells:snapshot.value.cells,empty:snapshot.value.empty,completed:snapshot.value.completed});
       state.done=c.completed;state.cells=c.cells;state.empty=c.empty;state.palette=c.palette;
-      if(snapshot.recovered){ui.projectStatus.textContent='⚠ Recuperata la copia di sicurezza: esporta subito un progetto JSON.';notify('Ripristinata una copia di sicurezza del progetto. Esporta una copia.',true);}
-    }catch(e){console.warn('Snapshot ignorato perché non valido',e);ui.projectStatus.textContent='⚠ Dati locali danneggiati: controlla gli ultimi salvataggi JSON.';}}
-    else{
+      if(snapshot.recovered||damaged){ui.projectStatus.textContent='⚠ Recuperata una copia valida: esporta subito un progetto JSON.';notify('Recuperato un salvataggio PDF valido. Esporta una copia di sicurezza.',true);}
+    }else{
       try{
         const arr=JSON.parse(localStorage.getItem(state.key)||'[]');
         if(Array.isArray(arr))state.done=new Set(arr.filter(i=>Number.isInteger(i)&&i>=0&&i<total()));
@@ -91,12 +128,22 @@
         if(old?.version===3){const parsed=codec.normalize({...model(),cells:old.cells,empty:old.empty});state.cells=parsed.cells;state.empty=parsed.empty;state.legacy=false;}
         if(arr.length||saved||old){save();}
       }catch(err){console.warn('Salvataggio precedente non leggibile',err);ui.projectStatus.textContent='⚠ Vecchio salvataggio danneggiato: importa il progetto JSON.';}
-      if(snapshot?.damaged)ui.projectStatus.textContent='⚠ Copia locale danneggiata: controlla o importa il progetto JSON.';
+      if(damaged){state.saveOK=false;ui.projectStatus.textContent='⚠ Salvataggi locali danneggiati: importa un progetto JSON prima di continuare.';notify('Salvataggi PDF non recuperabili automaticamente. Verifica i backup JSON.',true);}
     }
     state.selected=null;state.tool='progress';state.kind='full';
   }
   function getStats(){const resolved=state.cells.size+state.empty.size,unknown=total()-resolved;return {resolved,unknown,total:total(),stitches:state.cells.size,empty:state.empty.size};}
-  function setTool(tool){state.tool=tool;const control=document.querySelector(`input[name="trackerTool"][value="${tool}"]`);if(control)control.checked=true;renderLegend();}
+  function setTool(tool){
+    state.tool=tool;
+    const control=document.querySelector(`input[name="trackerTool"][value="${tool}"]`);
+    if(control)control.checked=true;
+    ui.root.querySelectorAll('[data-mobile-tool]').forEach(button=>{
+      const active=button.dataset.mobileTool===tool;
+      button.classList.toggle('is-active',active);
+      button.setAttribute('aria-pressed',String(active));
+    });
+    renderLegend();
+  }
   function legendInfo(){
     const s=getStats();
     if(state.tool==='stitch')return state.selected?'Assegna '+state.selected+' ('+KINDS[state.kind]+'). Tocca una casella per sostituirla.':'Seleziona un filato dalla legenda.';
@@ -113,7 +160,7 @@
       const name=document.createElement('strong');name.textContent=(item.brand==='DMC'?'DMC ':'')+item.code;
       const title=document.createElement('small');title.className='pp-thread-desc';title.textContent=item.name||'';
       const count=document.createElement('span');count.textContent=(counts.get(item.code)||0)+' punti';
-      b.append(sw,name,title,count);b.addEventListener('click',()=>{state.selected=item.code;setTool('stitch');});ui.list.appendChild(b);
+      b.append(sw,name,title,count);b.addEventListener('click',()=>{state.selected=item.code;setTool('stitch');setMobilePanel(false);});ui.list.appendChild(b);
     }
     if(!state.palette.length)ui.info.textContent='Aggiungi i filati riportati sulla legenda del PDF.';
     else ui.info.textContent=legendInfo();
@@ -131,7 +178,7 @@
       return {ok:false,message:'Il codice '+code+' è già usato per un altro filato. Per il personalizzato, scegli un codice diverso (es. MIO-'+code+').'};
     }
     if(state.palette.length>=100)return {ok:false,message:'La legenda ammette al massimo 100 filati.'};
-    state.palette.push({code,color,brand,name});state.selected=code;setTool('stitch');save();draw();return {ok:true};
+    state.palette.push({code,color,brand,name});state.selected=code;setTool('stitch');save();draw();setMobilePanel(false);return {ok:true};
   }
   function sourceMode(){
     const dmc=ui.threadSource.value==='dmc';ui.dmcFields.classList.toggle('hidden',!dmc);ui.customFields.classList.toggle('hidden',dmc);
@@ -184,22 +231,34 @@
     try{localStorage.setItem('pp-pdf-tracker-last-v1:'+state.hash,JSON.stringify({page:state.page,cols:state.cols,rows:state.rows,rect:state.rect}));}catch(e){console.warn('Griglia recente non salvata',e);notify('La griglia potrebbe non essere ripristinata automaticamente: esporta il progetto JSON.',true);}
     await load();ui.dmcSearch.value='';ui.addDMC.disabled=true;ui.name.textContent=`${info.name} · pagina ${info.page} · ${info.cols} × ${info.rows}`;
     window.PuntoPuntoOXSNavigation?.close({confirmExit:false,showHome:false});
+    // An OXS session exempts its filename/metadata from automatic translation.
+    // On entry to PDF mode, keep the PDF filename literal but translate the fixed metadata.
+    $('projectTitle').setAttribute('data-i18n-ignore','');
+    $('projectMeta').removeAttribute('data-i18n-ignore');
     document.body.classList.add('pp-tracker-mode');$('welcome').classList.add('hidden');$('editor').classList.add('hidden');ui.root.classList.remove('hidden');
     $('projectTitle').textContent=info.name.replace(/\.pdf$/i,'')+' · PDF';$('projectMeta').textContent='Digitalizzazione manuale e avanzamento separati';
     ['exportOXS','saveProgress','loadProgress'].forEach(id=>$(id).disabled=true);
     document.querySelector('input[name=trackerTool][value=progress]').checked=true;ui.kind.value=state.kind;syncQuarterPicker();
-    setFocus(false);setCompact(true);scaleTo(Math.min(1,(ui.scroller.clientWidth-25)/sw));draw();sourceMode();ui.scroller.scrollTop=0;ui.scroller.scrollLeft=0;
+    setMobilePanel(false);setMobileMenu(false);setCompact(true);
+    setFocus(mobileQuery.matches);setTool('progress');
+    scaleTo(Math.min(1,(ui.scroller.clientWidth-25)/sw));draw();sourceMode();ui.scroller.scrollTop=0;ui.scroller.scrollLeft=0;
     if(state.pdfBytes&&window.PuntoPuntoPDFStore){window.PuntoPuntoPDFStore.rememberPDF(source(),state.pdfBytes).catch(e=>{notify('PDF aperto, ma non memorizzato: usa «Salva progetto» per conservarlo. '+e.message,true);});}
   }
   function setCompact(value){compact=!!value;controlPanel.classList.toggle('pp-compact',compact);collapse.setAttribute('aria-expanded',String(!compact));collapse.textContent=compact?'▾ Mostra filati':'▴ Riduci pannello filati';}
-  function setFocus(value){focusMode=!!value;document.body.classList.toggle('pp-tracker-focus',focusMode);focus.setAttribute('aria-pressed',String(focusMode));focus.textContent=focusMode?'⤡ Vista normale':'⛶ Schermo ampio';}
+  function setFocus(value){focusMode=!!value;setMobilePanel(false);setMobileMenu(false);document.body.classList.toggle('pp-tracker-focus',focusMode);focus.setAttribute('aria-pressed',String(focusMode));focus.textContent=focusMode?'⤡ Vista normale':'⛶ Schermo ampio';}
   collapse.addEventListener('click',()=>setCompact(!compact));focus.addEventListener('click',()=>setFocus(!focusMode));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&focusMode&&!document.getElementById('pdfTutorial')?.classList.contains('hidden'))return;if(e.key==='Escape'&&focusMode){setFocus(false);focus.focus();}});
-  function closeBeforeOXS(){setFocus(false);if(ui.root.classList.contains('hidden'))return;save();flushSave();ui.root.classList.add('hidden');document.body.classList.remove('pp-tracker-mode');}
+  document.addEventListener('keydown',e=>{
+    if(e.key!=='Escape'||ui.root.classList.contains('hidden'))return;
+    if(!document.getElementById('pdfTutorial')?.classList.contains('hidden'))return;
+    if(mobilePanelOpen){setMobilePanel(false,{returnFocus:true});return;}
+    if(mobileMenuOpen){setMobileMenu(false,{returnFocus:true});return;}
+    if(focusMode){setFocus(false);focus.focus();}
+  });
+  function closeBeforeOXS(){setMobilePanel(false);setMobileMenu(false);setFocus(false);if(ui.root.classList.contains('hidden'))return;flushSave();ui.root.classList.add('hidden');document.body.classList.remove('pp-tracker-mode');}
   function close({confirmExit=true}={}){
     if(ui.root.classList.contains('hidden'))return true;
     if(confirmExit&&!window.ppConfirm('Stai per tornare alla home e uscire dal lavoro PDF in corso. Prima di procedere usa «Salva progetto» per scaricare una copia JSON con il PDF e la digitalizzazione: il salvataggio automatico del browser potrebbe non essere sufficiente. Vuoi uscire comunque?'))return false;
-    setFocus(false);save();flushSave();
+    setMobilePanel(false);setMobileMenu(false);setFocus(false);flushSave();
     ui.root.classList.add('hidden');document.body.classList.remove('pp-tracker-mode');
     $('welcome').classList.remove('hidden');$('projectTitle').removeAttribute('data-i18n-ignore');$('projectMeta').removeAttribute('data-i18n-ignore');
     $('projectTitle').textContent='Il tuo prossimo ricamo';$('projectMeta').textContent='Carica un OXS o un PDF interattivo per iniziare a lavorare';
@@ -266,7 +325,62 @@
     }catch(err){notify('Caricamento del progetto non riuscito: '+err.message,true);}
   }
   function restoreProject(payload){if(payload.format!=='PuntoPunto-Project')throw Error('Formato progetto sconosciuto.');applyData(payload.digitalization);}
-  ui.grid.addEventListener('pointerdown',activate);
+  // A single mobile tap edits on release, never on first contact: this prevents
+  // a second finger arriving for pinch-zoom from accidentally marking a cell.
+  const activeTouches=new Map();
+  let touchGesture=false,pinchStart=null;
+  const midpoint=(a,b)=>({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
+  const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+  function zoomAt(next,x,y){
+    const old=ui.page.getBoundingClientRect();
+    if(!old.width||!old.height)return;
+    const relativeX=(x-old.left)/old.width,relativeY=(y-old.top)/old.height;
+    scaleTo(next);
+    const now=ui.page.getBoundingClientRect();
+    ui.scroller.scrollLeft+=now.left+relativeX*now.width-x;
+    ui.scroller.scrollTop+=now.top+relativeY*now.height-y;
+  }
+  ui.grid.addEventListener('pointerdown',event=>{
+    if(event.pointerType!=='touch'){activate(event);return;}
+    if(activeTouches.size>=2)return;
+    activeTouches.set(event.pointerId,{x:event.clientX,y:event.clientY,startX:event.clientX,startY:event.clientY,time:Date.now()});
+    try{ui.grid.setPointerCapture(event.pointerId);}catch(_){ }
+    if(activeTouches.size===2){
+      touchGesture=true;
+      const [a,b]=[...activeTouches.values()];
+      pinchStart={distance:Math.max(1,distance(a,b)),scale:state.scale};
+    }
+    event.preventDefault();
+  });
+  ui.grid.addEventListener('pointermove',event=>{
+    if(!activeTouches.has(event.pointerId))return;
+    const old=activeTouches.get(event.pointerId);
+    activeTouches.set(event.pointerId,{...old,x:event.clientX,y:event.clientY});
+    if(activeTouches.size===2&&pinchStart){
+      const [a,b]=[...activeTouches.values()];
+      const mid=midpoint(a,b);
+      zoomAt(pinchStart.scale*distance(a,b)/pinchStart.distance,mid.x,mid.y);
+      // Rebase on current geometry so moving the midpoint also pans naturally.
+      pinchStart={distance:Math.max(1,distance(a,b)),scale:state.scale};
+    }
+    event.preventDefault();
+  });
+  function finishTouch(event,cancel=false){
+    const old=activeTouches.get(event.pointerId);
+    if(!old)return;
+    activeTouches.delete(event.pointerId);
+    if(!cancel&&!touchGesture&&!activeTouches.size&&Math.hypot(event.clientX-old.startX,event.clientY-old.startY)<12&&Date.now()-old.time<1500){
+      activate(event);
+    }
+    if(!activeTouches.size){touchGesture=false;pinchStart=null;}
+    event.preventDefault();
+  }
+  ui.grid.addEventListener('pointerup',e=>finishTouch(e));
+  ui.grid.addEventListener('pointercancel',e=>finishTouch(e,true));
+  ui.root.querySelectorAll('[data-mobile-tool]').forEach(button=>button.addEventListener('click',()=>{
+    setTool(button.dataset.mobileTool);
+    if(button.dataset.mobileTool==='stitch'&&!state.selected)setMobilePanel(true);
+  }));
   ui.threadSource.addEventListener('change',sourceMode);
   ui.dmcSearch.addEventListener('input',()=>{state.dmcSelected=null;ui.addDMC.disabled=true;renderDMCResults();});
   ui.dmcSearch.addEventListener('keydown',event=>{if(event.key!=='Enter')return;const exact=window.PuntoPuntoDMC?.get(ui.dmcSearch.value);if(exact){event.preventDefault();state.dmcSelected=exact;ui.addDMC.disabled=false;ui.addDMC.click();}});
@@ -300,12 +414,21 @@
   $('projectInput').addEventListener('change',async()=>{await importProject($('projectInput').files[0]);$('projectInput').value='';});
   $('trackerClose').addEventListener('click',()=>close());
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&pendingPayload)persistPending();});
-  window.addEventListener('beforeunload',event=>{if((!state.saveOK||!!pendingPayload)&&!ui.root.classList.contains('hidden')){event.preventDefault();event.returnValue='';}});
+  window.addEventListener('beforeunload',event=>{if(pendingPayload||writesInFlight.size||(!state.saveOK&&!ui.root.classList.contains('hidden'))){event.preventDefault();event.returnValue='';}});
+  window.addEventListener('pagehide',()=>{if(pendingPayload)persistPending();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&pendingPayload)persistPending();});
   // The tutorial remains an in-page dialog so it is easy to open at any time.
   $('trackerTutorial').addEventListener('click',()=>{$('pdfTutorial').classList.remove('hidden');$('pdfTutorialClose').focus();});
   $('pdfTutorialClose').addEventListener('click',()=>{$('pdfTutorial').classList.add('hidden');ui.tour.focus();});
   $('pdfTutorialDone').addEventListener('click',()=>$('pdfTutorialClose').click());
   $('pdfTutorial').addEventListener('click',e=>{if(e.target===$('pdfTutorial'))$('pdfTutorialClose').click();});
+  $('pdfTutorial').addEventListener('keydown',e=>{
+    if(e.key!=='Tab')return;
+    const all=[...$('pdfTutorial').querySelectorAll('button:not(:disabled),a[href],[tabindex="0"]')].filter(x=>x.getClientRects().length);
+    if(!all.length)return;
+    if(e.shiftKey&&document.activeElement===all[0]){e.preventDefault();all[all.length-1].focus();}
+    else if(!e.shiftKey&&document.activeElement===all[all.length-1]){e.preventDefault();all[0].focus();}
+  });
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('pdfTutorial').classList.contains('hidden'))$('pdfTutorialClose').click();});
   const resumeButton=$('resumeLastPDF');
   if(resumeButton&&window.PuntoPuntoPDFStore){
@@ -317,6 +440,7 @@
         try{
           const saved=await window.PuntoPuntoPDFStore.getRecentPDF();
           if(!saved)throw Error('Nessun PDF archiviato sul dispositivo.');
+          if(saved.recovered)notify('Ultimo PDF locale danneggiato: recuperato il documento precedente. Verifica lo schema.',true);
           const file=new File([saved.buffer],saved.name,{type:'application/pdf'});
           await window.PuntoPuntoPDFImport.readFile(file,{resumeSource:saved.source});
         }catch(e){notify('Impossibile riaprire il PDF locale: '+e.message,true);}
