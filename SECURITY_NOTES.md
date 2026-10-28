@@ -1,4 +1,4 @@
-# PuntoPunto security and dependency status — v0.9.8.8.18
+# PuntoPunto security and dependency status — v0.9.8.8.19 (review)
 
 ## PDF.js upgraded
 
@@ -18,6 +18,6 @@
 
 Mozilla PDF.js is used under Apache License 2.0; see `vendor/LICENSE-PDFJS.txt`. DMC palette attribution remains unchanged.
 
-## Affidabilità dati — v0.9.8.8.18
+## Data reliability — v0.9.8.8.19 (review)
 
-Letture checksum e struttura, recupero copia valida precedente e segnalazione degli errori sono stati rafforzati. Il backup JSON esterno continua a essere necessario: un browser può cancellare l'intera origine (inclusi principale e backup) o negare permessi/quotas. Nessun contenuto OXS/PDF è trasmesso a un servizio esterno. I test automatici con storage simulato non garantiscono la persistenza reale su file://, HTTPS o iOS/Android.
+Checksum and structural validation, restoration from an earlier valid copy, and error reporting have been strengthened. External JSON backups remain necessary: a browser may clear all data associated with an origin (including primary and backup copies) or deny storage quotas or permissions. No OXS/PDF project content is sent to external processing services. Automated tests using simulated browser storage do not guarantee persistence on real file://, HTTPS, or iOS/Android browsers.
