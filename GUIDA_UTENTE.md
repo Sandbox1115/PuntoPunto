@@ -64,3 +64,7 @@ Su smartphone, dopo avere confermato la griglia, si apre automaticamente la vist
 ### Tastiera nell’editor OXS (v0.9.8.8.18)
 
 Premi Tab fino alla griglia. Usa le frecce per scegliere una casella, Shift+frecce per spostarti di 10 caselle, Home/End per raggiungere il primo/ultimo punto della riga. Premi Invio o Spazio per segnare o, in caso di sovrapposizione, scegliere il punto nel pannello. Esc chiude il pannello. Non è necessario usare il mouse.
+
+## Anteprima 0.9.8.8.20.2 — Punti sovrapposti
+
+Il selettore delle caselle con più punti mostra l’intero contenuto della casella (croce intera, metà superiore/inferiore o sinistra/destra dei punti parziali), con anteprime cromatiche e conteggio dei punti completati rispetto al totale. Le spunte sullo schema mantengono lo stile originale. La versione è destinata al collaudo e non è pubblicata.

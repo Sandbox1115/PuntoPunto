@@ -34,3 +34,11 @@ The owner approved publication of the reviewed v0.9.8.8.19 from `review/v0.9.8.8
 - Run `python3 qa/quality.py verify --root . --mode web`, the Python and Node.js regression suites, and both reproducible builds before the release.
 - GitHub Pages must use **Source: GitHub Actions** for `quality-pages.yml` to enforce the QA gate. When Pages instead deploys from the branch, GitHub's original Pages build may still deploy independently of QA.
 - The browser-based application still requires real-device functional tests, particularly for direct `file://` access to the separate local build.
+
+### v0.9.8.8.20.1 — Review-only OXS completion hotfix
+
+A review package is prepared for GitHub Pages and for direct local `index.html` use without an HTTP server. It restores plain completion ticks, fixes the Unfinished overlay/filter behavior for overlapping stitches and does not change OXS/JSON data formats. **Do not deploy until the owner approves the release.**
+
+### v0.9.8.8.20.2 — published after review
+
+The OXS overlapping-stitch chooser now displays all independent stitches per cell (including both triangular halves), each with a color/position preview and a live completed/total count. No change to exported project data, PDF.js binaries, vendor resources or persistent storage. Publication was explicitly approved after the local review; retain GitHub Actions QA and review the live deployment separately from the push.

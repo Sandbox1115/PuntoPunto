@@ -117,7 +117,7 @@
             <button type="button" class="pp-oxs-tiny-btn" id="oxsUndoMark" disabled>↶ Annulla segno</button>
             <button type="button" class="pp-oxs-tiny-btn" id="oxsGoLast" disabled>◎ Ultimo punto</button>
           </div>
-          <div id="canvasWrap" class="canvas-wrap" tabindex="0" role="group" aria-roledescription="griglia interattiva" aria-label="Griglia interattiva dello schema" aria-describedby="canvasHint oxsKeyboardHelp"><canvas id="patternCanvas"></canvas><div class="canvas-crosshair" id="hoverInfo" aria-hidden="true"></div><div id="stitchPicker" class="oxs-point-picker hidden" role="dialog" aria-labelledby="stitchPickerTitle" aria-modal="false" tabindex="-1"><div class="oxs-picker-head"><strong id="stitchPickerTitle">Quale punto vuoi segnare?</strong><button id="stitchPickerClose" type="button" aria-label="Chiudi selezione punti" class="oxs-picker-close">×</button></div><div id="stitchPickerList" class="oxs-picker-list" role="group" aria-label="Punti disponibili"></div><p class="oxs-picker-note">Seleziona un punto per cambiarne lo stato.</p></div></div>
+          <div id="canvasWrap" class="canvas-wrap" tabindex="0" role="group" aria-roledescription="griglia interattiva" aria-label="Griglia interattiva dello schema" aria-describedby="canvasHint oxsKeyboardHelp"><canvas id="patternCanvas"></canvas><div class="canvas-crosshair" id="hoverInfo" aria-hidden="true"></div><div id="stitchPicker" class="oxs-point-picker hidden" role="dialog" aria-labelledby="stitchPickerTitle" aria-describedby="stitchPickerProgress" aria-modal="false" tabindex="-1"><div class="oxs-picker-head"><span class="oxs-picker-title-group"><strong id="stitchPickerTitle">Quale punto vuoi segnare?</strong><span id="stitchPickerProgress" class="oxs-picker-count" aria-live="polite" aria-atomic="true"></span></span><button id="stitchPickerClose" type="button" aria-label="Chiudi selezione punti" class="oxs-picker-close">×</button></div><div id="stitchPickerList" class="oxs-picker-list" role="group" aria-label="Punti disponibili"></div><p class="oxs-picker-note">Seleziona un punto per cambiarne lo stato. Il pannello mostra tutti i punti presenti nella casella.</p></div></div>
           <div class="canvas-footer"><span id="canvasHint">Tocca una casella per segnare il punto; se ci sono punti sovrapposti, scegli quale. Trascina per segnare più punti.</span><span class="pp-oxs-keyboard-help" id="oxsKeyboardHelp">Tastiera: frecce per spostarti, Invio o Spazio per segnare, Esc per chiudere la scelta.</span><span id="coords">—</span></div><p class="pp-sr-only" id="oxsKeyboardStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         </div>
         <div id="pdfTracker" class="pp-tracker hidden" aria-label="PDF interattivo senza conversione">
@@ -196,7 +196,7 @@
 <div class="pp-pdf-overlay hidden" id="pdfOverlay" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" aria-describedby="pdfStatus">
   <div class="pp-pdf-dialog pp-manual-dialog">
     <div class="pp-pdf-heading">
-      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.20</span>
+      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.20.2</span>
         <h2 id="pdfTitle">Imposta la griglia del tuo schema</h2>
         <p id="pdfFilename" class="muted">Seleziona la pagina del diagramma. Le dimensioni della griglia le scegli tu.</p>
       </div>

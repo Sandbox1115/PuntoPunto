@@ -1,5 +1,22 @@
 # PuntoPunto — Change log
 
+## v0.9.8.8.20.2 — 30 October 2026 (complete overlapping-stitch chooser; published)
+
+- Show every independent stitch belonging to the selected OXS cell, including both triangular halves from the same partstitch and an overlapping full cross.
+- Distinguish the two triangular halves by their actual occupied position and thread color, without changing the original plain green completion marks.
+- Display and refresh the completed/total count while the chooser stays open; each stitch retains its independent progress state.
+- Maintain normal touch, mouse, keyboard and unfinished-filter selection; no changes to project storage formats, PDF.js or vendor assets.
+- Prepared separate GitHub Pages and direct-file local distributions and published the reviewed release after explicit owner approval; automated QA includes the overlapping-stitch regressions.
+
+## v0.9.8.8.20.1 — 30 October 2026 (OXS completion rendering hotfix, review only)
+
+- Restored one original-style green checkmark in the OXS editor for single and overlapping stitches, replacing the inconsistent circular completion badges.
+- Corrected Unfinished, thread and stitch-type filter visibility for completion overlays on overlapping cells.
+- Prevented neighboring ornaments in the touch-selection index from being mistaken for stitches occupying the current cell during completion rendering.
+- Added targeted automated tests. OXS/JSON formats, storage, PDFs, PDF.js, catalog and editing semantics remain unchanged.
+- This build is for review and must not be published without approval.
+
+
 ## v0.9.8.8.20 — 30 October 2026 (quality infrastructure; published)
 
 - Added a reproducible, offline-capable build process for GitHub Pages and a direct-file local package (self-contained PDF.js and DMC resources).

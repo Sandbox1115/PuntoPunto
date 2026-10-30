@@ -66,3 +66,7 @@ Press Tab to focus the grid. Use arrow keys to select a cell, Shift+arrows to mo
 ### Localization review — v0.9.8.8.19
 
 Use the IT/EN control on the home page, PDF editor, Privacy and Licenses pages. Check tooltips, validation errors, PDF/OXS recovery messages and assistive labels as well as visible buttons. Uploaded pattern titles, filenames and user-provided floss names remain unchanged by design. The 0.9.8.8.19 localization review was incorporated into the published release; v0.9.8.8.20 adds quality infrastructure.
+
+### v0.9.8.8.20.2 — published improvement
+
+The OXS overlapping-stitch chooser now displays all independent stitches per cell (including both triangular halves), each with a color/position preview and a live completed/total count. No change to exported project data, PDF.js binaries, vendor resources or persistent storage. The feature was tested and approved for the v0.9.8.8.20.2 GitHub Pages release.

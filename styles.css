@@ -323,3 +323,16 @@ body.pp-oxs-focus #editor .pp-oxs-workbar{display:none!important}
   .tool.active,.chip.active,.legend-item.selected,.kind.is-active,.pp-oxs-tiny-btn[aria-pressed="true"]{border:2px solid Highlight!important;forced-color-adjust:auto;}
   #patternCanvas{border:1px solid CanvasText;}
 }
+
+/* v0.9.8.8.20.2 — complete per-cell chooser; previews follow actual OXS halves. */
+.oxs-point-picker{width:min(360px,calc(100% - 16px));max-height:min(470px,85%)}
+.oxs-picker-title-group{min-width:0;display:flex;flex-direction:column;gap:3px}
+.oxs-picker-count{font-size:11px;font-weight:700;color:#22745f;font-variant-numeric:tabular-nums}
+.oxs-picker-choice{min-height:58px;gap:10px}
+.oxs-picker-choice .oxs-picker-swatch{width:36px;height:36px;overflow:hidden}
+.oxs-picker-choice .oxs-picker-swatch.oxs-picker-partial{background:#fbf9f4;border-color:#aac4b9;padding:0}
+.oxs-picker-triangle{display:block;width:100%;height:100%}
+.oxs-picker-position{font-size:11px;font-weight:750;color:#39695b}
+.oxs-picker-choice.is-completed{background:#f0f8f2}
+.oxs-picker-choice .oxs-picker-status{font-size:10px;text-align:right;max-width:85px;white-space:normal}
+@media(max-width:620px){.oxs-point-picker{width:min(340px,calc(100% - 12px));max-height:76%}.oxs-picker-choice{min-height:58px}}

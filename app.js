@@ -559,10 +559,6 @@
     if(d)return s.side===1?[[0,0],[0,1],[1,1]]:[[0,0],[1,0],[1,1]];
     return s.side===1?[[0,0],[1,0],[0,1]]:[[1,0],[1,1],[0,1]];
   }
-  function overlapsAnotherStitch(x,y){
-    const p=state.pattern,key=Math.floor(y)*10000+Math.floor(x);
-    return (p.byCell.get(key)?.length||0)+(p.specialsByCell?.get(key)||[]).filter(s=>s.kind!=='back').length>1;
-  }
   function paintCell(s){
     const c=colorFor(s.palIndex),done=state.completed.has(s.id),filtered=!matchesFilter(s);
     ctx.save();ctx.globalAlpha=filtered ? .13 : 1;
@@ -571,11 +567,7 @@
     else rectanglePath(s.x,s.y);
     ctx.fillStyle=state.mono?'#fafbf8':c.color;ctx.fill();
     ctx.save();ctx.clip();
-    if(done){ctx.fillStyle='rgba(250,251,248,.74)';ctx.fillRect(s.x,s.y,1,1);
-      if(!overlapsAnotherStitch(s.x,s.y)){
-        ctx.beginPath();ctx.moveTo(s.x+.15,s.y+.56);ctx.lineTo(s.x+.42,s.y+.8);ctx.lineTo(s.x+.88,s.y+.2);
-        ctx.strokeStyle='#176e60';ctx.lineWidth=Math.max(.05,2/state.cell);ctx.stroke();
-      }}
+    if(done){ctx.fillStyle='rgba(250,251,248,.74)';ctx.fillRect(s.x,s.y,1,1);}
     else if(state.showSymbols&&state.cell>=12){
       ctx.font=`700 ${Math.min(.71,16/state.cell)}px ui-sans-serif,Segoe UI Symbol,sans-serif`;
       ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=state.mono?'#213e37':c.ink;
@@ -605,7 +597,6 @@
       ctx.fillRect(x,y,w,h);
       if(s.kind==='fullcross'){ctx.strokeStyle=c.ink;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+1,y+1);ctx.moveTo(x+1,y);ctx.lineTo(x,y+1);ctx.stroke();}
     }
-    if(done&&!overlapsAnotherStitch(s.x1,s.y1)){ctx.fillStyle='#176e60';ctx.font='bold .45px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('✓',s.x1+.17,s.y1+.12);}
     ctx.restore();
   }
   function paintBack(s){
@@ -614,36 +605,43 @@
     ctx.lineWidth=Math.max(.09,2.2/state.cell);ctx.lineCap='round';ctx.strokeStyle=done?'#afbbb3':(state.mono?'#234f43':c.color);
     if(done)ctx.setLineDash([.2,.17]);ctx.beginPath();ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);ctx.stroke();ctx.restore();
   }
-  // v0.9.8.8.19: render completion above EVERY overlapping layer.
-  // The underlying stitched shapes are intentionally left unchanged. Without
-  // this pass, a later uncompleted half stitch can paint over the checkmark of
-  // an already-completed full cross (and vice versa for other combinations).
-  function paintOverlapCompletion(stitches,x,y){
-    if(stitches.length<2||!stitches.some(s=>state.completed.has(s.id)))return;
-    // Mirror the picker priority: partial/half before full, then ornaments.
-    const priority={part:0,half:1,full:2};
-    const ordered=[...stitches].sort((a,b)=>(priority[a.kind]??3)-(priority[b.kind]??3)||a.id-b.id);
-    const done=ordered.filter(s=>state.completed.has(s.id));
-    const large=state.cell>=14&&ordered.length<=4;
-    const center=(i)=>large?{x:x+(i%2?.74:.26),y:y+(i<2?.27:.73)}:{x:x+.74,y:y+.26};
-    const radius=large?.205:.255;
+  // v0.9.8.8.20.1: one original-style tick for every completed stitch.
+  // Draw checks after the stitched layers: otherwise a second overlapping stitch
+  // covers a completion tick. Never draw badges/circles over the original symbol.
+  function drawCompletionMark(x,y,scale=1){
+    ctx.beginPath();
+    ctx.moveTo(x+.15*scale,y+.56*scale);
+    ctx.lineTo(x+.42*scale,y+.8*scale);
+    ctx.lineTo(x+.88*scale,y+.2*scale);
+    ctx.strokeStyle='#176e60';
+    ctx.lineWidth=Math.max(.05,2/state.cell)*scale;
+    ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.stroke();
+  }
+  function paintCompletionMarks(stitches,x,y){
+    // Treat the points as independent progress records. An unfinished-only
+    // filter excludes completed marks, even when another stitch in this cell
+    // has not been completed. Thread and stitch-type filters are respected too.
+    const completed=stitches.filter(s=>state.completed.has(s.id)&&matchesFilter(s));
+    if(!completed.length)return;
     ctx.save();
-    ctx.lineWidth=Math.max(.045,1/state.cell);
-    ctx.lineJoin='round';ctx.lineCap='round';
-    const indices=large?ordered.map((s,i)=>state.completed.has(s.id)?i:-1).filter(i=>i!==-1):[0];
-    for(const i of indices){
-      const point=center(i);
-      ctx.beginPath();ctx.arc(point.x,point.y,radius,0,Math.PI*2);
-      ctx.fillStyle='#ffffff';ctx.fill();ctx.strokeStyle='#146550';ctx.stroke();
-      ctx.beginPath();ctx.moveTo(point.x-radius*.57,point.y+.01);
-      ctx.lineTo(point.x-radius*.14,point.y+radius*.47);
-      ctx.lineTo(point.x+radius*.63,point.y-radius*.49);
-      ctx.strokeStyle='#146550';ctx.lineWidth=Math.max(.095,1.55/state.cell);ctx.stroke();
-    }
-    if(!large&&state.cell>=16&&ordered.length>4){
-      const point=center(0);
-      ctx.font='bold .24px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-      ctx.fillStyle='#ffffff';ctx.fillText(`${done.length}/${ordered.length}`,point.x,point.y+.43);
+    if(stitches.length===1){drawCompletionMark(x,y);}
+    else if(state.cell<14||stitches.length>4){
+      // Low zoom and unusually crowded cells: a single, recognizable tick.
+      drawCompletionMark(x,y);
+    }else{
+      // The same original tick, scaled and offset to preserve individual
+      // completion states for two to four overlapping stitches.
+      const priority={part:0,half:1,full:2};
+      const ordered=[...stitches].sort((a,b)=>(priority[a.kind]??3)-(priority[b.kind]??3)||a.id-b.id);
+      const scale=stitches.length===2?.48:.46;
+      for(let i=0;i<ordered.length;i++){
+        const stitch=ordered[i];
+        if(!state.completed.has(stitch.id)||!matchesFilter(stitch))continue;
+        const px=x+(i%2?.51:.01);
+        const py=y+(stitches.length===2?.24:(i<2?.01:.52));
+        drawCompletionMark(px,py,scale);
+      }
     }
     ctx.restore();
   }
@@ -667,13 +665,15 @@
     for(const s of p.ornaments){if(s.x1>=fromX-1&&s.x1<=toX+1&&s.y1>=fromY-1&&s.y1<=toY+1)paintOrnament(s);}
     for(const s of p.linear){if(Math.max(s.x1,s.x2)>=fromX-1&&Math.min(s.x1,s.x2)<=toX+1&&Math.max(s.y1,s.y2)>=fromY-1&&Math.min(s.y1,s.y2)<=toY+1)paintBack(s);}
     ctx.strokeStyle='#566e65';ctx.lineWidth=Math.max(.08,1.5/size);ctx.strokeRect(0,0,p.width,p.height);
-    // Draw checks after all cell fills, ornaments and lines so neither a half
-    // stitch nor a full stitch can hide the completion of another stitch.
+    // Render all completion marks on the top layer using the original tick.
+    // The selection index deliberately includes neighbouring squares; here
+    // only ornaments actually anchored in this square belong to the mark group.
     for(let y=fromY;y<toY;y++)for(let x=fromX;x<toX;x++){
       const key=y*10000+x;
       const base=p.byCell.get(key)||[];
-      const special=(p.specialsByCell?.get(key)||[]).filter(s=>s.kind!=='back');
-      if(base.length+special.length>1)paintOverlapCompletion([...base,...special],x,y);
+      const special=(p.specialsByCell?.get(key)||[]).filter(s=>
+        s.kind!=='back'&&Math.floor(s.x1)===x&&Math.floor(s.y1)===y);
+      if(base.length||special.length)paintCompletionMarks([...base,...special],x,y);
     }
     if(keyboardCell&&document.activeElement===el.wrap){
       // Visible selection for keyboard navigation; no change to stitch rendering.
@@ -739,6 +739,35 @@
     for(const item of specialMatches)if(!ordered.includes(item.stitch))ordered.push(item.stitch);
     return ordered;
   }
+  // A cell may contain a full cross PLUS two independent triangular parts.
+  // Hit testing selects the touched half, but the chooser must inventory ALL
+  // stitches anchored in that cell, regardless of the touched half or filters.
+  function cellPickerStitches(gx,gy,hitChoices=[]){
+    const p=state.pattern,ix=Math.floor(gx),iy=Math.floor(gy);
+    if(!p||ix<0||iy<0||ix>=p.width||iy>=p.height)return [];
+    const key=iy*10000+ix;
+    const all=[...(p.byCell.get(key)||[])];
+    for(const stitch of p.specialsByCell?.get(key)||[]){
+      // Special indexes include neighboring cells to help touch selection;
+      // don't mistake those neighbors for stitches in the active square.
+      if(stitch.kind==='back'){
+        if(hitChoices.includes(stitch))all.push(stitch);
+      }else if(Math.floor(stitch.x1)===ix&&Math.floor(stitch.y1)===iy)all.push(stitch);
+    }
+    const unique=new Map();for(const stitch of all)unique.set(stitch.id,stitch);
+    const priority={part:0,half:1,full:2};
+    return [...unique.values()].sort((a,b)=>(priority[a.kind]??3)-(priority[b.kind]??3)
+      ||(a.kind==='part'&&b.kind==='part'?(a.side??0)-(b.side??0):0)||a.id-b.id);
+  }
+  function partLocation(stitch,en){
+    if(stitch.kind!=='part')return null;
+    const d=stitch.direction===1,first=stitch.side===1;
+    // Match the exact polygon used by shapeForPart() and paintCell().
+    if(d&&first)return {text:en?'Lower-left half':'Metà inferiore sinistra',shape:'polygon(0 0,0 100%,100% 100%)'};
+    if(d)return {text:en?'Upper-right half':'Metà superiore destra',shape:'polygon(0 0,100% 0,100% 100%)'};
+    if(first)return {text:en?'Upper-left half':'Metà superiore sinistra',shape:'polygon(0 0,100% 0,0 100%)'};
+    return {text:en?'Lower-right half':'Metà inferiore destra',shape:'polygon(100% 0,100% 100%,0 100%)'};
+  }
   function pickStitch(gx,gy,preferSpecial=false){
     const list=stitchChoices(gx,gy);
     return preferSpecial?(list.find(s=>s.kind==='back'||state.pattern?.ornaments.includes(s))||list[0]||null):(list[0]||null);
@@ -751,6 +780,21 @@
     $('stitchPickerList').replaceChildren();
     if(wasOpen&&restoreFocus)el.wrap.focus({preventScroll:true});
   }
+  function refreshStitchPicker(){
+    const picker=state.picker;if(!picker)return;
+    const en=window.PuntoPuntoI18n?.language==='en';
+    const completed=picker.stitches.filter(s=>state.completed.has(s.id)).length;
+    $('stitchPickerProgress').textContent=en
+      ?`${completed} of ${picker.stitches.length} stitches completed`
+      :`${completed} di ${picker.stitches.length} punti completati`;
+    for(const {stitch,button,status,label} of picker.rows){
+      const done=state.completed.has(stitch.id);
+      status.textContent=done?(en?'Completed':'Completato'):(en?'Not completed':'Da ricamare');
+      button.classList.toggle('is-completed',done);
+      button.setAttribute('aria-pressed',String(done));
+      button.setAttribute('aria-label',`${label}, ${done?(en?'completed, mark unfinished':'completato, segna da ricamare'):(en?'not completed, mark completed':'da ricamare, segna completato')}`);
+    }
+  }
   function openStitchPicker(point,choices){
     closeStitchPicker();
     if(!state.pattern||choices.length<2)return;
@@ -759,23 +803,42 @@
     const grid=localToGrid(point.x,point.y);
     const en=window.PuntoPuntoI18n?.language==='en';
     const t=window.PuntoPuntoI18n?.t||((s)=>s);
-    $('stitchPickerTitle').textContent=`${en?'Cell':'Casella'} ${Math.floor(grid.x)+1}, ${Math.floor(grid.y)+1} · ${en?'choose a stitch':'scegli il punto'}`;
-    state.picker={choices:choices.map(s=>s.id)};
-    for(const s of choices){
-      const pal=colorFor(s.palIndex),def=kindDefs[s.kind]||['·',s.kind];
+    $('stitchPickerTitle').textContent=`${en?'Cell':'Casella'} ${Math.floor(grid.x)+1}, ${Math.floor(grid.y)+1}`;
+    const picker={choices:choices.map(s=>s.id),stitches:choices,rows:[]};
+    state.picker=picker;
+    for(const stitch of choices){
+      const pal=colorFor(stitch.palIndex),def=kindDefs[stitch.kind]||['·',stitch.kind];
+      const position=partLocation(stitch,en);
       const button=document.createElement('button');button.type='button';button.className='oxs-picker-choice';
-      const sw=document.createElement('span');sw.className='oxs-picker-swatch';sw.style.background=pal.color;sw.style.color=pal.ink;sw.textContent=def[0];
+      const sw=document.createElement('span');sw.className='oxs-picker-swatch';sw.setAttribute('aria-hidden','true');
+      if(position){
+        sw.classList.add('oxs-picker-partial');
+        const triangle=document.createElement('span');triangle.className='oxs-picker-triangle';
+        triangle.style.backgroundColor=pal.color;triangle.style.clipPath=position.shape;
+        sw.appendChild(triangle);
+      }else{sw.style.background=pal.color;sw.style.color=pal.ink;sw.textContent=def[0];}
       const desc=document.createElement('span');desc.className='oxs-picker-desc';
       const name=document.createElement('strong');name.textContent=t(def[1]);
-      const small=document.createElement('small');small.textContent=`${pal.number||s.palIndex} · ${pal.name||'Filato'}`;
-      const done=document.createElement('span');done.className='oxs-picker-status';done.textContent=state.completed.has(s.id)?(en?'✓ Done':'✓ Fatto'):(en?'To do':'Da fare');
-      desc.append(name,small);button.append(sw,desc,done);
-      button.setAttribute('aria-label',`${t(def[1])}, ${en?'thread':'filato'} ${pal.number||s.palIndex}, ${state.completed.has(s.id)?(en?'completed; mark unfinished':'completato, segna da fare'):(en?'unfinished; mark completed':'da fare, segna completato')}`);
-      button.addEventListener('click',()=>{if(!state.picker||!state.picker.choices.includes(s.id))return;closeStitchPicker();setCompleted(s.id,!state.completed.has(s.id));rememberWorkPoint(grid);el.wrap.focus({preventScroll:true});});
+      const place=document.createElement('span');place.className='oxs-picker-position';
+      if(position)place.textContent=position.text;
+      const thread=document.createElement('small');thread.textContent=`${pal.number||stitch.palIndex} · ${pal.name||(en?'Thread':'Filato')}`;
+      const status=document.createElement('span');status.className='oxs-picker-status';
+      desc.append(name);
+      if(position)desc.append(place);
+      desc.append(thread);button.append(sw,desc,status);
+      const label=`${t(def[1])}${position?', '+position.text:''}, ${en?'thread':'filato'} ${pal.number||stitch.palIndex}`;
+      picker.rows.push({stitch,button,status,label});
+      button.addEventListener('click',()=>{
+        if(state.picker!==picker||!picker.choices.includes(stitch.id))return;
+        setCompleted(stitch.id,!state.completed.has(stitch.id));
+        rememberWorkPoint(grid);
+        refreshStitchPicker(); // Keep the complete cell and running total visible.
+      });
       items.appendChild(button);
     }
+    refreshStitchPicker();
     popup.classList.remove('hidden');
-    // Clamp to the visible canvas. The picker lives inside canvasWrap, not the PDF overlay.
+    // Clamp to the visible canvas. The picker lives inside canvasWrap.
     const pw=popup.offsetWidth,ph=popup.offsetHeight;
     const left=Math.min(Math.max(6,point.x+12),Math.max(6,w-pw-6));
     const top=point.y+ph+14>h?Math.max(6,point.y-ph-12):Math.min(Math.max(6,point.y+12),Math.max(6,h-ph-6));
@@ -827,7 +890,8 @@
     if(pan){}
     else if(['paint','erase','restore'].includes(state.mode))edits.at(localToGrid(point.x,point.y),state.mode,drag);
     else if(!drag.preferSpecial){
-      const g=localToGrid(point.x,point.y),choices=stitchChoices(g.x,g.y,false);
+      const g=localToGrid(point.x,point.y),hits=stitchChoices(g.x,g.y,false);
+      const choices=hits.length?cellPickerStitches(g.x,g.y,hits):[];
       if(choices.length>1)drag.pending={point,choices};
       else markAt(point,drag);
     }else markAt(point,drag,true);
@@ -893,7 +957,8 @@
         const point=drag.start;
         if(['paint','erase','restore'].includes(state.mode))edits.at(localToGrid(point.x,point.y),state.mode,drag);
         else{
-          const g=localToGrid(point.x,point.y),choices=stitchChoices(g.x,g.y,true);
+          const g=localToGrid(point.x,point.y),hits=stitchChoices(g.x,g.y,true);
+          const choices=hits.length?cellPickerStitches(g.x,g.y,hits):[];
           if(choices.length>1){
             const pattern=state.pattern;
             state.pickerTimer=setTimeout(()=>{state.pickerTimer=null;if(pattern===state.pattern&&state.mode==='mark')openStitchPicker(point,choices);},85);
@@ -932,7 +997,7 @@
     if(!state.pattern||!keyboardCell)return;
     const en=window.PuntoPuntoI18n?.language==='en';
     const {x,y}=keyboardCell;
-    const choices=stitchChoices(x+.5,y+.5);
+    const choices=cellPickerStitches(x+.5,y+.5);
     const completed=choices.filter(s=>state.completed.has(s.id)).length;
     const s=en?`Cell ${x+1}, ${y+1}. ${choices.length} stitches; ${completed} completed.`:
       `Casella ${x+1}, ${y+1}. ${choices.length} punti; ${completed} completati.`;
@@ -956,9 +1021,10 @@
     const point={x:state.ox+(keyboardCell.x+.5)*state.cell,y:state.oy+(keyboardCell.y+.5)*state.cell};
     const g={x:keyboardCell.x+.5,y:keyboardCell.y+.5};
     if(state.mode==='mark'){
-      const choices=stitchChoices(g.x,g.y);
+      const hits=stitchChoices(g.x,g.y);
+      const choices=hits.length?cellPickerStitches(g.x,g.y,hits):[];
       if(choices.length>1){openStitchPicker(point,choices);return;}
-      if(choices.length===1){const s=choices[0];setCompleted(s.id,!state.completed.has(s.id));rememberWorkPoint(g);}
+      if(hits.length===1){const s=hits[0];setCompleted(s.id,!state.completed.has(s.id));rememberWorkPoint(g);}
     }else if(['paint','erase','restore'].includes(state.mode)){
       edits.at(g,state.mode,{seen:new Set()});rememberWorkPoint(g);
     }

@@ -26,3 +26,7 @@ Checksum and structural validation, restoration from an earlier valid copy, and 
 ## v0.9.8.8.20 quality gate
 
 A locked-asset, whole-package SHA-256, script-syntax, local-reference, and deterministic behavior test suite is included under `qa/`. The offline package embeds PDF.js core, worker, fonts/CMaps/WASM and the DMC catalog for direct `file://` launch. On GitHub Pages, only same-origin verified resources are loaded. The GitHub Actions workflow gates deployment only after Pages **Source** is changed to **GitHub Actions**. If Pages still publishes directly from the branch, the new workflow does not prevent an untested deployment. Automated tests do not replace hands-on real-browser testing.
+
+### v0.9.8.8.20.2 — published hotfix
+
+The OXS overlapping-stitch chooser now displays all independent stitches per cell (including both triangular halves), each with a color/position preview and a live completed/total count. No change to exported project data, PDF.js binaries, vendor resources or persistent storage. Owner-approved hotfix: no changes to project file formats, storage, or third-party binaries. Release quality checks must pass before publishing.

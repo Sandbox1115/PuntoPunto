@@ -2,7 +2,7 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **GitHub Pages beta v0.9.8.8.20 — quality infrastructure release.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
+> **GitHub Pages beta v0.9.8.8.20.2 — published after user testing.** This release improves the overlapping-stitch chooser without changing saved project formats. Keep your original patterns and export regular progress backups.
 
 ## Use the application
 
@@ -92,3 +92,14 @@ Version 0.9.8.8.19 was prepared and reviewed on `review/v0.9.8.8.19-it-en` befor
 - Run `python3 qa/build.py --source . --output dist` to prepare verified `dist/github-pages/` and `dist/offline/` distributions. The offline version embeds the verified PDF.js engine, matching worker and resource files and the DMC catalog: open `dist/offline/index.html` directly with a browser; HTTP is not needed.
 - `qa/quality.py manifest` generates an integrity manifest of every packaged file except the manifest itself. Do not hand-edit the manifest; CI verifies it.
 - `.github/workflows/quality-pages.yml` gates an **Actions-based** Pages deployment on the QA checks. To enforce the gate, GitHub Pages must be configured to deploy from **GitHub Actions**, not by directly publishing the branch; the workflow is included in the published repository. Verify the GitHub Pages deployment source before relying on this workflow as a mandatory release gate.
+
+## v0.9.8.8.20.1 — OXS completion rendering hotfix (review build)
+
+- Restores the original plain green checkmark for all completed OXS stitches; overlapping stitches share the same visual style with smaller positional offsets, without circular badges.
+- Corrects completion marks shown by the **Unfinished** filter. Completion is tracked per stitch, and other thread/kind filters now also apply to completion overlays.
+- Resolves overlap checks against the stitch's actual cell, not adjacent cells included in the ornament selection index.
+- No changes to saved progress, OXS/JSON schemas, PDF.js, DMC catalog or user data. This version is **not yet published** to GitHub Pages.
+
+## v0.9.8.8.20.2 — OXS overlapping stitches (published)
+
+Selecting a cell with multiple independent stitches now shows all of them, including both colored triangular halves and a full cross when present. The chooser reports completed/total and stays open as you mark each stitch. The original green plain checks remain unchanged. The change was tested in a local review build and approved for the v0.9.8.8.20.2 GitHub Pages release.

@@ -93,6 +93,7 @@ const DICT={
   "Nessuna modifica allo schema": "No edits to the pattern",
   "Quale punto vuoi segnare?": "Which stitch would you like to mark?",
   "Seleziona un punto per cambiarne lo stato.": "Select a stitch to change its status.",
+  "Seleziona un punto per cambiarne lo stato. Il pannello mostra tutti i punti presenti nella casella.": "Select a stitch to change its status. This panel lists every stitch in the cell.",
   "Tocca una casella per segnare il punto; se ci sono punti sovrapposti, scegli quale. Trascina per segnare più punti.": "Tap a cell to mark its stitch; if stitches overlap, choose which one. Drag to mark several stitches.",
   "▤ PDF interattivo": "▤ Interactive PDF",
   "ⓘ Come funziona": "ⓘ How it works",

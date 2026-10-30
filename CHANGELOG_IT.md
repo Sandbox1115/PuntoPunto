@@ -1,3 +1,16 @@
+## 0.9.8.8.20.2 — 30 ottobre 2026 (selettore dei punti sovrapposti; pubblicata)
+
+- Il selettore OXS mostra tutti i punti indipendenti della casella, inclusi la croce intera e i due mezzi punti triangolari di colori differenti.
+- Le metà triangolari sono distinguibili per posizione e filato; il conteggio dei punti completati sul totale si aggiorna durante la selezione.
+- Restano invariati la spunta verde originale, il filtro dei punti da completare, i formati OXS/JSON, i salvataggi, PDF.js e il catalogo DMC.
+- Preparati e verificati i pacchetti GitHub Pages e locale senza server; pubblicazione autorizzata dopo la prova dell'utente.
+
+## 0.9.8.8.20.1 — 30 ottobre 2026 (spunte OXS; confluita nella 0.9.8.8.20.2)
+
+- Ripristinata la spunta originale anche nei punti sovrapposti, senza badge circolari.
+- Corretta la visibilità delle spunte con i filtri «Da completare», filato e tipo di punto.
+- Versione di collaudo non pubblicata autonomamente, inclusa nella successiva 0.9.8.8.20.2.
+
 ## 0.9.8.8.18 — 28 ottobre 2026 (UX e accessibilità; distribuzione GitHub Pages)
 
 - Navigazione da tastiera della griglia OXS: frecce, Shift+frecce (10 caselle), Home/End, Invio/Spazio per segnare. La scelta dei punti sovrapposti rimane esplicita; il cursore tastiera non modifica progressi o backup.

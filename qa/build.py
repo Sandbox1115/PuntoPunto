@@ -68,7 +68,7 @@ def offline_index(src: Path, dest: Path):
     html=html.replace('href="./" aria-label="PuntoPunto, pagina iniziale"','href="index.html" aria-label="PuntoPunto, pagina iniziale"')
     html=html.replace('</body>',embed+'</body>')
     (dest/'index.html').write_text(html,encoding='utf-8')
-    (dest/'ISTRUZIONI_OFFLINE.md').write_text('''# PuntoPunto 0.9.8.8.20 — versione locale senza server
+    (dest/'ISTRUZIONI_OFFLINE.md').write_text('''# PuntoPunto 0.9.8.8.20.2 — versione locale senza server
 
 Apri `index.html` con un doppio clic, direttamente da una cartella decompressa, preferibilmente in un browser desktop aggiornato (Chrome/Chromium, Firefox o Edge). Non occorre internet, Python, localhost o un server HTTP. Conserva la struttura dei file estratta dal pacchetto; non aprire il file dentro l'anteprima ZIP.\n\nIl motore PDF.js 6.4.299, il worker, i CMap, i font, i moduli WASM e il catalogo DMC da 489 filati sono **incorporati e verificabili** nel file `index.html` locale. Gli originali binari PDF.js non sono duplicati nella cartella `vendor/`, per ridurre lo spazio. Le pagine Privacy e Licenze restano file separati e sono navigabili offline.\n\n**Sicurezza dei progetti:** alcuni browser possono limitare IndexedDB/WebCrypto/persistenza in modalità `file://`. Esporta sempre backup JSON e conserva il PDF/OXS originale. La persistenza dopo la chiusura del browser non è garantita in tutti i browser e dispositivi. Le prove automatiche non certificano tutti i browser.\n\n**Privacy:** il sito non deve effettuare richieste online per il caricamento dei componenti. I collegamenti a GitHub o ad altre fonti esterne si aprono solo se selezionati.\n\n**Verifica integrità:** il manifesto `MANIFEST_DISTRIBUZIONE_SHA256.txt` elenca le impronte SHA-256 degli altri file.\n''',encoding='utf-8')
 
@@ -96,10 +96,10 @@ def main():
     offline_index(src,offline)
     manifest(online);manifest(offline)
     if not check(online,'web') or not check(offline,'offline'): raise SystemExit('QA rejected generated package')
-    zip_dist(online,out/'PuntoPunto-v0.9.8.8.20-GitHub-Pages.zip')
-    zip_dist(offline,out/'PuntoPunto-v0.9.8.8.20-Locale-Senza-Server.zip')
+    zip_dist(online,out/'PuntoPunto-v0.9.8.8.20.2-GitHub-Pages.zip')
+    zip_dist(offline,out/'PuntoPunto-v0.9.8.8.20.2-Locale-Senza-Server.zip')
     print('Created 2 verified distributions:')
-    for name in ['PuntoPunto-v0.9.8.8.20-GitHub-Pages.zip','PuntoPunto-v0.9.8.8.20-Locale-Senza-Server.zip']:
+    for name in ['PuntoPunto-v0.9.8.8.20.2-GitHub-Pages.zip','PuntoPunto-v0.9.8.8.20.2-Locale-Senza-Server.zip']:
         p=out/name;print(f'  {p} ({p.stat().st_size:,} bytes)')
 
 if __name__=='__main__':main()

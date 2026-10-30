@@ -12,7 +12,7 @@ ROOT=Path(__file__).resolve().parents[2]
 class TestSourceIntegrity(unittest.TestCase):
  def test_locked_assets(self):
   metadata=locked(ROOT)
-  self.assertEqual(metadata['version'],'0.9.8.8.20')
+  self.assertEqual(metadata['version'],'0.9.8.8.20.2')
   self.assertEqual(set(metadata['assets']),{'vendor/pdf.mjs','vendor/pdf.worker.mjs','data/dmc-floss.json'})
  def test_csp_no_remote_script(self):
   for name in ['index.html','privacy.html','licenze.html']:
@@ -37,6 +37,6 @@ class TestSourceIntegrity(unittest.TestCase):
    s=(ROOT/name).read_text();self.assertIn('data-pp-locale="it"',s);self.assertIn('data-pp-locale="en"',s)
  def test_versions_on_site(self):
   for name in ['index.html','privacy.html','licenze.html']:
-   self.assertIn('0.9.8.8.20',(ROOT/name).read_text())
+   self.assertIn('0.9.8.8.20.2',(ROOT/name).read_text())
 
 if __name__=='__main__': unittest.main()
