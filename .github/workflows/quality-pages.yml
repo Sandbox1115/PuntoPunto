@@ -1,0 +1,65 @@
+name: PuntoPunto QA and Pages deploy
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: 'pages-qa-${{ github.ref }}'
+  cancel-in-progress: false
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source and locked vendor assets
+        run: python3 qa/quality.py verify --root . --mode web
+      - name: Behavioral regression tests
+        run: |
+          python3 -m unittest discover -s qa/tests -v
+          node --test qa/tests/*.test.cjs
+      - name: Build two verified distributions
+        run: python3 qa/build.py --source . --output dist
+      - name: Upload validated web build
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: puntopunto-qa-pages
+          path: dist/github-pages
+          retention-days: 7
+      - name: Upload validated offline archive
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: puntopunto-qa-offline
+          path: dist/PuntoPunto-v0.9.8.8.20-Locale-Senza-Server.zip
+          retention-days: 7
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    needs: [quality]
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: puntopunto-qa-pages
+          path: _site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

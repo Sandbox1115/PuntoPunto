@@ -42,7 +42,11 @@
     if(list)return list;
     if(pending)return pending;
     pending=(async()=>{
-      // Prefer the versioned local source to avoid stale browser cache values.
+      // The portable file:// distribution embeds the exact versioned catalog.
+      // It can therefore load without a server, fetch(), cookies or remote calls.
+      const embedded=document.getElementById('pp-dmc-offline')?.textContent;
+      if(embedded){list=parse(JSON.parse(embedded));return list;}
+      // GitHub Pages always prefers its versioned same-origin JSON resource.
       try{list=await fetchOne(SOURCES[0]);return list;}catch(e){console.warn('Catalogo DMC locale non disponibile',e.message);}
       try{const cached=localStorage.getItem(KEY);if(cached){list=parse(JSON.parse(cached));return list;}}catch{}
       throw Error('Catalogo DMC non disponibile. Installa il file locale data/dmc-floss.json oppure usa un filato personalizzato.');

@@ -1,4 +1,4 @@
-# PuntoPunto security and dependency status — v0.9.8.8.19 (review)
+# PuntoPunto security and dependency status — v0.9.8.8.20
 
 ## PDF.js upgraded
 
@@ -21,3 +21,8 @@ Mozilla PDF.js is used under Apache License 2.0; see `vendor/LICENSE-PDFJS.txt`.
 ## Data reliability — v0.9.8.8.19 (review)
 
 Checksum and structural validation, restoration from an earlier valid copy, and error reporting have been strengthened. External JSON backups remain necessary: a browser may clear all data associated with an origin (including primary and backup copies) or deny storage quotas or permissions. No OXS/PDF project content is sent to external processing services. Automated tests using simulated browser storage do not guarantee persistence on real file://, HTTPS, or iOS/Android browsers.
+
+
+## v0.9.8.8.20 quality gate
+
+A locked-asset, whole-package SHA-256, script-syntax, local-reference, and deterministic behavior test suite is included under `qa/`. The offline package embeds PDF.js core, worker, fonts/CMaps/WASM and the DMC catalog for direct `file://` launch. On GitHub Pages, only same-origin verified resources are loaded. The GitHub Actions workflow gates deployment only after Pages **Source** is changed to **GitHub Actions**. If Pages still publishes directly from the branch, the new workflow does not prevent an untested deployment. Automated tests do not replace hands-on real-browser testing.

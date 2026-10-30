@@ -2,7 +2,7 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **GitHub Pages beta 0.9.8.8.19.1 — complete bilingual Privacy page (IT/EN).** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
+> **GitHub Pages beta v0.9.8.8.20 — quality infrastructure release.** This software is provided for evaluation and may contain defects. Keep your original patterns and make regular backups of your progress.
 
 ## Use the application
 
@@ -75,7 +75,7 @@ On phones, the PDF editor opens in wide view with a persistent tool dock. Use **
 
 ## Roadmap backlog
 
-PWA/mobile installability is deferred until the saving/recovery and mobile PDF editor releases have completed real-device validation. Version 0.9.8.8.19 is **not** a PWA and does not install service workers or change offline caching.
+PWA/mobile installability is deferred until the saving/recovery and mobile PDF editor releases have completed real-device validation. Version 0.9.8.8.20 is **not** a PWA and does not install service workers or change offline caching.
 
 OXS quick filters, undo last marking, and jump to last stitch are available. The viewport position is stored as a local preference, not part of exported JSON backups.
 
@@ -83,3 +83,12 @@ OXS quick filters, undo last marking, and jump to last stitch are available. The
 ## Localization review
 
 Version 0.9.8.8.19 was prepared and reviewed on `review/v0.9.8.8.19-it-en` before publication. Documentation is English by default; [Italian user guide](GUIDA_UTENTE.md) and [English user guide](USER_GUIDE_EN.md) are maintained separately. Historical Italian release notes are preserved in [CHANGELOG_IT.md](CHANGELOG_IT.md), with an English overview in [CHANGELOG.md](CHANGELOG.md). No changes to library binaries, project formats or uploaded user files were intended for this review.
+
+
+## v0.9.8.8.20 — Quality infrastructure
+
+- Run `python3 qa/quality.py verify --root . --mode web` for a release-blocking source/integrity audit, including local links, version labels, all packaged hashes, PDF.js and catalog SHA-256, JS syntax and HTML structure.
+- Run `python3 -m unittest discover -s qa/tests -v` and `node --test qa/tests/*.test.cjs` for behavioral and build-system regressions. No external test frameworks or network access are needed.
+- Run `python3 qa/build.py --source . --output dist` to prepare verified `dist/github-pages/` and `dist/offline/` distributions. The offline version embeds the verified PDF.js engine, matching worker and resource files and the DMC catalog: open `dist/offline/index.html` directly with a browser; HTTP is not needed.
+- `qa/quality.py manifest` generates an integrity manifest of every packaged file except the manifest itself. Do not hand-edit the manifest; CI verifies it.
+- `.github/workflows/quality-pages.yml` gates an **Actions-based** Pages deployment on the QA checks. To enforce the gate, GitHub Pages must be configured to deploy from **GitHub Actions**, not by directly publishing the branch; the workflow is included in the published repository. Verify the GitHub Pages deployment source before relying on this workflow as a mandatory release gate.

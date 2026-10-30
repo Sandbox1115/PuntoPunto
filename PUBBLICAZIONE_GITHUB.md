@@ -27,3 +27,10 @@ Mobile home offers prominent Open OXS and Open PDF buttons instead of desktop dr
 ### v0.9.8.8.19 — Approved IT/EN localization update
 
 The owner approved publication of the reviewed v0.9.8.8.19 from `review/v0.9.8.8.19-it-en`. The live GitHub Pages deployment and real-browser tests must be checked independently of a successful code push. Keep automated and manual IT/EN regression results distinct.
+
+### v0.9.8.8.20 — Automated quality controls (30 October 2026)
+
+- Source: the verified, owner-approved GitHub Pages package; do not include the offline ZIP or personal project files in the website tree.
+- Run `python3 qa/quality.py verify --root . --mode web`, the Python and Node.js regression suites, and both reproducible builds before the release.
+- GitHub Pages must use **Source: GitHub Actions** for `quality-pages.yml` to enforce the QA gate. When Pages instead deploys from the branch, GitHub's original Pages build may still deploy independently of QA.
+- The browser-based application still requires real-device functional tests, particularly for direct `file://` access to the separate local build.

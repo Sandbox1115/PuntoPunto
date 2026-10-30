@@ -41,7 +41,7 @@ A detailed IT/EN guide is available on demand from a prominent home button. Reop
 
 ### v0.9.8.8.9 — Usability update
 
-The home tutorial is available via a visible button and never pops up automatically. Closing an OXS resets the legend, stitch types and project statistics. Narrow-screen hero artwork and captions no longer overlap text. This describes a historical preview. Version 0.9.8.8.18 is published; the 0.9.8.8.19 localization review is not.
+The home tutorial is available via a visible button and never pops up automatically. Closing an OXS resets the legend, stitch types and project statistics. Narrow-screen hero artwork and captions no longer overlap text. This historical change was incorporated into subsequent releases.
 
 ### Mobile OXS gestures (v0.9.8.8.9)
 - Use two fingers to zoom and pan without marking any stitches.
@@ -65,4 +65,4 @@ Press Tab to focus the grid. Use arrow keys to select a cell, Shift+arrows to mo
 
 ### Localization review — v0.9.8.8.19
 
-Use the IT/EN control on the home page, PDF editor, Privacy and Licenses pages. Check tooltips, validation errors, PDF/OXS recovery messages and assistive labels as well as visible buttons. Uploaded pattern titles, filenames and user-provided floss names remain unchanged by design. This version is a review candidate and must not replace the public site without approval.
+Use the IT/EN control on the home page, PDF editor, Privacy and Licenses pages. Check tooltips, validation errors, PDF/OXS recovery messages and assistive labels as well as visible buttons. Uploaded pattern titles, filenames and user-provided floss names remain unchanged by design. The 0.9.8.8.19 localization review was incorporated into the published release; v0.9.8.8.20 adds quality infrastructure.

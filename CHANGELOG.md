@@ -1,5 +1,14 @@
 # PuntoPunto — Change log
 
+## v0.9.8.8.20 — 30 October 2026 (quality infrastructure; published)
+
+- Added a reproducible, offline-capable build process for GitHub Pages and a direct-file local package (self-contained PDF.js and DMC resources).
+- Added automated integrity, syntax, link/HTML, static-security and basic behavior checks.
+- Regenerate the file manifest and check the locked SHA-256 dependencies before packaging.
+- Prepared an Actions-based deployment workflow that runs QA before upload and deploy; GitHub Pages must be set to **GitHub Actions** for this gate to be effective.
+- No changes to OXS/JSON serialization, saving behavior, existing user projects or PDF.js dependency binaries.
+
+
 ## v0.9.8.8.19.1 — 28 October 2026 (complete Privacy translation; approved for publication)
 
 - Provided independent, complete Italian and English Privacy documents, switching visibility with the IT/EN selector instead of translating legal paragraphs in fragments.
