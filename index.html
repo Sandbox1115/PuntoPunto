@@ -196,7 +196,7 @@
 <div class="pp-pdf-overlay hidden" id="pdfOverlay" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" aria-describedby="pdfStatus">
   <div class="pp-pdf-dialog pp-manual-dialog">
     <div class="pp-pdf-heading">
-      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.20.2</span>
+      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.21.2</span>
         <h2 id="pdfTitle">Imposta la griglia del tuo schema</h2>
         <p id="pdfFilename" class="muted">Seleziona la pagina del diagramma. Le dimensioni della griglia le scegli tu.</p>
       </div>
@@ -208,13 +208,28 @@
         Quando tutte le caselle saranno state definite, potrai esportare un OXS verificato rispetto ai dati inseriti.
       </div>
       <div class="pp-manual-steps" aria-label="Passaggi per importare il PDF">
-        <span>1 · Pagina</span><span>2 · Area della griglia</span><span>3 · Righe e colonne</span><span>4 · Conferma</span>
+        <span>1 · Pagina</span><span>2 · Area della griglia</span><span>3 · Dimensioni / punti</span><span>4 · Conferma</span>
       </div>
       <div class="pp-pdf-fields pp-manual-fields">
         <label>Pagina del diagramma <select id="pdfPage" aria-label="Pagina PDF"></select></label>
-        <label>Colonne <input id="pdfCols" type="number" min="1" max="600" step="1" placeholder="Es. 59" required></label>
-        <label>Righe <input id="pdfRows" type="number" min="1" max="600" step="1" placeholder="Es. 55" required></label>
+        <label class="pp-grid-unit-label">Dimensioni fornite come
+          <select id="pdfDimensionMode" aria-label="Unità delle dimensioni del progetto">
+            <option value="cells">Colonne × righe (punti)</option>
+            <option value="cm">Centimetri (cm)</option>
+            <option value="in">Pollici (in)</option>
+          </select>
+        </label>
+        <div id="pdfCellDimensions" class="pp-grid-dimension-group">
+          <label>Colonne <input id="pdfCols" type="number" min="1" max="600" step="1" placeholder="Es. 59" required></label>
+          <label>Righe <input id="pdfRows" type="number" min="1" max="600" step="1" placeholder="Es. 55" required></label>
+        </div>
+        <div id="pdfPhysicalDimensions" class="pp-grid-dimension-group hidden" aria-label="Dimensioni fisiche del disegno">
+          <label><span id="pdfPhysicalWidthLabel">Larghezza disegno (cm)</span> <input id="pdfPhysicalWidth" type="text" inputmode="decimal" placeholder="Es. 24,5" autocomplete="off"></label>
+          <label><span id="pdfPhysicalHeightLabel">Altezza disegno (cm)</span> <input id="pdfPhysicalHeight" type="text" inputmode="decimal" placeholder="Es. 16" autocomplete="off"></label>
+          <label><span id="pdfFabricDensityLabel">Punti/cm del tessuto</span> <input id="pdfFabricDensity" type="text" inputmode="decimal" placeholder="Es. 5,5" autocomplete="off"></label>
+        </div>
         <span id="pdfCellInfo" class="pp-manual-cell-info" aria-live="polite">Specifica il numero di colonne e righe dello schema originale.</span>
+        <p id="pdfPhysicalHint" class="pp-grid-physical-hint hidden">La misura del disegno e la densità Aida producono una stima dei punti. Verifica che la griglia coincida con il diagramma stampato prima di confermare.</p>
       </div>
       <p id="pdfStatus" class="pp-pdf-status" role="status" aria-live="polite">Apri un PDF per iniziare.</p>
       <div class="pp-manual-guide">Trascina su una zona esterna al rettangolo per selezionare la griglia. <strong>Trascina i quattro angoli</strong> per correggerla, oppure <strong>trascina l'interno</strong> per spostarla. Le linee appaiono dopo aver impostato righe e colonne.</div>
@@ -248,6 +263,7 @@
       <li><strong>Segna ciò che hai ricamato:</strong> «Segna completamento» non cambia il contenuto dello schema.</li>
       <li><strong>Salva e riapri:</strong> «Salva progetto» include anche il PDF; «Progressi JSON» salva le annotazioni per lo stesso PDF.</li>
       <li><strong>Esporta OXS:</strong> disponibile quando tutte le caselle del progetto sono state definite con gli strumenti a disposizione. Anche gli spazi bianchi dovranno essere segnalati. Il file viene riletto e confrontato con i tuoi dati; non certifica che tu abbia interpretato correttamente il disegno originale. Per schemi di terzi, usa il file solo nei limiti autorizzati: non pubblicare o rivendere conversioni senza i diritti necessari.</li></ol>
+    <p class="pp-tutorial-note">Se il PDF indica la dimensione del disegno in cm o pollici, scegli l’unità corrispondente e inserisci anche la densità Aida (punti/cm o ct). I punti sono stimati per arrotondamento: verifica sempre la griglia stampata.</p>
     <p class="pp-tutorial-note">Il PDF è il riferimento visivo. I punti speciali non digitalizzati (ad esempio linee di backstitch) non vengono ricostruiti automaticamente: non dichiarare fedele un progetto che ne contiene ancora.</p>
     <button type="button" class="btn btn-soft" id="pdfTutorialDone">Ho capito</button>
   </div>
@@ -274,10 +290,13 @@
 <script src="pdf-project-store.js" defer></script>
 <script src="stitch-visuals.js" defer></script>
 <script src="pattern-edit.js" defer></script>
+<script src="oxs-floss-names.js" defer></script>
 <script src="app.js" defer></script>
+<script src="pdf-grid-size.js" defer></script>
 <script src="pdf-manual.js" defer></script>
 <script src="pdf-project-codec.js" defer></script>
 <script src="dmc-catalog.js" defer></script>
+<script src="dmc-floss-names-it.js" defer></script>
 <script src="pdf-tracker.js" defer></script>
 <script src="home-guide.js" defer></script>
 </body>

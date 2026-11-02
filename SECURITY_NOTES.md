@@ -1,4 +1,4 @@
-# PuntoPunto security and dependency status — v0.9.8.8.20
+# PuntoPunto security and dependency status — v0.9.8.8.21.2
 
 ## PDF.js upgraded
 
@@ -30,3 +30,15 @@ A locked-asset, whole-package SHA-256, script-syntax, local-reference, and deter
 ### v0.9.8.8.20.2 — published hotfix
 
 The OXS overlapping-stitch chooser now displays all independent stitches per cell (including both triangular halves), each with a color/position preview and a live completed/total count. No change to exported project data, PDF.js binaries, vendor resources or persistent storage. Owner-approved hotfix: no changes to project file formats, storage, or third-party binaries. Release quality checks must pass before publishing.
+
+### v0.9.8.8.21 — Localization scope (included in v0.9.8.8.21.2)
+
+The new parameterized bilingual messages are rendered as text or DOM attributes, never as HTML. Project data, filenames and user-supplied thread names are preserved as data. No new external network requests, dependencies, telemetry, storage formats or PDF.js changes were introduced. Review the GitHub Pages and file:// distributions independently before publication.
+
+## v0.9.8.8.21.1 — scope and safety of physical grid sizing
+
+The physical-size form parses bounded decimal values locally and converts them to an integer grid before passing the existing dimensions to the PDF tracker. No OCR, server calls, external libraries, schema changes or new data persistence are introduced. DMC labels use the previously locked same-origin catalog; OXS source data is unchanged. The UI warns when the chart selection is inconsistent with square-looking cells. Physical-size conversion still requires the user to check actual chart alignment.
+
+## v0.9.8.8.21.2 — Italian DMC labels
+
+The additional static `dmc-floss-names-it.js` contains descriptive non-official translations keyed only by public DMC codes, with no user data, tracking, calls to third-party translation services or changes to persistence. Names are applied at display time; original and custom palette descriptions are not rewritten.

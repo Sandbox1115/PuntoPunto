@@ -3,8 +3,13 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
+  const L=window.PuntoPuntoI18n, say=(key,data={})=>L.message(key,data),bind=(el,key,data={})=>L.setText(el,key,data);
   const ui = {
     overlay:$('pdfOverlay'), file:$('pdfInput'), page:$('pdfPage'), cols:$('pdfCols'), rows:$('pdfRows'),
+    dimensionMode:$('pdfDimensionMode'), cellDimensions:$('pdfCellDimensions'), physicalDimensions:$('pdfPhysicalDimensions'),
+    physicalWidth:$('pdfPhysicalWidth'), physicalHeight:$('pdfPhysicalHeight'), fabricDensity:$('pdfFabricDensity'),
+    physicalWidthLabel:$('pdfPhysicalWidthLabel'), physicalHeightLabel:$('pdfPhysicalHeightLabel'),
+    fabricDensityLabel:$('pdfFabricDensityLabel'), physicalHint:$('pdfPhysicalHint'),
     preview:$('pdfPreview'), overlayCanvas:$('pdfGridOverlay'), shell:$('pdfPreviewShell'),
     status:$('pdfStatus'), filename:$('pdfFilename'), confirm:$('pdfConfirm'),
     review:$('pdfReview'), info:$('pdfCellInfo'),
@@ -12,6 +17,8 @@
   };
   if (!ui.overlay) return;
   const MAX_BYTES=30*1024*1024, MAX_CELLS=100000, MAX_SIDE=600;
+  const GridSize=window.PuntoPuntoGridSize;
+  if(!GridSize)throw Error('PuntoPunto grid sizing component is missing.');
   const initialRect=()=>({x:.08,y:.08,w:.84,h:.84});
   const state={doc:null,name:'',hash:'',page:1,rect:initialRect(),width:0,height:0,
     imageReady:false,drag:null,renderToken:0,buffer:null,loading:false};
@@ -32,9 +39,40 @@
     if(target?.isConnected&&target.getClientRects().length)target.focus({preventScroll:true});
     else $('openPDF')?.focus({preventScroll:true});
   }
-  function validDimensions(){
+  // Physical design dimensions are converted into integer stitch counts before
+  // entering the PDF tracker. Existing project/backup formats are unchanged.
+  function resolvedDimensions(){
+    if(ui.dimensionMode.value==='cm'||ui.dimensionMode.value==='in')
+      return GridSize.derive(ui.dimensionMode.value,ui.physicalWidth.value,ui.physicalHeight.value,ui.fabricDensity.value);
     const c=Number(ui.cols.value),r=Number(ui.rows.value);
-    return ui.cols.value.trim()!==''&&ui.rows.value.trim()!==''&&Number.isInteger(c)&&Number.isInteger(r)&&c>0&&r>0&&c<=MAX_SIDE&&r<=MAX_SIDE&&c*r<=MAX_CELLS;
+    return ui.cols.value.trim()!==''&&ui.rows.value.trim()!==''&&GridSize.limits(c,r)?{cols:c,rows:r}:null;
+  }
+  function validDimensions(){return !!resolvedDimensions();}
+  let lastPhysicalUnit='cm';
+  function switchDimensionMode(){
+    const mode=ui.dimensionMode.value,physical=mode!=='cells';
+    if(physical&&lastPhysicalUnit!==mode){
+      // Convert dimensions AND fabric count, so mode switching cannot change
+      // the number of stitches simply by interpreting units differently.
+      for(const ctrl of [ui.physicalWidth,ui.physicalHeight,ui.fabricDensity]){
+        if(!ctrl.value.trim())continue;
+        const n=GridSize.convert(ctrl.value,lastPhysicalUnit,mode,ctrl===ui.fabricDensity?'density':'size');
+        if(Number.isFinite(n))ctrl.value=String(Math.round(n*100000)/100000).replace('.',',');
+      }
+    }
+    ui.cellDimensions.classList.toggle('hidden',physical);
+    ui.physicalDimensions.classList.toggle('hidden',!physical);
+    ui.physicalHint.classList.toggle('hidden',!physical);
+    ui.cols.required=!physical;ui.rows.required=!physical;
+    ui.physicalWidth.required=physical;ui.physicalHeight.required=physical;ui.fabricDensity.required=physical;
+    if(physical){
+      lastPhysicalUnit=mode;
+      if(!ui.fabricDensity.value.trim())ui.fabricDensity.value=mode==='in'?'14':'5,5';
+      bind(ui.physicalWidthLabel,mode==='cm'?'pdf.physicalWidthCm':'pdf.physicalWidthIn');
+      bind(ui.physicalHeightLabel,mode==='cm'?'pdf.physicalHeightCm':'pdf.physicalHeightIn');
+      bind(ui.fabricDensityLabel,mode==='cm'?'pdf.fabricCountCm':'pdf.fabricCountIn');
+    }
+    refreshValidity();drawOverlay();
   }
   function validRect(rect){
     return rect&&Object.values(rect).every(Number.isFinite)&&rect.x>=0&&rect.y>=0&&rect.w>=.005&&rect.h>=.005&&rect.x+rect.w<=1.000001&&rect.y+rect.h<=1.000001;
@@ -42,9 +80,25 @@
   function refreshValidity(){
     const ready=state.imageReady&&validDimensions()&&validRect(state.rect)&&!state.loading;
     ui.confirm.disabled=!ready;
-    if (!ui.cols.value&&!ui.rows.value)ui.info.textContent='Inserisci colonne e righe indicate sullo schema originale.';
-    else if(!validDimensions())ui.info.textContent='Dimensioni non valide: ogni lato deve avere 1–600 celle, massimo 100.000 caselle.';
-    else ui.info.textContent=`Griglia ${ui.cols.value} × ${ui.rows.value} · ${Number(ui.cols.value)*Number(ui.rows.value)} caselle`;
+    const dimensions=resolvedDimensions();
+    if(ui.dimensionMode.value==='cells'){
+      if(!ui.cols.value&&!ui.rows.value)bind(ui.info,'pdf.promptDimensions');
+      else if(!dimensions)bind(ui.info,'pdf.invalidDimensions');
+      else bind(ui.info,'pdf.gridSummary',{cols:dimensions.cols,rows:dimensions.rows,cells:dimensions.cols*dimensions.rows});
+    }else if(!dimensions){
+      bind(ui.info,'pdf.promptPhysical');
+    }else{
+      bind(ui.info,'pdf.physicalGridSummary',{cols:dimensions.cols,rows:dimensions.rows,cells:dimensions.cols*dimensions.rows});
+    }
+    if(ui.dimensionMode.value!=='cells'){
+      let nonSquare=false;
+      if(dimensions&&state.imageReady&&state.width>0&&state.height>0){
+        const stepX=state.rect.w*state.width/dimensions.cols;
+        const stepY=state.rect.h*state.height/dimensions.rows;
+        nonSquare=Math.abs(stepX-stepY)/Math.max(stepX,stepY)>.1;
+      }
+      bind(ui.physicalHint,nonSquare?'pdf.squareWarning':'pdf.physicalHint');
+    }
     return ready;
   }
   function loadScript(src){return new Promise((resolve,reject)=>{
@@ -93,7 +147,9 @@
     openDialog();state.loading=true;state.imageReady=false;state.drag=null;state.page=1;state.rect=initialRect();
     state.name=file.name;state.hash='';state.buffer=null;ui.filename.setAttribute('data-i18n-ignore','');ui.filename.textContent=file.name;
     ui.preview.width=ui.preview.height=ui.overlayCanvas.width=ui.overlayCanvas.height=1;
-    ui.cols.value='';ui.rows.value='';ui.page.replaceChildren();refreshValidity();message('Apertura del PDF in corso…');
+    ui.cols.value='';ui.rows.value='';ui.physicalWidth.value='';ui.physicalHeight.value='';
+    // A previously saved PDF always carries exact integer grid counts, not physical metadata.
+    ui.dimensionMode.value='cells';switchDimensionMode();ui.page.replaceChildren();refreshValidity();message('Apertura del PDF in corso…');
     const token=++state.renderToken;
     try{
       const bytes=await file.arrayBuffer();if(token!==state.renderToken)return;state.buffer=bytes.slice(0);
@@ -128,7 +184,7 @@
       const previous=state.doc;state.doc=doc;
       if(previous){try{await previous.destroy();}catch{}}
       for(let n=1;n<=doc.numPages;n++){
-        const opt=document.createElement('option');opt.value=String(n);opt.textContent=`Pagina ${n} di ${doc.numPages}`;ui.page.append(opt);
+        const opt=document.createElement('option');opt.value=String(n);bind(opt,'pdf.pageOption',{page:n,pages:doc.numPages});ui.page.append(opt);
       }
       const last=options.project?options.project.source:(options.resumeSource||restoreLast());
       if(options.project){
@@ -149,7 +205,7 @@
         closeDialog();
       }
       message(last?'Configurazione precedente ripristinata: verifica allineamento, colonne e righe prima di confermare.':
-        'Seleziona il rettangolo della griglia (escludi legenda, numeri e margini), poi inserisci righe e colonne.');
+        say('pdf.newGridInstructions'));
     }catch(err){if(token!==state.renderToken)return;console.error(err);message('Impossibile aprire il PDF: '+err.message,true);notify('PDF non aperto: '+err.message,true);if(options.project)throw err;}
     finally{if(token===state.renderToken){state.loading=false;refreshValidity();}}
   }
@@ -193,7 +249,7 @@
     ctx.fillStyle='rgba(10,25,20,.22)';ctx.fillRect(0,0,W,T);ctx.fillRect(0,T,L,h);ctx.fillRect(R,T,W-R,h);ctx.fillRect(0,B,W,H-B);
     ctx.fillStyle='rgba(29,154,109,.045)';ctx.fillRect(L,T,w,h);
     if(validDimensions()){
-      const cols=Number(ui.cols.value),rows=Number(ui.rows.value);
+      const {cols,rows}=resolvedDimensions();
       ctx.beginPath();
       for(let c=1;c<cols;c++){const x=L+c*w/cols;ctx.moveTo(x,T);ctx.lineTo(x,B);}
       for(let row=1;row<rows;row++){const y=T+row*h/rows;ctx.moveTo(L,y);ctx.lineTo(R,y);}
@@ -210,7 +266,7 @@
       ctx.fillRect(x-radius,y-radius,radius*2,radius*2);ctx.strokeRect(x-radius,y-radius,radius*2,radius*2);
     }
     ctx.font=`bold ${Math.max(12,W/78)}px system-ui`;ctx.textBaseline='top';
-    ctx.fillStyle='#05664e';ctx.fillText(validDimensions()?`${ui.cols.value} × ${ui.rows.value}`:'Inserisci colonne e righe',L+radius,T+radius+4);
+    ctx.fillStyle='#05664e';const grid=resolvedDimensions();ctx.fillText(grid?`${grid.cols} × ${grid.rows}`:say('pdf.gridLabelMissing'),L+radius,T+radius+4);
   }
   function point(e){
     const box=ui.preview.getBoundingClientRect();
@@ -259,7 +315,7 @@
     state.drag=null;
     if(!validRect(state.rect)){state.rect={...d.origin};syncPercent();drawOverlay();}
     refreshValidity();
-    message(validDimensions()?'Controlla l’allineamento della prima e ultima colonna e riga, poi conferma.':'Area selezionata. Ora specifica colonne e righe.');
+    message(validDimensions()?'Controlla l’allineamento della prima e ultima colonna e riga, poi conferma.':say('pdf.gridInputPrompt'));
     try{ui.shell.releasePointerCapture(e.pointerId);}catch{}
   }
   async function confirm(){
@@ -267,11 +323,13 @@
     try{
       ui.confirm.disabled=true;
       // Explicitly use the rendered PDF canvas and the exact manually declared grid.
+      const grid=resolvedDimensions();
+      if(!grid)return;
       await window.PuntoPuntoPDFTracker.open({
         image:ui.preview,name:state.name,hash:state.hash,page:state.page,
-        cols:Number(ui.cols.value),rows:Number(ui.rows.value),rect:{...state.rect},pdfBytes:state.buffer
+        cols:grid.cols,rows:grid.rows,rect:{...state.rect},pdfBytes:state.buffer
       });
-      closeDialog();notify('PDF pronto: griglia manuale '+ui.cols.value+' × '+ui.rows.value+'.');
+      closeDialog();notify(say('pdf.ready',{cols:grid.cols,rows:grid.rows}));
     }catch(err){message('Impossibile aprire la griglia: '+err.message,true);notify(err.message,true);}
     finally{refreshValidity();}
   }
@@ -281,11 +339,13 @@
   ui.file.addEventListener('change',async()=>{const file=ui.file.files?.[0];ui.file.value='';await readFile(file);});
   ui.page.addEventListener('change',async()=>{
     // No inferred grid or colors: a different page must be manually delimited.
-    state.rect=initialRect();ui.cols.value='';ui.rows.value='';++state.renderToken;
+    state.rect=initialRect();ui.cols.value='';ui.rows.value='';ui.physicalWidth.value='';ui.physicalHeight.value='';++state.renderToken;
     try{await displayPage(Number(ui.page.value));message('Pagina selezionata. Delimita la griglia su questa pagina.');}
     catch(err){message('Pagina non caricata: '+err.message,true);}
   });
-  [ui.cols,ui.rows].forEach(field=>field.addEventListener('input',()=>{refreshValidity();drawOverlay();}));
+  [ui.cols,ui.rows,ui.physicalWidth,ui.physicalHeight,ui.fabricDensity].forEach(field=>field.addEventListener('input',()=>{refreshValidity();drawOverlay();}));
+  ui.dimensionMode.addEventListener('change',switchDimensionMode);
+  switchDimensionMode();
   [ui.x,ui.y,ui.w,ui.h].forEach(field=>field.addEventListener('change',applyPercent));
   ui.shell.addEventListener('pointerdown',onDown);
   ui.shell.addEventListener('pointermove',onMove);
@@ -312,5 +372,6 @@
     const file=new File([bytes],name,{type:'application/pdf'});
     await readFile(file,{project:payload});
   }
+  document.addEventListener('puntopunto:languagechange',switchDimensionMode);
   window.PuntoPuntoPDFImport={readFile,loadProject};
 })();

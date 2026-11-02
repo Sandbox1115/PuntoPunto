@@ -36,3 +36,7 @@ The seven exercised strings cover the OXS Erase/Restore tooltips, reset-progress
 This is a static and translation-engine test, **not a successful full end-to-end browser test**. It does not demonstrate compatibility with actual GitHub Pages, `file://`, mobile browsers, screen readers, live PDF.js, a real OXS import/export session, or real persistent storage.
 
 **Before approval:** verify home, OXS editor, PDF setup and digitization, Privacy, Licenses and on-screen tutorials in both languages. Exercise errors, saves/recovery, overlapping stitch picker and controls on desktop and mobile. Do not merge into `main` or deploy until specifically approved.
+
+## 0.9.8.8.21.2 — PDF DMC descriptions
+
+Added tests that cover all 489 catalog entries, language switching in the PDF picker and added-thread legend, selected status, accent-insensitive Italian searches and preservation of English source descriptions and custom names. This supplemental reference is non-official and uses the source MakeBead CC BY 4.0 attribution.

@@ -70,3 +70,17 @@ Use the IT/EN control on the home page, PDF editor, Privacy and Licenses pages. 
 ### v0.9.8.8.20.2 — published improvement
 
 The OXS overlapping-stitch chooser now displays all independent stitches per cell (including both triangular halves), each with a color/position preview and a live completed/total count. No change to exported project data, PDF.js binaries, vendor resources or persistent storage. The feature was tested and approved for the v0.9.8.8.20.2 GitHub Pages release.
+
+### v0.9.8.8.21 — Language switching (included in v0.9.8.8.21.2)
+
+Switch between IT and EN while viewing an OXS chart, an overlapping-stitch selection, or an active PDF digitization. Counts, descriptions, errors and status messages are displayed in the selected language. Pattern filenames, colors and thread names from source files are preserved. The localization update does not alter OXS exports, progress JSON formats, or saved completion states.
+
+## Physical PDF design dimensions — v0.9.8.8.21.1
+
+When setting up a PDF grid, select **columns × rows**, **centimeters**, or **inches**. If entering physical design dimensions, also provide the **fabric count** in stitches per centimeter or stitches per inch (ct). Example: a 24.5 × 16 cm design on 5.5 stitches/cm Aida yields approximately **135 × 88 stitches**. The equivalent 9.64 × 6.29 in design on 14 ct Aida also yields approximately **135 × 88 stitches**. Rounding is inevitable: align the selected region with the printed grid and check the first and last lines. Physical size without fabric count cannot determine stitch counts.
+
+In the OXS editor, recognized DMC threads display canonical English names when EN is selected. Original OXS palette descriptions and custom thread names remain unmodified.
+
+## PDF editor DMC descriptions — v0.9.8.8.21.2
+
+The PDF thread picker and saved-project legend show non-official Italian descriptions in **IT**, and original MakeBead English DMC descriptions in **EN**. Search by code, English name or Italian name. Switching languages changes labels only; the source palette descriptions, codes, HEX colors, custom thread names and export contents remain intact.

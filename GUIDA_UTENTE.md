@@ -68,3 +68,17 @@ Premi Tab fino alla griglia. Usa le frecce per scegliere una casella, Shift+frec
 ## Anteprima 0.9.8.8.20.2 — Punti sovrapposti
 
 Il selettore delle caselle con più punti mostra l’intero contenuto della casella (croce intera, metà superiore/inferiore o sinistra/destra dei punti parziali), con anteprime cromatiche e conteggio dei punti completati rispetto al totale. Le spunte sullo schema mantengono lo stile originale. La versione è destinata al collaudo e non è pubblicata.
+
+## 0.9.8.8.21 — Cambio lingua (versione di prova)
+
+Il cambio IT/EN è disponibile anche durante il lavoro nell'editor OXS o PDF. I messaggi che includono quantità, coordinate ed errori vengono composti direttamente nella lingua selezionata. I nomi e i dati dei progetti restano invariati e non vengono tradotti. La nuova versione non è ancora pubblicata.
+
+## Dimensioni fisiche del disegno PDF — 0.9.8.8.21.1
+
+Nell’impostazione della griglia PDF puoi scegliere tra **colonne × righe**, **centimetri** o **pollici**. Se scegli una misura fisica, inserisci anche la **densità del tessuto**: punti per centimetro o punti per pollice («ct»). Esempio Aida 5,5 punti/cm, disegno 24,5 × 16 cm: la griglia risultante è circa **135 × 88 punti**. Analogamente Aida 14 ct, disegno 9,64 × 6,29 in: circa **135 × 88 punti**. I risultati sono arrotondati: controlla la prima e l’ultima linea sulla griglia stampata e correggi i bordi dell’area se necessario. Le sole dimensioni in cm/in non consentono di sapere quante crocette sono presenti senza la densità.
+
+Nell’editor OXS, con EN selezionato, i filati DMC riconosciuti mostrano il nome inglese del catalogo. I nomi dei filati personalizzati e le descrizioni originali nel file OXS non sono modificati.
+
+## Filati DMC nell'editor PDF — 0.9.8.8.21.2
+
+Nella ricerca e nella legenda dei filati DMC, **IT** mostra le descrizioni italiane non ufficiali e **EN** i nomi inglesi del catalogo MakeBead. Puoi cercare anche per nome italiano (ad esempio «salmone»), in inglese o per codice. Il cambio lingua aggiorna le voci già aggiunte, senza cambiare codici, colori o descrizioni conservate nel progetto. I filati personalizzati mantengono sempre il loro nome.

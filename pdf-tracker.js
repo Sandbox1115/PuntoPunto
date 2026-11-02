@@ -7,6 +7,10 @@
   const ui={root:$('pdfTracker'),image:$('trackerImage'),grid:$('trackerGrid'),page:$('trackerPage'),scroller:$('trackerScroller'),count:$('trackerCount'),zoom:$('trackerZoomLabel'),name:$('trackerName'),json:$('trackerJSON'),projectFile:$('trackerProjectFile'),list:$('trackerLegendList'),code:$('trackerThreadCode'),color:$('trackerThreadColor'),info:$('trackerLegendInfo'),digital:$('trackerDigitalStats'),oxs:$('trackerExportOXS'),kind:$('trackerKind'),tour:$('trackerTutorial'),projectStatus:$('trackerProjectStatus'),threadSource:$('trackerThreadSource'),dmcFields:$('trackerDMCFields'),customFields:$('trackerCustomFields'),dmcSearch:$('trackerDMCQuery'),dmcResults:$('trackerDMCResults'),dmcStatus:$('trackerDMCStatus'),addDMC:$('trackerAddDMC'),customName:$('trackerCustomName')};
   if(!ui.root||!codec)return;
   const VISUALS=window.PuntoPuntoStitchVisuals;
+  const L=window.PuntoPuntoI18n;
+  const threadDisplayName=(item)=>item?.brand==='DMC' ? (window.PuntoPuntoDMCNames?.name(item.code,window.PuntoPuntoDMC?.get(item.code)?.name||item.name,L.language) ?? item.name) : (item?.name||'');
+  const dmcDisplayName=(item)=>window.PuntoPuntoDMCNames?.name(item.code,item.name,L.language) ?? item.name;
+  const say=(key,data={})=>L.message(key,data),bind=(el,key,data={})=>L.setText(el,key,data),attr=(el,name,key,data={})=>L.setAttr(el,name,key,data);
   const KINDS={full:'Croce intera',halfForward:'Mezza croce ╱',halfBack:'Mezza croce ╲',quarterNW:'Quarto ◤ alto a sinistra',quarterNE:'Quarto ◥ alto a destra',quarterSW:'Quarto ◣ basso a sinistra',quarterSE:'Quarto ◢ basso a destra',tentForward:'Punto diagonale ╲•',tentBack:'Punto diagonale ╱•',knot:'Nodo francese',bead:'Perlina'};
   const controlPanel=$('trackerControlPanel'),collapse=$('trackerCollapse'),focus=$('trackerFocus'),quarterPicker=$('trackerQuarterPicker');
   const mobileThreads=$('trackerMobileThreads'),mobileClose=$('trackerMobilePanelClose'),mobileBackdrop=$('trackerMobilePanelBackdrop');
@@ -146,7 +150,7 @@
   }
   function legendInfo(){
     const s=getStats();
-    if(state.tool==='stitch')return state.selected?'Assegna '+state.selected+' ('+KINDS[state.kind]+'). Tocca una casella per sostituirla.':'Seleziona un filato dalla legenda.';
+    if(state.tool==='stitch')return state.selected?say('pdf.assignThread',{code:state.selected,kind:L.t(KINDS[state.kind])}):L.t('Seleziona un filato dalla legenda.');
     if(state.tool==='empty')return 'Conferma che la casella è vuota: non contiene alcun punto.';
     if(state.tool==='unknown')return 'Rimetti la casella tra quelle da esaminare.';
     return state.legacy?'I filati della v0.9 sono stati importati come croci intere: verifica i punti prima di completare l’OXS.':'Segna o deseleziona i punti già ricamati. Il disegno rimane invariato.';
@@ -155,17 +159,17 @@
     ui.list.replaceChildren();
     const counts=new Map();for(const point of state.cells.values())counts.set(point.code,(counts.get(point.code)||0)+1);
     for(const item of state.palette){
-      const b=document.createElement('button');b.type='button';b.className='pp-c-thread'+(state.selected===item.code?' is-active':'');b.title='Seleziona '+item.code;
+      const b=document.createElement('button');b.type='button';b.className='pp-c-thread'+(state.selected===item.code?' is-active':'');attr(b,'title','pdf.threadTooltip',{code:item.code});
       const sw=document.createElement('span');sw.className='pp-c-thread-swatch';sw.style.background=item.color;
       const name=document.createElement('strong');name.textContent=(item.brand==='DMC'?'DMC ':'')+item.code;
-      const title=document.createElement('small');title.className='pp-thread-desc';title.textContent=item.name||'';
-      const count=document.createElement('span');count.textContent=(counts.get(item.code)||0)+' punti';
+      const title=document.createElement('small');title.className='pp-thread-desc';title.textContent=threadDisplayName(item);
+      const count=document.createElement('span');bind(count,'pdf.threadCount',{count:counts.get(item.code)||0});
       b.append(sw,name,title,count);b.addEventListener('click',()=>{state.selected=item.code;setTool('stitch');setMobilePanel(false);});ui.list.appendChild(b);
     }
     if(!state.palette.length)ui.info.textContent='Aggiungi i filati riportati sulla legenda del PDF.';
     else ui.info.textContent=legendInfo();
     const s=getStats(),pct=s.total?Math.round(s.resolved/s.total*100):0;
-    ui.digital.textContent=`Digitalizzate ${s.resolved.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT')} / ${s.total.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT')} caselle (${pct}%) · ${s.stitches} punti · ${s.empty} vuote · ${s.unknown} da verificare`;
+    bind(ui.digital,'pdf.progressStats',{resolved:s.resolved.toLocaleString(L.language==='en'?'en-US':'it-IT'),total:s.total.toLocaleString(L.language==='en'?'en-US':'it-IT'),percent:pct,stitches:s.stitches,empty:s.empty,unknown:s.unknown});
     ui.oxs.disabled=s.unknown!==0;
     ui.oxs.title=s.unknown?'Definisci tutte le caselle per esportare un OXS completo.':'Esporta e verifica l’OXS contro i dati digitalizzati.';
   }
@@ -175,7 +179,7 @@
     const existing=state.palette.find(p=>p.code.toLowerCase()===code.toLowerCase());
     if(existing){
       if(existing.brand===brand&&existing.color.toLowerCase()===color){state.selected=existing.code;setTool('stitch');return {ok:true,existing:true};}
-      return {ok:false,message:'Il codice '+code+' è già usato per un altro filato. Per il personalizzato, scegli un codice diverso (es. MIO-'+code+').'};
+      return {ok:false,message:say('pdf.duplicateThread',{code})};
     }
     if(state.palette.length>=100)return {ok:false,message:'La legenda ammette al massimo 100 filati.'};
     state.palette.push({code,color,brand,name});state.selected=code;setTool('stitch');save();draw();setMobilePanel(false);return {ok:true};
@@ -186,16 +190,25 @@
   }
   function renderDMCResults(){
     const cat=window.PuntoPuntoDMC;if(!cat?.count)return;
-    const q=ui.dmcSearch.value,results=cat.search(q,16);ui.dmcResults.replaceChildren();
+    const q=ui.dmcSearch.value;
+    // Source descriptions remain English; localize results without changing the
+    // locked DMC catalog, PDF palettes, or saved/exported project data.
+    const results=L.language==='it' && q.trim()
+      ? [...new Map([
+          ...cat.search(q,16),
+          ...cat.search('',489).filter(item=>window.PuntoPuntoDMCNames?.matches(item.code,item.name,q,L.language))
+        ].map(item=>[item.code,item])).values()].slice(0,16)
+      : cat.search(q,16);
+    ui.dmcResults.replaceChildren();
     for(const item of results){
       const button=document.createElement('button');button.type='button';button.className='pp-dmc-item'+(state.dmcSelected?.code===item.code?' pp-dmc-item-active':'');
       const sw=document.createElement('span');sw.className='pp-c-thread-swatch';sw.style.backgroundColor=item.hex;
       const info=document.createElement('span'),code=document.createElement('strong');code.textContent='DMC '+item.code;
-      const name=document.createElement('small');name.textContent=item.name;info.append(code,name);
-      button.append(sw,info);button.addEventListener('click',()=>{state.dmcSelected=item;ui.dmcSearch.value=item.code;ui.addDMC.disabled=false;ui.dmcStatus.textContent='Selezionato: DMC '+item.code+' · '+item.name+' · '+item.hex;renderDMCResults();});
+      const name=document.createElement('small');name.textContent=dmcDisplayName(item);info.append(code,name);
+      button.append(sw,info);button.addEventListener('click',()=>{state.dmcSelected=item;ui.dmcSearch.value=item.code;ui.addDMC.disabled=false;ui.dmcStatus.textContent=say('pdf.dmcSelected',{code:item.code,name:dmcDisplayName(item),hex:item.hex});renderDMCResults();});
       ui.dmcResults.append(button);
     }
-    if(!results.length)ui.dmcStatus.textContent='Nessuna corrispondenza. Per un filato fuori catalogo usa «Colore personalizzato».';
+    if(!results.length)ui.dmcStatus.textContent=L.t('Nessuna corrispondenza. Per un filato fuori catalogo usa «Colore personalizzato».');
   }
   async function loadDMC(){
     const cat=window.PuntoPuntoDMC;if(!cat){ui.dmcStatus.textContent='Il modulo DMC non è stato caricato.';return;}
@@ -216,7 +229,7 @@
     const stride=Math.max(1,Math.ceil(Math.max(state.cols/W,state.rows/H)*8));c.strokeStyle='rgba(6,72,55,.55)';c.lineWidth=Math.max(.65,Math.min(1.4,W/1400));c.beginPath();
     for(let x=0;x<=state.cols;x+=stride){c.moveTo(x*cw,0);c.lineTo(x*cw,H);}for(let y=0;y<=state.rows;y+=stride){c.moveTo(0,y*ch);c.lineTo(W,y*ch);}c.stroke();
     c.strokeStyle='rgba(12,117,83,.9)';c.lineWidth=2;c.strokeRect(1,1,W-2,H-2);
-    ui.count.textContent=`${state.done.size} caselle segnate come ricamate · ${state.cells.size} punti definiti`;
+    bind(ui.count,'pdf.completionStats',{completed:state.done.size,stitches:state.cells.size});
     renderLegend();
   }
   function scaleTo(n){state.scale=clamp(n,.5,4);ui.page.style.width=Math.round(ui.image.width*state.scale)+'px';ui.page.style.height=Math.round(ui.image.height*state.scale)+'px';ui.zoom.textContent=Math.round(state.scale*100)+'%';}
@@ -229,7 +242,7 @@
     const sx=Math.round(r.x*info.image.width),sy=Math.round(r.y*info.image.height),sw=Math.max(1,Math.round(r.w*info.image.width)),sh=Math.max(1,Math.round(r.h*info.image.height));
     ui.image.width=ui.grid.width=sw;ui.image.height=ui.grid.height=sh;ui.image.getContext('2d').drawImage(info.image,sx,sy,sw,sh,0,0,sw,sh);
     try{localStorage.setItem('pp-pdf-tracker-last-v1:'+state.hash,JSON.stringify({page:state.page,cols:state.cols,rows:state.rows,rect:state.rect}));}catch(e){console.warn('Griglia recente non salvata',e);notify('La griglia potrebbe non essere ripristinata automaticamente: esporta il progetto JSON.',true);}
-    await load();ui.dmcSearch.value='';ui.addDMC.disabled=true;ui.name.textContent=`${info.name} · pagina ${info.page} · ${info.cols} × ${info.rows}`;
+    await load();ui.dmcSearch.value='';ui.addDMC.disabled=true;bind(ui.name,'pdf.pdfInfo',{filename:info.name,page:info.page,cols:info.cols,rows:info.rows});
     window.PuntoPuntoOXSNavigation?.close({confirmExit:false,showHome:false});
     // An OXS session exempts its filename/metadata from automatic translation.
     // On entry to PDF mode, keep the PDF filename literal but translate the fixed metadata.
@@ -297,7 +310,7 @@
   function exportOXS(){
     try{const xml=codec.write(model(),state.name.replace(/\.pdf$/i,'')),check=codec.verify(xml,model());
       downloadBlob(new Blob([xml],{type:'application/xml;charset=utf-8'}),filename('-digitalizzato.oxs'));
-      ui.projectStatus.textContent=`OXS verificato: ${check.stitches} punti e ${check.palette} filati. Verifica visivamente la fedeltà al PDF.`;
+      ui.projectStatus.textContent=say('pdf.exportVerification',{stitches:check.stitches,threads:check.palette});
       notify('OXS creato e riletto senza differenze rispetto alla tua digitalizzazione.');
     }catch(err){notify('Esportazione OXS bloccata: '+err.message,true);}
   }
@@ -387,7 +400,7 @@
   ui.addDMC.addEventListener('click',()=>{
     const item=state.dmcSelected;if(!item)return;
     const outcome=addThread(item.code,item.hex,{brand:'DMC',name:item.name});
-    ui.dmcStatus.textContent=outcome.ok?'DMC '+item.code+' aggiunto alla legenda.':outcome.message;
+    ui.dmcStatus.textContent=outcome.ok?say('pdf.dmcAdded',{code:item.code}):L.t(outcome.message);
   });
   $('trackerAddThread').addEventListener('click',()=>{
     const outcome=addThread(ui.code.value,ui.color.value,{brand:'Personalizzato',name:ui.customName.value});
@@ -400,7 +413,7 @@
   ui.kind.addEventListener('change',()=>{state.kind=ui.kind.value;syncQuarterPicker();renderLegend();});
   $('trackerMarkEmpty').addEventListener('click',()=>{
     const s=getStats();if(!s.unknown)return;
-    if(!window.ppConfirm(`Confermi che tutte le ${s.unknown} caselle non definite sono effettivamente vuote nel PDF? Questa azione non assegna filati.`))return;
+    if(!window.ppConfirm(say('pdf.confirmEmpty',{count:s.unknown})))return;
     for(let i=0;i<total();i++)if(!state.cells.has(i))state.empty.add(i);
     save();draw();notify('Le caselle non definite sono ora vuote confermate.');
   });
@@ -448,5 +461,18 @@
       });
     }).catch(e=>console.warn('Riapertura ultimo PDF indisponibile',e));
   }
+  document.addEventListener('puntopunto:languagechange',()=>{
+    if(ui.root.classList.contains('hidden'))return;
+    renderLegend();
+    // Refresh visible DMC search entries and the selected-thread status on every
+    // IT↔EN switch, including when the palette was restored from an older JSON.
+    if(window.PuntoPuntoDMC?.count){
+      renderDMCResults();
+      if(state.dmcSelected)ui.dmcStatus.textContent=say('pdf.dmcSelected',{code:state.dmcSelected.code,name:dmcDisplayName(state.dmcSelected),hex:state.dmcSelected.hex});
+      else if(ui.dmcResults.children.length)ui.dmcStatus.textContent=L.t('489 filati DMC disponibili · catalogo non ufficiale');
+    }
+    if(state.name&&state.cols&&state.rows)bind(ui.name,'pdf.pdfInfo',{filename:state.name,page:state.page,cols:state.cols,rows:state.rows});
+    setCompact(compact);setFocus(focusMode);
+  });
   window.PuntoPuntoPDFTracker={open,close,closeBeforeOXS,restoreProject,importProject,inspect:()=>({...getStats(),source:source()})};
 })();

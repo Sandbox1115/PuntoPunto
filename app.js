@@ -17,7 +17,23 @@
   const visuals=window.PuntoPuntoStitchVisuals;
   const filterKindEl=$('filterKind'),viewModeEl=$('oxsViewMode');
   const kindDefs = {full:['×','Croce intera'],part:['◩','Punto parziale'],half:['╱','Mezzo punto'],quarter:['◢','Quarto di punto'],tent:['╱','Punto diagonale'],verticalhalf:['▐','Mezza croce verticale'],horizontalhalf:['▂','Mezza croce orizzontale'],back:['━','Punto scritto'],knot:['●','Nodo francese'],bead:['◆','Perlina'],fullcross:['×','Croce decorativa']};
+  const I18N=window.PuntoPuntoI18n, msg=(key,params={})=>I18N.message(key,params),bind=(el,key,params={})=>I18N.setText(el,key,params),bindAttr=(el,attribute,key,params={})=>I18N.setAttr(el,attribute,key,params);
   const state = {pattern:null,completed:new Set(),activeColor:null,activeKind:null,pendingOnly:false,mono:false,mode:'mark',showSymbols:true,cell:16,ox:0,oy:0,drag:null,picker:null,pickerTimer:null,savedTimer:null,saveAvailable:true,saveAt:0,dirty:false,lastStorageWarning:0,oxsFilename:''};
+  // DMC OXS names are presentation-only; preserve the source OXS palette
+  // (including Italian/custom names) for saving, export, and fingerprints.
+  function threadDisplayName(thread){
+    return window.PuntoPuntoFlossNames?.display(thread,I18N.language,
+      code=>window.PuntoPuntoDMC?.get(code))||thread.name;
+  }
+  function loadDMCDisplayNames(pattern){
+    // The same 489-color local catalog used by the PDF editor. Never block
+    // OXS loading or require remote services for an optional UI translation.
+    window.PuntoPuntoDMC?.load()?.then(()=>{
+      if(state.pattern!==pattern)return; // ignore an older asynchronous load
+      renderLegends();
+      if(state.picker)openStitchPicker(state.picker.point,state.picker.stitches);
+    }).catch(()=>{}); // keep the original source name when unavailable
+  }
   const ctx = el.canvas.getContext('2d',{alpha:false});
   const touchGesture={points:new Map(),pinching:false,lastDistance:0,lastCenter:null};
   let oxsFocusMode=false;
@@ -325,7 +341,7 @@
     else{state.saveAvailable=false;updateSavedLabel();if(!silent||Date.now()-state.lastStorageWarning>12000){state.lastStorageWarning=Date.now();notify('Impossibile salvare nel browser. Esporta subito un JSON dei progressi.',true);}}
   }
   function queueSave(){state.dirty=true;clearTimeout(state.savedTimer);state.savedTimer=setTimeout(()=>saveNow(),360);}
-  function updateSavedLabel(){el.lastSaved.textContent=state.saveAvailable?(state.saveAt?'Automatico · '+new Date(state.saveAt).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}):'Automatico'):'Solo esportazione';}
+  function updateSavedLabel(){const en=I18N.language==='en';el.lastSaved.textContent=state.saveAvailable?(state.saveAt?msg('oxs.saveTime',{time:new Date(state.saveAt).toLocaleTimeString(en?'en-US':'it-IT',{hour:'2-digit',minute:'2-digit'})}):I18N.t('Automatico')):I18N.t('Solo esportazione');}
   function openDB(){return new Promise((resolve,reject)=>{
     if(!('indexedDB'in window))return reject(Error('IndexedDB indisponibile'));
     const request=indexedDB.open('PuntoPunto',2);
@@ -357,20 +373,20 @@
     setMode('mark');$('closeOXSProject').classList.remove('hidden');el.welcome.classList.add('hidden');el.editor.classList.remove('hidden');
     syncOXSInlinePanels();
     state.oxsFilename=filename;el.title.setAttribute('data-i18n-ignore','');el.title.textContent=pattern.title;
-    el.meta.setAttribute('data-i18n-ignore','');el.meta.textContent=`${pattern.width} × ${pattern.height} ${window.PuntoPuntoI18n?.language==='en'?'cells':'caselle'} · ${filename}`;
-    el.summary.textContent=`${[...pattern.palette.values()].filter(c=>!c.isCloth&&pattern.stitches.some(s=>s.palIndex===c.index)).length} colori nello schema`;
+    el.meta.setAttribute('data-i18n-ignore','');el.meta.textContent=msg('oxs.patternMeta',{width:pattern.width,height:pattern.height,filename});
+    bind(el.summary,'oxs.colorSummary',{count:[...pattern.palette.values()].filter(c=>!c.isCloth&&pattern.stitches.some(s=>s.palIndex===c.index)).length});
     el.dimensions.textContent=`${pattern.width} × ${pattern.height}`;
     el.stitchCount.textContent=pattern.stitches.length.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT');
     el.colorCount.textContent=[...new Set(pattern.stitches.map(s=>s.palIndex))].length;
     ['saveProgress','loadProgress','resetProgress','exportOXS'].forEach(id=>$(id).disabled=false);
-    renderLegends();updateStats();resizeCanvas();fit();restoreOXSView();
+    renderLegends();loadDMCDisplayNames(pattern);updateStats();resizeCanvas();fit();restoreOXSView();
     try{await dbPut({id:pattern.id,text,filename,updatedAt:Date.now()});
       const confirmed=await dbGet(pattern.id);
       if(!confirmed||confirmed.text!==text||confirmed.id!==pattern.id)throw Error('Verifica lettura del progetto OXS non riuscita');
       localStorage.setItem('pp-last-project',pattern.id);
     }catch(e){console.warn('File OXS non archiviabile',e);notify('Schema aperto ma originale OXS non conservato: mantieni il file per riprenderlo.',true);}
     if(oxsRestoreNotice)notify(oxsRestoreNotice,true);
-    else if(pattern.unsupported.count)notify(`Schema aperto: ${pattern.unsupported.count} elementi particolari non supportati (non inclusi nel conteggio).`);
+    else if(pattern.unsupported.count)notify(msg('oxs.unsupported',{count:pattern.unsupported.count}));
     else if(restoring)notify('Bentornato! Ho ripristinato il tuo progetto.');
     else if(stored)notify('Schema aperto. Ho recuperato i tuoi progressi salvati.');
     else notify('Schema aperto! Puoi iniziare a segnare le crocette.');
@@ -380,8 +396,8 @@
   function resetHomeProjectUI(){
     state.activeColor=null;state.activeKind=null;state.mono=false;state.showSymbols=true;
     state.saveAt=0;state.oxsFilename='';state.drag=null;lastWorkPoint=null;lastMarkUndo=null;markStroke=null;keyboardCell=null;state.pendingOnly=false;
-    el.search.value='';el.summary.textContent='Apri uno schema per vedere tutti i colori.';
-    el.filterInfo.textContent='';el.all.classList.add('active');
+    el.search.value='';el.summary.removeAttribute('data-i18n-ignore');delete el.summary.dataset.ppMessage;el.summary.textContent='Apri uno schema per vedere tutti i colori.';
+    el.filterInfo.removeAttribute('data-i18n-ignore');delete el.filterInfo.dataset.ppMessage;el.filterInfo.textContent='';el.all.classList.add('active');
     el.legend.replaceChildren();
     const emptyThreads=document.createElement('div');emptyThreads.className='empty-side';
     emptyThreads.textContent='I tuoi filati appariranno qui, con quantità e avanzamento.';
@@ -487,7 +503,7 @@
     lastMarkUndo=null;syncOXSWorkbar();
     el.stitchCount.textContent=p.stitches.length.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT');
     el.colorCount.textContent=new Set(p.stitches.map(s=>s.palIndex)).size;
-    el.summary.textContent=`${new Set(p.stitches.map(s=>s.palIndex)).size} colori nello schema`;
+    bind(el.summary,'oxs.colorSummary',{count:new Set(p.stitches.map(s=>s.palIndex)).size});
     renderLegends();updateStats();draw();
   }
   function matchesFilter(s){return (state.activeColor===null||s.palIndex===state.activeColor)&&(state.activeKind===null||visuals.token(s)===state.activeKind)&&(!state.pendingOnly||!state.completed.has(s.id));}
@@ -501,14 +517,15 @@
     el.legend.replaceChildren();
     let visible=0;
     for(const c of colors){
-      const label=`${c.number} ${c.name} ${c.index}`.toLocaleLowerCase('it');if(lookup&&!label.includes(lookup))continue;
+      const shownName=threadDisplayName(c);
+      const label=`${c.number} ${c.name} ${shownName} ${c.index}`.toLocaleLowerCase('it');if(lookup&&!label.includes(lookup))continue;
       visible++;
       const row=document.createElement('button');row.type='button';row.className='legend-item'+(state.activeColor===c.index?' selected':'');
-      row.title='Mostra soltanto il colore '+c.number;row.setAttribute('aria-pressed',String(state.activeColor===c.index));
+      bindAttr(row,'title','oxs.threadTooltip',{code:c.number});row.setAttribute('aria-pressed',String(state.activeColor===c.index));
       const sw=document.createElement('span');sw.className='legend-swatch';sw.style.background=c.color;sw.style.color=c.ink;sw.textContent=c.symbol;
       const meta=document.createElement('span');meta.className='legend-text';
       const name=document.createElement('strong');name.textContent=c.number;
-      const desc=document.createElement('small');desc.textContent=c.name;
+      const desc=document.createElement('small');desc.textContent=shownName;
       const bar=document.createElement('span');bar.className='mini-track';const fill=document.createElement('span');fill.style.width=(100*(done.get(c.index)||0)/counts.get(c.index))+'%';bar.appendChild(fill);
       meta.append(name,desc,bar);
       const progress=document.createElement('span');progress.className='legend-stat';progress.textContent=(Math.round(100*(done.get(c.index)||0)/counts.get(c.index)))+'%';
@@ -518,14 +535,14 @@
     if(!visible){const none=document.createElement('div');none.className='empty-side';none.textContent='Nessun filato corrisponde alla ricerca.';el.legend.appendChild(none);}
     el.all.classList.toggle('active',state.activeColor===null);
     el.all.setAttribute('aria-pressed',String(state.activeColor===null));
-    el.filterInfo.textContent=state.activeColor===null?`${visible} filati`:'1 colore isolato';
+    if(state.activeColor===null)bind(el.filterInfo,'oxs.filterThreads',{count:visible});else bind(el.filterInfo,'oxs.singleFilter');
     const currentKind=state.activeKind;filterKindEl.replaceChildren(new Option('Tutti i tipi di punto',''));
     for(const k of [...kinds].sort((a,b)=>visuals.name(a).localeCompare(visuals.name(b),'it'))){const quantity=p.stitches.filter(s=>visuals.token(s)===k).length;filterKindEl.add(new Option(`${visuals.glyph(k)} ${visuals.name(k)} (${quantity})`,k));}
     filterKindEl.value=currentKind??'';
     el.kinds.replaceChildren();
     const entries=[...kinds].sort((a,b)=>visuals.name(a).localeCompare(visuals.name(b),'it'));
-    for(const k of entries){const item=document.createElement('button');item.type='button';item.className='kind kind-action'+(state.activeKind===k?' is-active':'');item.setAttribute('aria-pressed',String(state.activeKind===k));item.title='Isola i punti di tipo '+visuals.name(k);
-      const icon=document.createElement('b');icon.textContent=visuals.glyph(k);const lab=document.createElement('span');lab.textContent=visuals.name(k);item.append(icon,lab);item.addEventListener('click',()=>{state.activeKind=state.activeKind===k?null:k;renderLegends();draw();});el.kinds.appendChild(item);}
+    for(const k of entries){const item=document.createElement('button');item.type='button';item.className='kind kind-action'+(state.activeKind===k?' is-active':'');item.setAttribute('aria-pressed',String(state.activeKind===k));bindAttr(item,'title','oxs.kindTooltip',{kind:I18N.t(visuals.name(k))});
+      const icon=document.createElement('b');icon.textContent=visuals.glyph(k);const lab=document.createElement('span');lab.textContent=I18N.t(visuals.name(k));item.append(icon,lab);item.addEventListener('click',()=>{state.activeKind=state.activeKind===k?null:k;renderLegends();draw();});el.kinds.appendChild(item);}
   }
   function updateStats(){
     const p=state.pattern;if(!p)return;
@@ -784,9 +801,7 @@
     const picker=state.picker;if(!picker)return;
     const en=window.PuntoPuntoI18n?.language==='en';
     const completed=picker.stitches.filter(s=>state.completed.has(s.id)).length;
-    $('stitchPickerProgress').textContent=en
-      ?`${completed} of ${picker.stitches.length} stitches completed`
-      :`${completed} di ${picker.stitches.length} punti completati`;
+    $('stitchPickerProgress').textContent=msg('oxs.pickerProgress',{completed,total:picker.stitches.length});
     for(const {stitch,button,status,label} of picker.rows){
       const done=state.completed.has(stitch.id);
       status.textContent=done?(en?'Completed':'Completato'):(en?'Not completed':'Da ricamare');
@@ -803,8 +818,8 @@
     const grid=localToGrid(point.x,point.y);
     const en=window.PuntoPuntoI18n?.language==='en';
     const t=window.PuntoPuntoI18n?.t||((s)=>s);
-    $('stitchPickerTitle').textContent=`${en?'Cell':'Casella'} ${Math.floor(grid.x)+1}, ${Math.floor(grid.y)+1}`;
-    const picker={choices:choices.map(s=>s.id),stitches:choices,rows:[]};
+    $('stitchPickerTitle').textContent=msg('oxs.pickerTitle',{col:Math.floor(grid.x)+1,row:Math.floor(grid.y)+1});
+    const picker={point,choices:choices.map(s=>s.id),stitches:choices,rows:[]};
     state.picker=picker;
     for(const stitch of choices){
       const pal=colorFor(stitch.palIndex),def=kindDefs[stitch.kind]||['·',stitch.kind];
@@ -821,7 +836,7 @@
       const name=document.createElement('strong');name.textContent=t(def[1]);
       const place=document.createElement('span');place.className='oxs-picker-position';
       if(position)place.textContent=position.text;
-      const thread=document.createElement('small');thread.textContent=`${pal.number||stitch.palIndex} · ${pal.name||(en?'Thread':'Filato')}`;
+      const thread=document.createElement('small');thread.textContent=`${pal.number||stitch.palIndex} · ${threadDisplayName(pal)||(en?'Thread':'Filato')}`;
       const status=document.createElement('span');status.className='oxs-picker-status';
       desc.append(name);
       if(position)desc.append(place);
@@ -900,7 +915,7 @@
   function canvasPointerMove(e){
     if(!state.pattern)return;
     const pt=pointInCanvas(e),g=localToGrid(pt.x,pt.y);
-    el.coords.textContent=g.x>=0&&g.y>=0&&g.x<state.pattern.width&&g.y<state.pattern.height?`Casella ${Math.floor(g.x)+1}, ${Math.floor(g.y)+1}`:'Fuori schema';
+    if(g.x>=0&&g.y>=0&&g.x<state.pattern.width&&g.y<state.pattern.height)bind(el.coords,'oxs.coordinates',{col:Math.floor(g.x)+1,row:Math.floor(g.y)+1});else bind(el.coords,'oxs.outsidePattern');
     if(e.pointerType==='touch'&&touchGesture.points.has(e.pointerId)){
       touchGesture.points.set(e.pointerId,pt);
       if(touchGesture.pinching){
@@ -999,10 +1014,9 @@
     const {x,y}=keyboardCell;
     const choices=cellPickerStitches(x+.5,y+.5);
     const completed=choices.filter(s=>state.completed.has(s.id)).length;
-    const s=en?`Cell ${x+1}, ${y+1}. ${choices.length} stitches; ${completed} completed.`:
-      `Casella ${x+1}, ${y+1}. ${choices.length} punti; ${completed} completati.`;
+    const s=msg('oxs.keyboardStatus',{col:x+1,row:y+1,stitches:choices.length,completed});
     $('oxsKeyboardStatus').textContent=action?`${s} ${action}`:s;
-    el.coords.textContent=(en?'Cell ':'Casella ')+(x+1)+', '+(y+1);
+    bind(el.coords,'oxs.coordinates',{col:x+1,row:y+1});
   }
   function oxsKeyboardNavigate(e){
     if(e.target!==el.wrap||!state.pattern||state.picker||el.editor.classList.contains('hidden'))return;
@@ -1122,6 +1136,6 @@
   const startupReady=restore();
   window.PuntoPuntoOXSNavigation=Object.freeze({hasProject:()=>!!state.pattern,close:closeOXSProject,ready:startupReady});
   window.PuntoPuntoImport={loadPattern,notify}; // accesso limitato per il modulo PDF, senza modificare editor/stato
-  document.addEventListener('puntopunto:languagechange',()=>{if(!state.pattern)return;if(keyboardCell&&document.activeElement===el.wrap)keyboardCellAnnouncement();syncOXSWorkbar();const p=state.pattern;el.meta.textContent=`${p.width} × ${p.height} ${window.PuntoPuntoI18n?.language==='en'?'cells':'caselle'} · ${state.oxsFilename}`;renderLegends();updateSavedLabel();});
+  document.addEventListener('puntopunto:languagechange',()=>{if(!state.pattern)return;if(keyboardCell&&document.activeElement===el.wrap)keyboardCellAnnouncement();syncOXSWorkbar();if(state.picker)openStitchPicker(state.picker.point,state.picker.stitches);const p=state.pattern;el.meta.textContent=msg('oxs.patternMeta',{width:p.width,height:p.height,filename:state.oxsFilename});renderLegends();updateSavedLabel();});
   buildHeroArt();events();
 })();

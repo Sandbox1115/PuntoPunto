@@ -1,3 +1,25 @@
+## 0.9.8.8.21.2 — 2 novembre 2026 (nomi DMC IT/EN nell’editor PDF; pubblicata)
+
+- Corretta la traduzione dei filati DMC nell’editor PDF: risultati di ricerca, filati già aggiunti alla legenda e messaggio del filato selezionato si aggiornano passando da IT a EN e viceversa.
+- Inserite 489 descrizioni italiane locali e non ufficiali, derivate dal catalogo MakeBead (CC BY 4.0); ricerca possibile anche per nome italiano, oltre al codice e al nome inglese.
+- Le descrizioni italiane sono esclusivamente etichette d’interfaccia: codici DMC, colori RGB, descrizioni originali nei salvataggi, filati personalizzati e file OXS/PDF/JSON non vengono modificati.
+- Ampliate le prove automatiche. Pubblicazione autorizzata dopo il collaudo dell’utente e i controlli di rilascio.
+
+## 0.9.8.8.21.1 — 2 novembre 2026 (filati EN e dimensioni fisiche PDF; anteprima)
+
+- Nell’editor OXS, con lingua EN, i filati DMC riconosciuti mostrano i nomi inglesi del catalogo locale; i nomi originali del file e i filati personalizzati non sono alterati. La ricerca accetta sia i nomi originali sia quelli visualizzati.
+- Nell’importazione PDF è possibile scegliere tra colonne×righe, centimetri e pollici. Inserendo la misura del disegno e la densità del tessuto (punti/cm o punti/in, «ct») il programma calcola colonne e righe arrotondate e traccia la griglia con suddivisioni uniformi.
+- Prima della conferma vengono mostrati i conteggi e una nota per verificare l’allineamento; viene segnalato quando l’area scelta appare incompatibile con quadratini visivamente quadrati.
+- Formati OXS/JSON, salvataggi, PDF.js e catalogo DMC invariati. Questa anteprima non è stata pubblicata separatamente: le sue funzionalità sono incluse nella 0.9.8.8.21.2.
+
+## 0.9.8.8.21 — 30 ottobre 2026 (localizzazione definitiva; non pubblicata)
+
+- Aggiunto un catalogo strutturato di messaggi parametrizzati IT/EN per i dati dinamici di editor OXS e PDF, avanzamento, conferme e riepiloghi.
+- Migliorata la traduzione di errori di validazione, recupero, catalogo filati, salvataggi e tooltip; aggiornamento dei messaggi associati al cambio lingua.
+- Corretto l'aggiornamento del selettore dei punti sovrapposti quando si cambia lingua, senza modificare i progressi o la resa delle spunte originali.
+- Introdotti test di regressione linguistica. Restano invariati i formati dei progetti, PDF.js e il catalogo DMC.
+- Questa anteprima non è stata pubblicata separatamente: la localizzazione è inclusa nella versione 0.9.8.8.21.2.
+
 ## 0.9.8.8.20.2 — 30 ottobre 2026 (selettore dei punti sovrapposti; pubblicata)
 
 - Il selettore OXS mostra tutti i punti indipendenti della casella, inclusi la croce intera e i due mezzi punti triangolari di colori differenti.

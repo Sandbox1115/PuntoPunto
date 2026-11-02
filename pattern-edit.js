@@ -75,7 +75,7 @@
       if(patches.size)rebuild();
       setupPalette();
       $('editUndo').disabled=true;
-      $('editChangeCount').textContent=patches.size?'Caselle modificate: '+patches.size:'Nessuna modifica allo schema';
+      $('editChangeCount').textContent=patches.size?window.PuntoPuntoI18n.message('edit.changeCount',{count:patches.size}):window.PuntoPuntoI18n.t('Nessuna modifica allo schema');
     }
     function setupPalette(){
       const sel=$('editColor');sel.replaceChildren();
@@ -86,7 +86,7 @@
       state.editKind=$('editKind').value;
     }
     function changed(){
-      $('editChangeCount').textContent='Caselle modificate: '+patches.size;
+      $('editChangeCount').textContent=window.PuntoPuntoI18n.message('edit.changeCount',{count:patches.size});
       $('editUndo').disabled=!history.length;
       queueSave();refresh();
     }

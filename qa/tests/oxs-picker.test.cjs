@@ -44,8 +44,10 @@ function harness({direction=1,completed=[],lang='it',pendingOnly=false,withNeigh
     [3,{color:'#d9b356',ink:'#234',number:'DMC 3',name:'Gold'}]]);
   const eventUpdates=[];
   const code=fragment+'\n;({cellPickerStitches,partLocation,openStitchPicker,closeStitchPicker,refreshStitchPicker})';
-  const ctx={state,$,document:{createElement:n=>new Element(n)},window:{PuntoPuntoI18n:{language:lang,t:s=>s}},
+  const msg=(key,params)=>{if(key==='oxs.pickerTitle')return (lang==='en'?'Cell ':'Casella ')+params.col+', '+params.row; if(key==='oxs.pickerProgress')return lang==='en'?`${params.completed} of ${params.total} stitches completed`:`${params.completed} di ${params.total} punti completati`;throw Error(key);};
+  const ctx={state,$,msg,document:{createElement:n=>new Element(n)},window:{PuntoPuntoI18n:{language:lang,t:s=>s}},
     kindDefs:{full:['×','Croce intera'],part:['◩','Punto parziale']},
+    threadDisplayName:thread=>thread.name,
     colorFor:i=>pal.get(i)||{color:'#fff',name:'Thread',number:i},dimensions:()=>({w:800,h:600}),
     localToGrid:p=>p,setCompleted:(id,value)=>{value?state.completed.add(id):state.completed.delete(id);eventUpdates.push([id,value]);},
     rememberWorkPoint:()=>{},el:{wrap:{focus(){}}},clearTimeout:()=>{},stitchChoices:()=>[]};

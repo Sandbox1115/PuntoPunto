@@ -170,6 +170,8 @@ const DICT={
   "Pagina del diagramma": "Chart page",
   "Colonne": "Columns",
   "Righe": "Rows",
+  "Se il PDF indica la dimensione del disegno in cm o pollici, scegli l’unità corrispondente e inserisci anche la densità Aida (punti/cm o ct). I punti sono stimati per arrotondamento: verifica sempre la griglia stampata.":
+    "If the PDF gives design size in cm or inches, select that unit and also enter the Aida fabric count (stitches/cm or ct). Stitch counts are rounded estimates: always check the printed grid.",
   "Specifica il numero di colonne e righe dello schema originale.": "Enter the column and row counts from the original pattern.",
   "Apri un PDF per iniziare.": "Open a PDF to get started.",
   "Trascina su una zona esterna al rettangolo per selezionare la griglia.": "Drag outside the rectangle to select the grid.",
@@ -729,6 +731,376 @@ Object.assign(DICT,{
  "Digitalizzate ${s.resolved.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT')} / ${s.total.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT')} caselle (${pct}%) · ${s.stitches} punti · ${s.empty} vuote · ${s.unknown} da verificare": "Digitized ${s.resolved.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT')} / ${s.total.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT')} cells (${pct}%) · ${s.stitches} stitches · ${s.empty} empty · ${s.unknown} to review",
  "OXS verificato: ${check.stitches} punti e ${check.palette} filati. Verifica visivamente la fedeltà al PDF.": "OXS verified: ${check.stitches} stitches and ${check.palette} threads. Visually compare with the PDF."
 });
+
+
+// Exact messages for deterministic errors, tooltips and status updates.
+Object.assign(DICT, {
+  "Automatico": "Automatic",
+  "Solo esportazione": "Export only",
+  "1 colore isolato": "1 isolated color",
+  "Fuori schema": "Outside pattern",
+  "Inserisci colonne e righe indicate sullo schema originale.": "Enter the columns and rows shown on the original pattern.",
+  "Dimensioni non valide: ogni lato deve avere 1–600 celle, massimo 100.000 caselle.": "Invalid dimensions: each side must have 1–600 cells, with at most 100,000 cells.",
+  "Controlla l’allineamento della prima e ultima colonna e riga, poi conferma.": "Check the alignment of the first and last column and row, then confirm.",
+  "Area selezionata. Ora specifica colonne e righe.": "Area selected. Now enter columns and rows.",
+  "Pagina selezionata. Delimita la griglia su questa pagina.": "Page selected. Outline the grid on this page.",
+  "Apertura del PDF in corso…": "Opening PDF…",
+  "La pagina PDF non è stata renderizzata.": "The PDF page was not rendered.",
+  "La griglia potrebbe non essere ripristinata automaticamente: esporta il progetto JSON.": "The grid may not be restored automatically. Export a JSON project backup.",
+  "⚠ Vecchio salvataggio danneggiato: importa il progetto JSON.": "⚠ Older save is damaged. Import the JSON project.",
+  "⚠ Salvataggio automatico non riuscito: usa «Salva progetto» e conserva il JSON.": "⚠ Autosave failed. Use “Save project” and keep the JSON file.",
+  "Salvato sul dispositivo · esporta periodicamente una copia del progetto": "Saved on device · export a project backup regularly",
+  "Salvato in memoria locale ridotta · esporta periodicamente il progetto": "Saved to limited local storage · export the project regularly",
+  "Salvataggio in corso…": "Saving…",
+  "Impossibile aprire il PDF: ": "Unable to open PDF: ",
+  "PDF non aperto: ": "PDF could not be opened: ",
+  "PDF.js non valido: ": "Invalid PDF.js: ",
+  "PDF.js mancante o non integro: ": "PDF.js is missing or damaged: ",
+  "Dimensione PDF superiore a 30 MB.": "PDF exceeds the 30 MB limit.",
+  "Il file non presenta un’intestazione PDF valida.": "The file does not have a valid PDF header.",
+  "PDF con un numero di pagine non supportato (limite 2.000).": "PDF page count is unsupported (limit: 2,000).",
+  "Il PDF non corrisponde alla configurazione del progetto salvato.": "The PDF does not match the saved project configuration.",
+  "Il contenuto PDF del progetto non supera il controllo di integrità.": "Project PDF failed the integrity check.",
+  "Impossibile aprire la griglia: ": "Unable to open the grid: ",
+  "Pagina non caricata: ": "Page could not be loaded: ",
+  "Progetto non valido.": "Invalid project.",
+  "Contenuto PDF non decodificabile.": "PDF content could not be decoded.",
+  "Nome del PDF non valido.": "Invalid PDF filename.",
+  "La legenda non è valida.": "The thread legend is invalid.",
+  "Caselle vuote non valide.": "Invalid empty cells.",
+  "Avanzamento non valido.": "Invalid completion progress.",
+  "Non è possibile certificare una digitalizzazione incompleta.": "An incomplete digitization cannot be verified.",
+  "OXS XML malformato.": "Malformed OXS XML.",
+  "Le dimensioni OXS non coincidono.": "OXS dimensions do not match.",
+  "Contenuto PDF non valido.": "Invalid PDF content.",
+  "La legenda ammette al massimo 100 filati.": "The legend supports at most 100 threads.",
+  "Codice, descrizione o colore non valido.": "Invalid thread code, description or color.",
+  "Seleziona un filato dalla legenda.": "Select a thread from the legend.",
+  "Seleziona prima un filato.": "Select a thread first.",
+  "Aggiungi i filati riportati sulla legenda del PDF.": "Add the threads shown in the PDF legend.",
+  "Conferma che la casella è vuota: non contiene alcun punto.": "Confirm the cell is empty: it contains no stitches.",
+  "Rimetti la casella tra quelle da esaminare.": "Mark the cell as needing review again.",
+  "I filati della v0.9 sono stati importati come croci intere: verifica i punti prima di completare l’OXS.": "Threads from v0.9 were imported as full crosses. Check stitches before completing the OXS.",
+  "Segna o deseleziona i punti già ricamati. Il disegno rimane invariato.": "Mark or unmark completed stitches. The pattern remains unchanged.",
+  "Definisci tutte le caselle per esportare un OXS completo.": "Define every cell before exporting a complete OXS.",
+  "Esporta e verifica l’OXS contro i dati digitalizzati.": "Export and verify the OXS against the digitized data.",
+  "Nessuna corrispondenza. Per un filato fuori catalogo usa «Colore personalizzato».": "No matching threads. Use “Custom color” for threads outside the catalog.",
+  "Il modulo DMC non è stato caricato.": "The DMC module could not be loaded.",
+  "Caricamento catalogo DMC…": "Loading DMC catalog…",
+  "489 filati DMC disponibili · catalogo non ufficiale": "489 DMC threads available · unofficial catalog",
+  " Puoi continuare con i filati personalizzati.": " You can continue with custom threads.",
+  "Filato personalizzato aggiunto.": "Custom thread added.",
+  "Le caselle non definite sono ora vuote confermate.": "All previously undefined cells are now confirmed empty.",
+  "La griglia non è valida.": "The grid is invalid.",
+  "Griglia non valida.": "Invalid grid.",
+  "Area non valida.": "Invalid selection area.",
+  "Il salvataggio appartiene a un PDF, pagina o griglia diversa.": "The save belongs to a different PDF, page or grid.",
+  "Versione salvataggio non supportata.": "Unsupported save version.",
+  "Salvataggio troppo grande (limite 12 MB).": "Save file too large (12 MB limit).",
+  "JSON progressi PDF non supportato.": "Unsupported PDF progress JSON.",
+  "Importazione non riuscita: ": "Import failed: ",
+  "Esportazione OXS bloccata: ": "OXS export blocked: ",
+  "Impossibile esportare il progetto: ": "Unable to export project: ",
+  "Caricamento del progetto non riuscito: ": "Unable to load project: ",
+  "Impossibile riaprire il PDF locale: ": "Unable to reopen local PDF: ",
+  "Formato progetto sconosciuto.": "Unknown project format.",
+  "Il PDF originale non è disponibile nella sessione.": "The original PDF is not available in this session.",
+  "Progetto salvato con PDF originale, filati, schema e avanzamento.": "Project saved with original PDF, threads, chart and progress.",
+  "Progetto oltre il limite di 52 MB.": "Project exceeds the 52 MB limit.",
+  "Progetto completo ripristinato.": "Full project restored.",
+  "Nessun PDF archiviato sul dispositivo.": "No PDF is stored on this device.",
+  "Preferenze vista OXS non salvabili": "OXS view preferences could not be saved",
+  "Posizione OXS precedente non valida": "The previous OXS position is invalid",
+  "Formato non riconosciuto: è atteso un file OXS con elemento <chart>.": "Unrecognized format: an OXS file with a <chart> element is required.",
+  "File OXS non archiviabile": "The OXS file could not be stored",
+  "Impossibile recuperare il file OXS archiviato: reimporta l’originale.": "Unable to recover the stored OXS file. Reimport the original.",
+  "Apertura IndexedDB non riuscita.": "Could not open IndexedDB.",
+  "Database occupato da un’altra scheda: chiudila e riprova.": "Database is busy in another tab. Close it and try again.",
+  "IndexedDB indisponibile": "IndexedDB unavailable",
+  "Salvataggio annullato.": "Save was cancelled.",
+  "Lettura annullata.": "Read was cancelled.",
+  "Catalogo DMC incompleto o inatteso.": "DMC catalog is incomplete or unexpected.",
+  "Catalogo DMC con codici non validi.": "DMC catalog contains invalid codes.",
+  "Catalogo DMC con descrizioni non valide.": "DMC catalog contains invalid descriptions.",
+  "Impronta SHA-256 del catalogo DMC non corrispondente.": "DMC catalog SHA-256 mismatch.",
+  "Tipo di punto non riconosciuto": "Unrecognized stitch type",
+  "Sorgente OXS non valida.": "Invalid source OXS.",
+  "Checksum del salvataggio non valido.": "Invalid save checksum.",
+  "Struttura del salvataggio non valida.": "Invalid save structure.",
+  "Salvataggio precedente non coerente.": "Previous save is inconsistent.",
+  "Memoria locale non disponibile.": "Local storage unavailable.",
+  "Struttura del salvataggio non coerente.": "Inconsistent save structure.",
+  "Database occupato da un’altra scheda di PuntoPunto. Chiudila e riprova.": "Database busy in another PuntoPunto tab. Close it and try again.",
+  "Snapshot assente o danneggiato": "Snapshot missing or damaged",
+  "Lettura IndexedDB non riuscita": "IndexedDB read failed",
+  "Scrittura IndexedDB non riuscita": "IndexedDB write failed",
+  "PDF o identificativo non valido": "Invalid PDF or identifier",
+  "Archiviazione PDF fallita": "PDF storage failed",
+  "Archiviazione PDF annullata": "PDF storage cancelled",
+  "PDF salvato incompleto": "Stored PDF is incomplete",
+  "Copia PDF non leggibile": "PDF copy could not be read",
+  "Nessun PDF recuperabile nel browser": "No recoverable PDF in browser",
+  "Impossibile aprire lo schema: ": "Unable to open pattern: ",
+  "Impossibile salvare nel browser. Esporta subito un JSON dei progressi.": "Unable to save in browser. Export a progress JSON now.",
+  "Il salvataggio contiene punti non validi.": "Save contains invalid stitches.",
+  "Progressi esportati. Conserva il JSON insieme al file OXS.": "Progress exported. Keep the JSON with the OXS file.",
+  "Schema OXS scaricato. I progressi restano nel salvataggio JSON separato.": "OXS pattern downloaded. Progress remains in a separate JSON save.",
+  "Segno di spunta": "Completion checkmark",
+  "Filtri: ": "Filters: ",
+  "Isola i punti di tipo ": "Show only stitches of type ",
+  "Visualizzazione normale": "Normal view",
+  "Ultima marcatura annullata.": "Last marking undone.",
+  "Mostra soltanto il colore ": "Show only thread color "
+});
+// Version 0.9.8.8.21: parameterized, fully translated runtime messages.
+// These never run through substring replacement; each message is assembled in one language.
+const MESSAGES={
+  "pdf.physicalWidthCm": ["Larghezza disegno (cm)", "Design width (cm)"],
+  "pdf.physicalHeightCm": ["Altezza disegno (cm)", "Design height (cm)"],
+  "pdf.physicalWidthIn": ["Larghezza disegno (in)", "Design width (in)"],
+  "pdf.physicalHeightIn": ["Altezza disegno (in)", "Design height (in)"],
+  "pdf.fabricCountCm": ["Densità del tessuto (punti/cm)", "Fabric density (stitches/cm)"],
+  "pdf.fabricCountIn": ["Densità del tessuto (ct, punti/in)", "Fabric count (stitches/in, ct)"],
+  "pdf.promptPhysical": [
+    "Inserisci larghezza, altezza e densità Aida valide; limite 600 × 600 e 100.000 caselle.",
+    "Enter valid design width, height and Aida fabric count; limit 600 × 600 and 100,000 cells."
+  ],
+  "pdf.physicalGridSummary": [
+    "Griglia stimata: {cols} × {rows} punti ({cells} caselle). Verifica i quadratini nel PDF.",
+    "Estimated grid: {cols} × {rows} stitches ({cells} cells). Check squares against the PDF."
+  ],
+  "pdf.physicalHint": [
+    "Le misure fisiche e la densità del tessuto danno un numero di punti arrotondato. Allinea l'area alla griglia stampata prima di confermare.",
+    "Physical dimensions and fabric count give rounded stitch counts. Align the selection with the printed grid before confirming."
+  ],
+  "pdf.squareWarning": [
+    "Attenzione: l'area selezionata non produce quadratini visivamente quadrati. Regola i bordi sul reticolo stampato prima di confermare.",
+    "Warning: the selected area does not produce visually square cells. Align its borders with the printed grid before confirming."
+  ],
+  "pdf.gridLabelMissing": ["Inserisci le dimensioni della griglia", "Enter grid dimensions"],
+  "pdf.newGridInstructions": [
+    "Seleziona l'area della griglia (escludi legenda e margini), poi scegli righe×colonne oppure le misure del disegno con la densità Aida.",
+    "Select the chart grid (excluding the legend and margins), then enter rows×columns or physical design size with Aida fabric count."
+  ],
+  "pdf.gridInputPrompt": ["Area selezionata. Inserisci le dimensioni della griglia.", "Area selected. Enter the grid dimensions."],
+  "pdf.promptDimensions": ["Inserisci colonne e righe indicate sullo schema originale.", "Enter the columns and rows shown on the original pattern."],
+  "pdf.invalidDimensions": ["Dimensioni non valide: ogni lato deve avere 1–600 celle, massimo 100.000 caselle.", "Invalid dimensions: each side must have 1–600 cells, with at most 100,000 cells."],
+  "oxs.outsidePattern": ["Fuori schema", "Outside pattern"],
+  "oxs.singleFilter": ["1 colore isolato", "1 isolated color"],
+  "pdf.gridSummary": [
+    "Griglia {cols} × {rows} · {cells} caselle",
+    "Grid {cols} × {rows} · {cells} cells"
+  ],
+  "pdf.pageOption": [
+    "Pagina {page} di {pages}",
+    "Page {page} of {pages}"
+  ],
+  "pdf.ready": [
+    "PDF pronto: griglia manuale {cols} × {rows}.",
+    "PDF ready: manual grid {cols} × {rows}."
+  ],
+  "pdf.progressStats": [
+    "Digitalizzate {resolved} / {total} caselle ({percent}%) · {stitches} punti · {empty} vuote · {unknown} da verificare",
+    "Digitized {resolved} / {total} cells ({percent}%) · {stitches} stitches · {empty} empty · {unknown} to review"
+  ],
+  "pdf.completionStats": [
+    "{completed} caselle segnate come ricamate · {stitches} punti definiti",
+    "{completed} cells marked as stitched · {stitches} stitches defined"
+  ],
+  "pdf.pdfInfo": [
+    "{filename} · pagina {page} · {cols} × {rows}",
+    "{filename} · page {page} · {cols} × {rows}"
+  ],
+  "pdf.exportVerification": [
+    "OXS verificato: {stitches} punti e {threads} filati. Verifica visivamente la fedeltà al PDF.",
+    "OXS verified: {stitches} stitches and {threads} threads. Visually compare it with the PDF."
+  ],
+  "pdf.confirmEmpty": [
+    "Confermi che tutte le {count} caselle non definite sono effettivamente vuote nel PDF? Questa azione non assegna filati.",
+    "Are you sure all {count} undefined cells are actually empty in the PDF? This action does not assign threads."
+  ],
+  "pdf.assignThread": [
+    "Assegna {code} ({kind}). Tocca una casella per sostituirla.",
+    "Assign {code} ({kind}). Tap a cell to replace it."
+  ],
+  "pdf.threadCount": [
+    "{count} punti",
+    "{count} stitches"
+  ],
+  "pdf.threadTooltip": [
+    "Seleziona {code}",
+    "Select {code}"
+  ],
+  "pdf.duplicateThread": [
+    "Il codice {code} è già usato per un altro filato. Per il personalizzato, scegli un codice diverso (es. MIO-{code}).",
+    "Code {code} is already used for another thread. For a custom thread choose a different code (e.g. MY-{code})."
+  ],
+  "pdf.dmcSelected": [
+    "Selezionato: DMC {code} · {name} · {hex}",
+    "Selected: DMC {code} · {name} · {hex}"
+  ],
+  "pdf.dmcAdded": [
+    "DMC {code} aggiunto alla legenda.",
+    "DMC {code} added to the legend."
+  ],
+  "pdf.definedThread": [
+    "Filato {code} già definito.",
+    "Thread {code} already defined."
+  ],
+  "pdf.formatError": [
+    "{prefix}: {detail}",
+    "{prefix}: {detail}"
+  ],
+  "pdf.saveSourceError": [
+    "PDF aperto, ma non memorizzato: usa «Salva progetto» per conservarlo. {detail}",
+    "PDF opened but not stored: use “Save project” to keep it. {detail}"
+  ],
+  "oxs.patternMeta": [
+    "{width} × {height} caselle · {filename}",
+    "{width} × {height} cells · {filename}"
+  ],
+  "oxs.colorSummary": [
+    "{count} colori nello schema",
+    "{count} colors in the pattern"
+  ],
+  "oxs.unsupported": [
+    "Schema aperto: {count} elementi particolari non supportati (non inclusi nel conteggio).",
+    "Pattern opened: {count} unsupported special elements (excluded from the stitch count)."
+  ],
+  "oxs.filterThreads": [
+    "{count} filati",
+    "{count} threads"
+  ],
+  "oxs.threadTooltip": [
+    "Mostra soltanto il colore {code}",
+    "Show only thread color {code}"
+  ],
+  "oxs.kindTooltip": [
+    "Isola i punti di tipo {kind}",
+    "Show only stitches of type {kind}"
+  ],
+  "oxs.coordinates": [
+    "Casella {col}, {row}",
+    "Cell {col}, {row}"
+  ],
+  "oxs.keyboardStatus": [
+    "Casella {col}, {row}. {stitches} punti; {completed} completati.",
+    "Cell {col}, {row}. {stitches} stitches; {completed} completed."
+  ],
+  "oxs.pickerTitle": [
+    "Casella {col}, {row}",
+    "Cell {col}, {row}"
+  ],
+  "oxs.pickerProgress": [
+    "{completed} di {total} punti completati",
+    "{completed} of {total} stitches completed"
+  ],
+  "oxs.importCount": [
+    "Progressi importati: {count} punti completati.",
+    "Progress imported: {count} completed stitches."
+  ],
+  "oxs.saveTime": [
+    "Automatico · {time}",
+    "Automatic · {time}"
+  ],
+  "oxs.filterLabel": [
+    "Filtri: {filters}",
+    "Filters: {filters}"
+  ],
+  "oxs.filterThread": [
+    "Filato {code}",
+    "Thread {code}"
+  ],
+  "oxs.pickerAria": [
+    "{label}, {state}",
+    "{label}, {state}"
+  ],
+  "edit.changeCount": [
+    "Caselle modificate: {count}",
+    "Modified cells: {count}"
+  ],
+  "error.withDetail": [
+    "{prefix}: {detail}",
+    "{prefix}: {detail}"
+  ],
+  "error.cellCount": [
+    "La digitalizzazione non è completa: {count} caselle ancora da definire.",
+    "Digitization incomplete: {count} cells still undefined."
+  ],
+  "error.duplicateCode": [
+    "Codice filato duplicato: {code}",
+    "Duplicate thread code: {code}"
+  ],
+  "error.unknownPalette": [
+    "Codice o colore del filato non conservato: {code}",
+    "Thread code or color not preserved: {code}"
+  ],
+  "error.paletteDescription": [
+    "Descrizione del filato non conservata: {code}",
+    "Thread description not preserved: {code}"
+  ],
+  "error.differentOXSCell": [
+    "Punto OXS differente alla casella {cell}",
+    "Different OXS stitch in cell {cell}"
+  ]
+};
+const localizedNodes=new WeakMap();
+function message(key,params={}) {
+ const entry=MESSAGES[key];
+ if(!entry)throw Error('Unknown localization key: '+key);
+ return entry[language==='en'?1:0].replace(/\{([a-zA-Z][a-zA-Z0-9]*)\}/g,(_,name)=>
+   Object.prototype.hasOwnProperty.call(params,name)?String(params[name]):'{'+name+'}');
+}
+function setText(element,key,params={}){
+ if(!element)return;
+ element.setAttribute('data-i18n-ignore','');
+ element.dataset.ppMessage=key;
+ localizedNodes.set(element,{key,params});
+ const value=message(key,params);if(element.textContent!==value)element.textContent=value;
+}
+function setAttr(element,attr,key,params={}){
+ if(!element)return;
+ const previous=localizedNodes.get(element)||{attrs:{}};
+ previous.attrs={...(previous.attrs||{}),[attr]:{key,params}};
+ localizedNodes.set(element,previous);
+ element.setAttribute('data-pp-bound','');
+ const value=message(key,params);if(element.getAttribute(attr)!==value)element.setAttribute(attr,value);
+}
+function updateBound(){
+ for(const el of document.querySelectorAll('[data-pp-message], [data-pp-bound]')){
+   const binding=localizedNodes.get(el);if(!binding)continue;
+   if(binding.key){const value=message(binding.key,binding.params);if(el.textContent!==value)el.textContent=value;}
+   for(const [attr,spec] of Object.entries(binding.attrs||{})){const value=message(spec.key,spec.params);if(el.getAttribute(attr)!==value)el.setAttribute(attr,value);}
+ }
+}
+
+// Legacy interpolation fallback: recognize a complete Italian sentence with data
+// values, then rebuild it fully in English before any substring replacement.
+const PARAMETERIZED=Object.values(MESSAGES).filter(([it,en])=>it!==en&&it.includes('{')).map(([it,en])=>{
+ const names=[];const escape=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+ const pieces=it.split(/\{[a-zA-Z][a-zA-Z0-9]*\}/).map(escape);
+ const re=new RegExp('^'+pieces.join('([\\s\\S]*?)')+'$');
+ for(const match of it.matchAll(/\{([a-zA-Z][a-zA-Z0-9]*)\}/g))names.push(match[1]);
+ return {re,names,en};
+});
+// v0.9.8.8.21.1: physical PDF grid setup labels and units.
+Object.assign(DICT, {
+  "3 · Dimensioni / punti": "3 · Dimensions / stitches",
+  "Dimensioni fornite come": "Enter dimensions as",
+  "Unità delle dimensioni del progetto": "Project dimension units",
+  "Colonne × righe (punti)": "Columns × rows (stitches)",
+  "Centimetri (cm)": "Centimeters (cm)",
+  "Pollici (in)": "Inches (in)",
+  "Dimensioni fisiche del disegno": "Physical design dimensions",
+  "La misura del disegno e la densità Aida producono una stima dei punti. Verifica che la griglia coincida con il diagramma stampato prima di confermare.":
+    "Design size and fabric count provide an estimated stitch grid. Check the alignment with the printed chart before confirming.",
+  "Seleziona la pagina del diagramma. Le dimensioni della griglia le scegli tu.":
+    "Choose the chart page and enter its grid dimensions.",
+  "Se il PDF indica la dimensione del disegno in cm o pollici, scegli l’unità corrispondente e inserisci anche la densità Aida (punti/cm o ct). I punti sono stimati per arrotondamento: verifica sempre la griglia stampata.":
+    "If the PDF gives design size in cm or inches, select that unit and also enter the Aida fabric count (stitches/cm or ct). Stitch counts are rounded estimates: always check the printed grid.",
+  "Specifica il numero di colonne e righe dello schema originale.":
+    "Enter the number of columns and rows from the original chart."
+});
 const LONG=Object.keys(DICT).filter(x=>x.length>=8 && !['PuntoPunto'].includes(x)).sort((a,b)=>b.length-a.length);
 const STORAGE='puntopunto.language';
 let language='it';
@@ -736,13 +1108,17 @@ try{if(localStorage.getItem(STORAGE)==='en')language='en';}catch(_){}
 const sourceText=new WeakMap(), lastOutput=new WeakMap();
 const sourceAttrs=new WeakMap(), lastAttrs=new WeakMap();
 const attrs=['placeholder','title','aria-label','aria-roledescription','alt'];
-const exempt='script,style,svg,code,pre,[data-i18n-ignore],#trackerName,#searchPalette,#trackerDMCQuery,#trackerThreadCode,#trackerCustomName,.pp-thread-desc,.pp-dmc-item,.legend-text';
+const exempt='script,style,svg,code,pre,[data-i18n-ignore],[data-pp-bound],#trackerName,#searchPalette,#trackerDMCQuery,#trackerThreadCode,#trackerCustomName,.pp-thread-desc,.pp-dmc-item,.legend-text';
 function translate(value){
   if(language!=='en'||typeof value!=='string')return value;
   const parts=/^(\s*)([\s\S]*?)(\s*)$/.exec(value);
   if(!parts)return value;
   let str=parts[2];if(!str)return value;
   if(Object.prototype.hasOwnProperty.call(DICT,str))return parts[1]+DICT[str]+parts[3];
+  for(const item of PARAMETERIZED){const result=item.re.exec(str);if(!result)continue;
+    const params={};item.names.forEach((name,i)=>{params[name]=result[i+1];});
+    return parts[1]+item.en.replace(/\{([a-zA-Z][a-zA-Z0-9]*)\}/g,(_,name)=>params[name]??'{'+name+'}')+parts[3];
+  }
   // Dynamic status lines can mix identifiers and counts with fixed interface text.
   // Replace only known interface fragments, never arbitrary text or project data.
   for(const key of LONG){if(str.includes(key))str=str.split(key).join(DICT[key]);}
@@ -774,6 +1150,7 @@ function update(){if(!document.body)return;
  document.documentElement.lang=language;
  translateNode(document.head.querySelector('title'));
  translateNode(document.body);
+ updateBound();
  const meta=document.querySelector('meta[name="description"][data-pp-description-en][data-pp-description-it]');
  if(meta)meta.setAttribute('content',meta.getAttribute(language==='en'?'data-pp-description-en':'data-pp-description-it'));
  for(const select of document.querySelectorAll('[data-pp-language]'))select.value=language;
@@ -797,5 +1174,5 @@ function start(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 root.ppConfirm=(message)=>root.confirm(translate(message));
-root.PuntoPuntoI18n=Object.freeze({get language(){return language;},setLanguage,t:translate,refresh:update});
+root.PuntoPuntoI18n=Object.freeze({get language(){return language;},setLanguage,t:translate,message,setText,setAttr,refresh:update});
 })(window);

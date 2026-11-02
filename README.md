@@ -2,7 +2,7 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **GitHub Pages beta v0.9.8.8.20.2 — published after user testing.** This release improves the overlapping-stitch chooser without changing saved project formats. Keep your original patterns and export regular progress backups.
+> **Current beta release: v0.9.8.8.21.2 (2 November 2026).** This release includes IT/EN DMC thread names in the PDF editor, physical grid sizing, and dynamic language fixes. Keep the original pattern and export regular progress backups.
 
 ## Use the application
 
@@ -39,7 +39,7 @@ The site source files are publicly readable because they are served by GitHub Pa
 
 This repository contains only the files needed to run the static site, two sample projects, user instructions, version history and third-party notices. No account credentials, personal contact details, internal test artifacts, screenshots of user projects or private datasets are intended for publication.
 
-For deployment instructions see [GitHub Pages setup](PUBBLICAZIONE_GITHUB.md) and for changes see [CHANGELOG](CHANGELOG.md). Deploy via **Settings → Pages → Deploy from a branch → main → /(root)**; `.nojekyll` is included. This repository is publicly accessible even if its link is shared only with invited testers.
+For deployment instructions see [GitHub Pages setup](PUBBLICAZIONE_GITHUB.md) and for changes see [CHANGELOG](CHANGELOG.md). For QA-gated deployment, set **Settings → Pages → Source → GitHub Actions** and use `.github/workflows/quality-pages.yml`. If Pages is instead configured to **Deploy from a branch → main → /(root)**, that independent deploy does **not** wait for the QA workflow; `.nojekyll` is included. This repository is publicly accessible even if its link is shared only with invited testers.
 
 ### Beta limitations
 
@@ -75,7 +75,7 @@ On phones, the PDF editor opens in wide view with a persistent tool dock. Use **
 
 ## Roadmap backlog
 
-PWA/mobile installability is deferred until the saving/recovery and mobile PDF editor releases have completed real-device validation. Version 0.9.8.8.20 is **not** a PWA and does not install service workers or change offline caching.
+PWA/mobile installability is deferred until the saving/recovery and mobile PDF editor releases have completed real-device validation. Version 0.9.8.8.21.2 is **not** a PWA and does not install service workers or change offline caching.
 
 OXS quick filters, undo last marking, and jump to last stitch are available. The viewport position is stored as a local preference, not part of exported JSON backups.
 
@@ -98,8 +98,24 @@ Version 0.9.8.8.19 was prepared and reviewed on `review/v0.9.8.8.19-it-en` befor
 - Restores the original plain green checkmark for all completed OXS stitches; overlapping stitches share the same visual style with smaller positional offsets, without circular badges.
 - Corrects completion marks shown by the **Unfinished** filter. Completion is tracked per stitch, and other thread/kind filters now also apply to completion overlays.
 - Resolves overlap checks against the stitch's actual cell, not adjacent cells included in the ornament selection index.
-- No changes to saved progress, OXS/JSON schemas, PDF.js, DMC catalog or user data. This version is **not yet published** to GitHub Pages.
+- No changes to saved progress, OXS/JSON schemas, PDF.js, DMC catalog or user data. This standalone test version was not published; its fixes are included in the later published 0.9.8.8.20.2.
 
 ## v0.9.8.8.20.2 — OXS overlapping stitches (published)
 
 Selecting a cell with multiple independent stitches now shows all of them, including both colored triangular halves and a full cross when present. The chooser reports completed/total and stays open as you mark each stitch. The original green plain checks remain unchanged. The change was tested in a local review build and approved for the v0.9.8.8.20.2 GitHub Pages release.
+
+## v0.9.8.8.21 — Final IT/EN localization (included in v0.9.8.8.21.2)
+
+Dynamic OXS/PDF messages now use complete named templates in Italian and English, with numbers, filenames and thread codes substituted as data. The bilingual engine also refreshes bound status labels/tooltips after switching languages, and updates an open overlapping-stitch selector without modifying completed stitches. Validation/recovery errors have more comprehensive English wording. User-supplied names, filenames, palette titles and OXS/PDF content are never translated as project data. The separate Italian historical release log is kept in `CHANGELOG_IT.md`; this file and `CHANGELOG.md` are public English documentation. This work was first reviewed in an unpublished build and is included in the published v0.9.8.8.21.2 release.
+
+## v0.9.8.8.21.1 — physical grid setup and English DMC thread labels
+
+In PDF setup, choose exact column/row counts or enter design width/height and fabric density in cm (stitches/cm) or inches (ct). The application rounds to integer stitch counts and previews an evenly divided grid. Verify printed chart alignment: measurements alone do not certify stitch counts. OXS uses the bundled DMC catalog to show canonical English thread names for recognized DMC codes under EN; original/custom palette descriptions remain unchanged in project data.
+
+This standalone build was not published; its physical-grid and OXS localization changes are included in the published v0.9.8.8.21.2 release.
+
+## v0.9.8.8.21.2 — PDF DMC floss names in both languages (published)
+
+- In the PDF editor, the DMC search results, already-added legend and selected-thread status now follow the IT/EN selector. Italian search terms also match the localized descriptions; English and numeric code searches continue to work.
+- The additional 489-name Italian reference is a **non-official descriptive translation** of the already bundled MakeBead DMC catalog (CC BY 4.0). It ships locally, works offline, and does not modify the original catalog, floss codes, RGB values, or imported/saved user palette descriptions.
+- Custom threads are never translated. The feature is display-only, does not call a translation service, and does not change PDF/OXS/JSON formats or browser persistence. This release was approved for publication after a local functional check.

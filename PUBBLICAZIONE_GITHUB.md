@@ -42,3 +42,15 @@ A review package is prepared for GitHub Pages and for direct local `index.html` 
 ### v0.9.8.8.20.2 — published after review
 
 The OXS overlapping-stitch chooser now displays all independent stitches per cell (including both triangular halves), each with a color/position preview and a live completed/total count. No change to exported project data, PDF.js binaries, vendor resources or persistent storage. Publication was explicitly approved after the local review; retain GitHub Actions QA and review the live deployment separately from the push.
+
+### v0.9.8.8.21 — Historical review (changes included in v0.9.8.8.21.2)
+
+The language-only candidate was reviewed separately before the owner authorized publication of v0.9.8.8.21.2. Run extended IT/EN regression tests and the complete quality pipeline for both GitHub Pages and the no-server archive; verify no user patterns, contact details, private keys or non-distribution files are added.
+
+### v0.9.8.8.21.1 — historical standalone preview (not published)
+
+Physical PDF grid dimensions (cm/in plus fabric density) and read-only canonical English DMC names in the OXS UI. Its changes are included in v0.9.8.8.21.2. Distribution must pass all QA and privacy checks. The owner authorized publication of the newer version after testing the preview.
+
+### v0.9.8.8.21.2 — PDF thread names (approved release, 2 November 2026)
+
+Publish the new local `dmc-floss-names-it.js` file alongside `dmc-catalog.js`; all 489 translated descriptions are display-only. The owner confirmed local functionality and approved publication. Regression-test PDF picker results, selected-thread status and the legend in both IT and EN, plus Italian/English/code searches. Preserve the original DMC and PDF.js binaries, pass full QA and check personal-data exposure. The live version after deployment is v0.9.8.8.21.2; verify the actual Pages workflow conclusion.
