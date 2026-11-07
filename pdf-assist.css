@@ -205,3 +205,17 @@ body.pp-tracker-focus .pp-tracker-scroller{min-height:0}
 #pdfPhysicalDimensions input{width:108px;max-width:100%}
 #pdfDimensionMode{width:190px;max-width:100%}
 @media(max-width:650px){.pp-grid-unit-label{min-width:160px}.pp-grid-dimension-group{width:100%;gap:7px}.pp-grid-dimension-group label{flex:1 1 120px}.pp-grid-dimension-group input{width:100%!important;box-sizing:border-box}}
+
+/* v0.9.8.8.21.3 — palette management, usable on desktop and mobile. */
+.pp-palette-entry{display:flex;align-items:stretch;gap:4px;border-radius:8px}
+.pp-palette-entry>.pp-c-thread{min-width:0;flex:1}
+.pp-palette-edit{min-width:44px;min-height:44px;border:1px solid #cfddd2;border-radius:7px;background:#fff;color:#235e4a;font-weight:750;padding:6px 9px}
+.pp-palette-edit:hover{background:#e6f3ee}
+.pp-palette-manager{padding:12px;border:1px solid #a9d4c2;border-radius:10px;background:#f7fbf8;display:flex;flex-direction:column;gap:8px;font-size:12px}
+.pp-palette-manager p{margin:0;line-height:1.5;color:#52675f}
+.pp-palette-manager label{font-weight:750}
+.pp-palette-manager select{width:100%;min-height:43px;border:1px solid #b9d3c5;border-radius:7px;padding:8px;background:#fff;color:#22333c}
+.pp-palette-buttons{display:flex;flex-wrap:wrap;gap:6px}
+.pp-palette-buttons .btn{min-height:44px;white-space:normal}
+#trackerFillWhite,#trackerUndoBulk{min-height:42px;white-space:normal}
+@media(max-width:620px){.pp-palette-manager{padding:10px}.pp-palette-buttons .btn{flex:1;min-width:120px}}

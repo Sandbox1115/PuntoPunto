@@ -1,20 +1,30 @@
+# PuntoPunto — Change log (English)
+
+## v0.9.8.8.21.3 — 7 November 2026 (PDF bulk tools and mobile file menu; published)
+
+- Added a clearly labeled **Fill uncolored cells with white** command to the manual PDF editor. With explicit confirmation it converts undefined and confirmed-empty cells into full-cross Snow White DMC B5200 assignments while preserving every previously colored stitch. The existing **Confirm remaining cells empty** command remains distinct, creating no stitches.
+- Added per-thread **Manage** actions to replace a palette thread across all assigned cells with another existing thread, or remove the thread and return its cells to undefined. Replacement preserves stitch types and completion state; deletion clears completion for deleted stitches. To replace with a new DMC or custom thread, add it to the legend first.
+- Added an **Undo last bulk action** safeguard, invalidated after subsequent individual edits or palette additions; existing PDF project JSON, progress JSON and OXS data formats are unchanged. All bulk actions pass codec normalization and the same autosave pipeline.
+- On narrow displays, moved the header's Open OXS, Open PDF and PDF Project actions into a compact, accessible right-side dropdown with readable full labels and large touch targets. Prominent home-screen buttons remain in place.
+- Extended offline/localization and regression tests. No changes to PDF.js, original DMC data, existing example files, or app telemetry. The two distributions passed the release quality checks; the owner approved publication on GitHub Pages on 7 November 2026.
+
 ## v0.9.8.8.21.2 — 2 November 2026 (PDF DMC names follow IT/EN; published)
 
 - Fixed the PDF editor thread picker, selected-thread summary and added-thread legend to show Italian DMC descriptions in IT and original English DMC descriptions in EN, refreshing immediately when switching language.
 - Added a local, non-official Italian description map for all 489 locked MakeBead DMC entries (CC BY 4.0), with accent-insensitive Italian searching in addition to code and original English-name search.
 - Preserve stored/exported source names, DMC codes, HEX values, custom thread names and existing project data verbatim. No network translator, no changes to PDF.js, OXS serialization or browser storage.
-- Added targeted tests for all catalog entries, language switching, searching and PDF editor display. Published after owner approval and release QA.
+- Added targeted tests for all catalog entries, language switching, searching and PDF editor display. This release was subsequently approved and deployed on GitHub Pages.
 
 # PuntoPunto — Change log
 
-## v0.9.8.8.21.1 — 2 November 2026 (OXS DMC English names and physical PDF grid dimensions; preview)
+## v0.9.8.8.21.1 — 2 November 2026 (OXS DMC English names and physical PDF grid dimensions; review candidate)
 
 - Display canonical English DMC floss names in the OXS legend and overlapping-stitch chooser when EN is selected, using the already bundled DMC catalog. Italian remains the original OXS description; unknown/custom thread names are not translated. Searching matches the original and displayed names.
 - Added an optional PDF grid setup by design dimensions in centimeters or inches and by fabric density (stitches/cm or fabric count/stitches/inch); the original columns × rows mode remains available.
 - Derive integer grid counts using the dimensions and density, with explicit rounding, preview and warnings when the selected chart would produce visibly non-square cells. Verify the calculated grid against the printed PDF before confirming.
 - Kept the existing grid crop editor and saved PDF/OXS/JSON schemas unchanged. A saved project restores its derived integer grid; physical measurements are not silently reinterpreted.
 - Added focused IT/EN and physical-unit tests. PDF.js, the 489-color DMC dataset, thread RGB values, and existing user files remain unchanged.
-- This was an unpublished standalone preview; its features are included in the published v0.9.8.8.21.2.
+- Offline and GitHub Pages candidates for review only; no publication is authorized yet.
 
 ## v0.9.8.8.21 — 30 October 2026 (final IT/EN localization review; not published)
 
@@ -23,7 +33,7 @@
 - Expanded the bilingual validation, import/export, recovery and catalog error dictionary. Preserved original pattern titles, filenames, DMC descriptions and custom thread names without translating user-provided content.
 - Refreshes the open overlapping-stitch chooser when switching language while keeping independent completed states and the original plain completion marks.
 - Added language regression tests for numerical values, errors, English/Italian round trips, DOM-bound tooltips and the two publishing formats.
-- This standalone preview was not deployed; its localization changes are included in v0.9.8.8.21.2. PDF.js 6.4.299, DMC assets, OXS and JSON schemas, and project storage remain unchanged.
+- Review candidate only: GitHub Pages remains v0.9.8.8.20.2 pending owner authorization. PDF.js 6.4.299, DMC assets, OXS and JSON schemas, and project storage are unchanged.
 
 
 ## v0.9.8.8.20.2 — 30 October 2026 (complete overlapping-stitch chooser; published)

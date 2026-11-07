@@ -7,6 +7,7 @@
   const ui={root:$('pdfTracker'),image:$('trackerImage'),grid:$('trackerGrid'),page:$('trackerPage'),scroller:$('trackerScroller'),count:$('trackerCount'),zoom:$('trackerZoomLabel'),name:$('trackerName'),json:$('trackerJSON'),projectFile:$('trackerProjectFile'),list:$('trackerLegendList'),code:$('trackerThreadCode'),color:$('trackerThreadColor'),info:$('trackerLegendInfo'),digital:$('trackerDigitalStats'),oxs:$('trackerExportOXS'),kind:$('trackerKind'),tour:$('trackerTutorial'),projectStatus:$('trackerProjectStatus'),threadSource:$('trackerThreadSource'),dmcFields:$('trackerDMCFields'),customFields:$('trackerCustomFields'),dmcSearch:$('trackerDMCQuery'),dmcResults:$('trackerDMCResults'),dmcStatus:$('trackerDMCStatus'),addDMC:$('trackerAddDMC'),customName:$('trackerCustomName')};
   if(!ui.root||!codec)return;
   const VISUALS=window.PuntoPuntoStitchVisuals;
+  const PALETTE_OPS=window.PuntoPuntoPDFPaletteOps;
   const L=window.PuntoPuntoI18n;
   const threadDisplayName=(item)=>item?.brand==='DMC' ? (window.PuntoPuntoDMCNames?.name(item.code,window.PuntoPuntoDMC?.get(item.code)?.name||item.name,L.language) ?? item.name) : (item?.name||'');
   const dmcDisplayName=(item)=>window.PuntoPuntoDMCNames?.name(item.code,item.name,L.language) ?? item.name;
@@ -59,6 +60,33 @@
   const state={key:null,hash:null,name:'',page:0,cols:0,rows:0,rect:null,pdfBytes:null,done:new Set(),cells:new Map(),empty:new Set(),palette:[],selected:null,tool:'progress',kind:'full',scale:1,legacy:false,dmcSelected:null,saveOK:true,saveWarningAt:0};
   const clamp=(n,a,b)=>Math.min(b,Math.max(a,n)),validColor=s=>/^#[a-f0-9]{6}$/i.test(s);
   const total=()=>state.cols*state.rows;
+  const palettePanel=$('trackerPaletteEditor'),paletteEditorTitle=$('trackerPaletteEditorTitle'),paletteEditorInfo=$('trackerPaletteEditorInfo'),paletteReplacement=$('trackerPaletteReplacement');
+  const undoButton=$('trackerUndoBulk');
+  let paletteEditingCode=null,bulkUndo=null;
+  function clearBulkUndo(){bulkUndo=null;undoButton.disabled=true;}
+  function commitBulk(next,{selected=state.selected,remember=true}={}){
+    const validated=codec.normalize(next);
+    if(remember){bulkUndo={data:model(),selected:state.selected};undoButton.disabled=false;}
+    state.palette=validated.palette;state.cells=validated.cells;state.empty=validated.empty;state.done=validated.completed;
+    state.selected=state.palette.find(p=>p.code===selected)?.code||null;
+    renderLegend();save();draw();
+  }
+  function renderPaletteManager(){
+    const old=state.palette.find(p=>p.code===paletteEditingCode);
+    if(!old){paletteEditingCode=null;palettePanel.classList.add('hidden');return;}
+    palettePanel.classList.remove('hidden');
+    paletteEditorTitle.textContent=say('pdf.paletteManageTitle',{code:old.code});
+    const assigned=PALETTE_OPS.counts(model(),old.code);
+    paletteEditorInfo.textContent=say('pdf.paletteManageInfo',{count:assigned});
+    const selectedBefore=paletteReplacement.value;
+    paletteReplacement.replaceChildren();
+    for(const p of state.palette){if(p.code===old.code)continue;
+      const option=document.createElement('option');option.value=p.code;option.textContent=(p.brand==='DMC'?'DMC ':'')+p.code+' · '+threadDisplayName(p);paletteReplacement.append(option);
+    }
+    paletteReplacement.value=[...paletteReplacement.options].some(x=>x.value===selectedBefore)?selectedBefore:(paletteReplacement.options[0]?.value||'');
+    $('trackerPaletteApply').disabled=!paletteReplacement.value;
+  }
+
   const source=()=>({name:state.name,hash:state.hash,page:state.page,cols:state.cols,rows:state.rows,rect:{...state.rect}});
   const model=()=>({cols:state.cols,rows:state.rows,palette:state.palette,cells:[...state.cells],empty:[...state.empty],completed:[...state.done]});
   const key=info=>'pp-pdf-tracker-v1:'+info.hash+':'+info.page+':'+info.cols+'x'+info.rows+':'+[info.rect.x,info.rect.y,info.rect.w,info.rect.h].map(x=>x.toFixed(4)).join(':');
@@ -104,7 +132,7 @@
   }
   async function flushSave(){if(pendingPayload)persistPending();await Promise.allSettled([...writesInFlight]);}
   async function load(){
-    state.done=new Set();state.cells=new Map();state.empty=new Set();state.palette=[];state.legacy=false;state.dmcSelected=null;state.saveOK=true;
+    clearBulkUndo();paletteEditingCode=null;state.done=new Set();state.cells=new Map();state.empty=new Set();state.palette=[];state.legacy=false;state.dmcSelected=null;state.saveOK=true;
     let database=null,local=null,readError=false;
     try{database=await window.PuntoPuntoPDFStore?.readProgress(state.key,validSnapshot);}
     catch(e){console.warn('Archivio PDF non leggibile',e);readError=true;}
@@ -159,12 +187,16 @@
     ui.list.replaceChildren();
     const counts=new Map();for(const point of state.cells.values())counts.set(point.code,(counts.get(point.code)||0)+1);
     for(const item of state.palette){
+      const entry=document.createElement('div');entry.className='pp-palette-entry';
       const b=document.createElement('button');b.type='button';b.className='pp-c-thread'+(state.selected===item.code?' is-active':'');attr(b,'title','pdf.threadTooltip',{code:item.code});
       const sw=document.createElement('span');sw.className='pp-c-thread-swatch';sw.style.background=item.color;
       const name=document.createElement('strong');name.textContent=(item.brand==='DMC'?'DMC ':'')+item.code;
       const title=document.createElement('small');title.className='pp-thread-desc';title.textContent=threadDisplayName(item);
       const count=document.createElement('span');bind(count,'pdf.threadCount',{count:counts.get(item.code)||0});
-      b.append(sw,name,title,count);b.addEventListener('click',()=>{state.selected=item.code;setTool('stitch');setMobilePanel(false);});ui.list.appendChild(b);
+      b.append(sw,name,title,count);b.addEventListener('click',()=>{state.selected=item.code;setTool('stitch');setMobilePanel(false);});
+      const manage=document.createElement('button');manage.type='button';manage.className='pp-palette-edit';manage.textContent=L.t('Gestisci');manage.setAttribute('aria-label',say('pdf.paletteManageTitle',{code:item.code}));manage.setAttribute('aria-expanded',String(paletteEditingCode===item.code));manage.setAttribute('aria-controls','trackerPaletteEditor');
+      manage.addEventListener('click',()=>{paletteEditingCode=paletteEditingCode===item.code?null:item.code;setCompact(false);renderLegend();if(paletteEditingCode)paletteReplacement.focus();});
+      entry.append(b,manage);ui.list.appendChild(entry);
     }
     if(!state.palette.length)ui.info.textContent='Aggiungi i filati riportati sulla legenda del PDF.';
     else ui.info.textContent=legendInfo();
@@ -172,6 +204,9 @@
     bind(ui.digital,'pdf.progressStats',{resolved:s.resolved.toLocaleString(L.language==='en'?'en-US':'it-IT'),total:s.total.toLocaleString(L.language==='en'?'en-US':'it-IT'),percent:pct,stitches:s.stitches,empty:s.empty,unknown:s.unknown});
     ui.oxs.disabled=s.unknown!==0;
     ui.oxs.title=s.unknown?'Definisci tutte le caselle per esportare un OXS completo.':'Esporta e verifica l’OXS contro i dati digitalizzati.';
+    $('trackerFillWhite').disabled=!(s.unknown+s.empty);
+    undoButton.disabled=!bulkUndo;
+    renderPaletteManager();
   }
   function addThread(code,color,{brand='Personalizzato',name=''}={}){
     code=String(code||'').trim();name=String(name||'').trim();color=String(color||'').toLowerCase();
@@ -182,7 +217,7 @@
       return {ok:false,message:say('pdf.duplicateThread',{code})};
     }
     if(state.palette.length>=100)return {ok:false,message:'La legenda ammette al massimo 100 filati.'};
-    state.palette.push({code,color,brand,name});state.selected=code;setTool('stitch');save();draw();setMobilePanel(false);return {ok:true};
+    clearBulkUndo();state.palette.push({code,color,brand,name});state.selected=code;setTool('stitch');save();draw();setMobilePanel(false);return {ok:true};
   }
   function sourceMode(){
     const dmc=ui.threadSource.value==='dmc';ui.dmcFields.classList.toggle('hidden',!dmc);ui.customFields.classList.toggle('hidden',dmc);
@@ -288,7 +323,7 @@
     }else if(state.tool==='empty'){state.empty.add(i);state.cells.delete(i);}
     else if(state.tool==='unknown'){state.empty.delete(i);state.cells.delete(i);}
     else if(state.tool==='progress'){if(state.done.has(i))state.done.delete(i);else state.done.add(i);}
-    save();draw();e.preventDefault();
+    clearBulkUndo();save();draw();e.preventDefault();
   }
   function progressData(){return{format:'PuntoPunto-PDF-Progress',version:3,source:source(),completed:[...state.done].sort((a,b)=>a-b),palette:state.palette,cells:[...state.cells],empty:[...state.empty],assigned:[...state.cells].map(([i,p])=>[i,p.code])};}
   function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);}
@@ -304,7 +339,7 @@
     else if(data.version===2){candidate=codec.normalize({cols:state.cols,rows:state.rows,palette:data.palette,cells:(data.assigned||[]).map(([i,code])=>[i,{kind:'full',code}]),empty:[],completed:data.completed});}
     else if(data.version===1){candidate=codec.normalize({cols:state.cols,rows:state.rows,palette:[],cells:[],empty:[],completed:data.completed});}
     else throw Error('Versione salvataggio non supportata.');
-    state.palette=candidate.palette;state.cells=candidate.cells;state.empty=candidate.empty;state.done=candidate.completed;state.selected=null;state.legacy=data.version===2;setTool('progress');save();draw();
+    clearBulkUndo();paletteEditingCode=null;state.palette=candidate.palette;state.cells=candidate.cells;state.empty=candidate.empty;state.done=candidate.completed;state.selected=null;state.legacy=data.version===2;setTool('progress');save();draw();
   }
   async function importProgress(file){if(!file)return;try{if(file.size>12*1024*1024)throw Error('Salvataggio troppo grande (limite 12 MB).');const data=JSON.parse(await file.text());if(data.format!=='PuntoPunto-PDF-Progress'||![1,2,3].includes(data.version))throw Error('JSON progressi PDF non supportato.');applyData(data);notify('Progressi e digitalizzazione importati.');}catch(err){notify('Importazione non riuscita: '+err.message,true);}}
   function exportOXS(){
@@ -414,8 +449,44 @@
   $('trackerMarkEmpty').addEventListener('click',()=>{
     const s=getStats();if(!s.unknown)return;
     if(!window.ppConfirm(say('pdf.confirmEmpty',{count:s.unknown})))return;
-    for(let i=0;i<total();i++)if(!state.cells.has(i))state.empty.add(i);
+    clearBulkUndo();for(let i=0;i<total();i++)if(!state.cells.has(i))state.empty.add(i);
     save();draw();notify('Le caselle non definite sono ora vuote confermate.');
+  });
+  $('trackerFillWhite').addEventListener('click',()=>{
+    const stats=getStats(),count=stats.unknown+stats.empty;
+    if(!count)return;
+    if(!window.ppConfirm(say('pdf.confirmFillWhite',{count,unknown:stats.unknown,empty:stats.empty})))return;
+    try{
+      const change=PALETTE_OPS.fillWhite(model());
+      if(!change.changed)return;
+      commitBulk(change.data,{selected:state.selected});
+      notify(say('pdf.filledWhite',{count:change.changed,code:change.code}));
+    }catch(err){notify(L.t(err.message),true);}
+  });
+  $('trackerPaletteApply').addEventListener('click',()=>{
+    const sourceCode=paletteEditingCode,targetCode=paletteReplacement.value;
+    if(!sourceCode||!targetCode)return;
+    const affected=PALETTE_OPS.counts(model(),sourceCode);
+    if(!window.ppConfirm(say('pdf.confirmReplaceThread',{source:sourceCode,target:targetCode,count:affected})))return;
+    try{const change=PALETTE_OPS.replaceThread(model(),sourceCode,targetCode);
+      paletteEditingCode=null;commitBulk(change.data,{selected:state.selected===sourceCode?targetCode:state.selected});
+      notify(say('pdf.replacedThread',{count:change.affected,source:change.old,target:change.target}));
+    }catch(err){notify(L.t(err.message),true);}
+  });
+  $('trackerPaletteDelete').addEventListener('click',()=>{
+    const code=paletteEditingCode;if(!code)return;
+    const count=PALETTE_OPS.counts(model(),code);
+    if(!window.ppConfirm(say('pdf.confirmDeleteThread',{code,count})))return;
+    try{const change=PALETTE_OPS.removeThread(model(),code);
+      paletteEditingCode=null;commitBulk(change.data,{selected:state.selected===code?null:state.selected});
+      notify(say('pdf.deletedThread',{code,count:change.affected}));
+    }catch(err){notify(L.t(err.message),true);}
+  });
+  $('trackerPaletteCancel').addEventListener('click',()=>{paletteEditingCode=null;renderPaletteManager();});
+  undoButton.addEventListener('click',()=>{if(!bulkUndo)return;
+    const previous=bulkUndo;clearBulkUndo();paletteEditingCode=null;
+    commitBulk(previous.data,{selected:previous.selected,remember:false});
+    notify(L.t('Ultima operazione globale annullata.'));
   });
   $('trackerMinus').addEventListener('click',()=>scaleTo(state.scale/1.25));$('trackerPlus').addEventListener('click',()=>scaleTo(state.scale*1.25));
   $('trackerExport').addEventListener('click',downloadProgress);$('trackerImport').addEventListener('click',()=>ui.json.click());

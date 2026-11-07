@@ -1,16 +1,24 @@
+## 0.9.8.8.21.3 — 7 novembre 2026 (funzioni massive PDF e menu mobile; pubblicata)
+
+- Aggiunto nell'editor PDF il comando «Riempi celle non colorate di bianco», distinto dalla conferma delle caselle vuote: con conferma esplicita assegna croci intere DMC B5200 alle celle non definite e a quelle confermate vuote, senza sovrascrivere i punti già colorati.
+- Introdotta la gestione dei filati della legenda: sostituzione globale con un filato già disponibile, mantenendo tipo di punto e stato di completamento; rimozione del filato, che rimette le relative caselle in «da definire» ed elimina i completamenti associati. Per usare un filato nuovo, prima aggiungerlo alla legenda.
+- Disponibile «Annulla ultima operazione globale», valida finché non si apportano ulteriori modifiche; salvataggi e formati OXS/JSON invariati.
+- Su smartphone i pulsanti piccoli nell'intestazione sono ora raccolti in un menu file apribile a destra con comandi e aree di tocco leggibili; i pulsanti grandi della home restano inalterati.
+- Test QA, regressioni, localizzazione IT/EN e verifiche di sicurezza della distribuzione estesi. I due ZIP hanno superato i controlli di qualità; pubblicazione su GitHub Pages approvata dal titolare del progetto il 7 novembre 2026.
+
 ## 0.9.8.8.21.2 — 2 novembre 2026 (nomi DMC IT/EN nell’editor PDF; pubblicata)
 
 - Corretta la traduzione dei filati DMC nell’editor PDF: risultati di ricerca, filati già aggiunti alla legenda e messaggio del filato selezionato si aggiornano passando da IT a EN e viceversa.
 - Inserite 489 descrizioni italiane locali e non ufficiali, derivate dal catalogo MakeBead (CC BY 4.0); ricerca possibile anche per nome italiano, oltre al codice e al nome inglese.
 - Le descrizioni italiane sono esclusivamente etichette d’interfaccia: codici DMC, colori RGB, descrizioni originali nei salvataggi, filati personalizzati e file OXS/PDF/JSON non vengono modificati.
-- Ampliate le prove automatiche. Pubblicazione autorizzata dopo il collaudo dell’utente e i controlli di rilascio.
+- Ampliate le prove automatiche. Nessuna pubblicazione autorizzata prima del collaudo dell’utente.
 
-## 0.9.8.8.21.1 — 2 novembre 2026 (filati EN e dimensioni fisiche PDF; anteprima)
+## 0.9.8.8.21.1 — 2 novembre 2026 (filati EN e dimensioni fisiche PDF; versione di collaudo)
 
 - Nell’editor OXS, con lingua EN, i filati DMC riconosciuti mostrano i nomi inglesi del catalogo locale; i nomi originali del file e i filati personalizzati non sono alterati. La ricerca accetta sia i nomi originali sia quelli visualizzati.
 - Nell’importazione PDF è possibile scegliere tra colonne×righe, centimetri e pollici. Inserendo la misura del disegno e la densità del tessuto (punti/cm o punti/in, «ct») il programma calcola colonne e righe arrotondate e traccia la griglia con suddivisioni uniformi.
 - Prima della conferma vengono mostrati i conteggi e una nota per verificare l’allineamento; viene segnalato quando l’area scelta appare incompatibile con quadratini visivamente quadrati.
-- Formati OXS/JSON, salvataggi, PDF.js e catalogo DMC invariati. Questa anteprima non è stata pubblicata separatamente: le sue funzionalità sono incluse nella 0.9.8.8.21.2.
+- Formati OXS/JSON, salvataggi, PDF.js e catalogo DMC invariati. Preparati test e pacchetti indipendenti per la verifica, senza pubblicazione.
 
 ## 0.9.8.8.21 — 30 ottobre 2026 (localizzazione definitiva; non pubblicata)
 
@@ -18,7 +26,7 @@
 - Migliorata la traduzione di errori di validazione, recupero, catalogo filati, salvataggi e tooltip; aggiornamento dei messaggi associati al cambio lingua.
 - Corretto l'aggiornamento del selettore dei punti sovrapposti quando si cambia lingua, senza modificare i progressi o la resa delle spunte originali.
 - Introdotti test di regressione linguistica. Restano invariati i formati dei progetti, PDF.js e il catalogo DMC.
-- Questa anteprima non è stata pubblicata separatamente: la localizzazione è inclusa nella versione 0.9.8.8.21.2.
+- Distribuzioni per GitHub Pages e locale senza server in preparazione; attesa approvazione per la pubblicazione.
 
 ## 0.9.8.8.20.2 — 30 ottobre 2026 (selettore dei punti sovrapposti; pubblicata)
 

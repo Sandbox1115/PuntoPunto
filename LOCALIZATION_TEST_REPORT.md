@@ -40,3 +40,7 @@ This is a static and translation-engine test, **not a successful full end-to-end
 ## 0.9.8.8.21.2 — PDF DMC descriptions
 
 Added tests that cover all 489 catalog entries, language switching in the PDF picker and added-thread legend, selected status, accent-insensitive Italian searches and preservation of English source descriptions and custom names. This supplemental reference is non-official and uses the source MakeBead CC BY 4.0 attribution.
+
+## v0.9.8.8.21.3 — new bilingual actions (published after QA)
+
+All new PDF palette-management labels, confirm dialogs and completion summaries use IT/EN static keys or parameterized templates. Project filenames, DMC codes, stored floss names and saved-project values remain unmodified by the language selector. The File disclosure in the mobile header retains readable button labels in both languages. New regression tests exercise English and Italian message output and the single-bulk undo behavior. Real-device accessibility and direct file:// execution must still be checked by the owner.

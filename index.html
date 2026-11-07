@@ -30,8 +30,12 @@
       <a class="legal-toplink" href="licenze.html" title="Licenze delle librerie e dei dati DMC">Licenze</a>
       <button class="btn btn-plain mobile-legend" id="toggleLegend" type="button" aria-label="Apri legenda" aria-controls="leftPanel" aria-expanded="false">☷ <span>Legenda</span></button>
       <button class="btn btn-plain mobile-stats" id="toggleStats" type="button" aria-label="Apri progressi" aria-controls="rightPanel" aria-expanded="false">◷ <span>Progressi</span></button>
-      <button class="btn btn-soft" id="openPDF" type="button" aria-label="Apri PDF">▤ <span>Apri PDF</span></button>
-      <button class="btn btn-soft" id="openFile" type="button" aria-label="Apri OXS">▦ <span>Apri OXS</span></button><button class="btn btn-outline" id="openProject" type="button" aria-label="Apri progetto PDF" title="Riapri un progetto PDF PuntoPunto con il suo PDF e la digitalizzazione"><span class="project-open-icon" aria-hidden="true">▣</span><span class="project-open-label">Progetto PDF</span></button>
+      <button class="btn btn-outline pp-mobile-file-toggle" id="mobileFileMenuToggle" type="button" aria-label="Apri menu file" aria-expanded="false" aria-controls="mobileFileMenu">☰ <span>File</span></button>
+      <div class="pp-file-actions" id="mobileFileMenu" role="group" aria-label="Apri un file">
+        <button class="btn btn-soft" id="openPDF" type="button" aria-label="Apri PDF">▤ <span>Apri PDF</span></button>
+        <button class="btn btn-soft" id="openFile" type="button" aria-label="Apri OXS">▦ <span>Apri OXS</span></button>
+        <button class="btn btn-outline" id="openProject" type="button" aria-label="Apri progetto PDF" title="Riapri un progetto PDF PuntoPunto con il suo PDF e la digitalizzazione"><span class="project-open-icon" aria-hidden="true">▣</span><span class="project-open-label">Progetto PDF</span></button>
+      </div>
     </div>
   </header>
 
@@ -161,8 +165,15 @@
                 <button type="button" id="trackerEraseThread" class="btn btn-outline">Torna a non definita</button>
               </div>
             </div>
-            <div class="pp-digital-summary"><strong id="trackerDigitalStats">0 caselle definite</strong><button type="button" class="btn btn-outline" id="trackerMarkEmpty">Conferma tutte le altre come vuote</button><span id="trackerProjectStatus" aria-live="polite">Salvataggio locale automatico · esporta periodicamente un backup</span></div>
-            <div id="trackerLegendList" class="pp-c-legend-list" aria-label="Filati disponibili"></div><p class="pp-tracker-compact-note">Per cambiare filato, espandi il pannello. Gli strumenti di digitalizzazione rimangono disponibili.</p></div>
+            <div class="pp-digital-summary"><strong id="trackerDigitalStats">0 caselle definite</strong><button type="button" class="btn btn-outline" id="trackerMarkEmpty">Conferma tutte le altre come vuote</button><button type="button" class="btn btn-outline" id="trackerFillWhite">Riempi celle non colorate di bianco</button><button type="button" class="btn btn-outline" id="trackerUndoBulk" disabled>Annulla ultima operazione globale</button><span id="trackerProjectStatus" aria-live="polite">Salvataggio locale automatico · esporta periodicamente un backup</span></div>
+            <div id="trackerLegendList" class="pp-c-legend-list" aria-label="Filati disponibili"></div>
+            <section id="trackerPaletteEditor" class="pp-palette-manager hidden" aria-labelledby="trackerPaletteEditorTitle">
+              <strong id="trackerPaletteEditorTitle">Gestisci filato</strong>
+              <p id="trackerPaletteEditorInfo">Per sostituire con un nuovo filato, aggiungilo prima dal catalogo DMC o dai colori personalizzati.</p>
+              <label for="trackerPaletteReplacement">Sostituisci con un filato già presente</label>
+              <select id="trackerPaletteReplacement"></select>
+              <div class="pp-palette-buttons"><button type="button" id="trackerPaletteApply" class="btn btn-soft">Sostituisci in tutto il progetto</button><button type="button" id="trackerPaletteDelete" class="btn btn-outline">Elimina filato</button><button type="button" id="trackerPaletteCancel" class="btn btn-outline">Chiudi</button></div>
+            </section><p class="pp-tracker-compact-note">Per cambiare filato, espandi il pannello. Gli strumenti di digitalizzazione rimangono disponibili.</p></div>
           <div class="pp-tracker-scroller" id="trackerScroller"><div class="pp-tracker-page" id="trackerPage"><canvas id="trackerImage"></canvas><canvas id="trackerGrid"></canvas></div></div>
           <input hidden type="file" id="trackerJSON" accept="application/json,.json"><input hidden type="file" id="trackerProjectFile" accept=".json,.puntopunto.json,application/json">
         </div>
@@ -196,7 +207,7 @@
 <div class="pp-pdf-overlay hidden" id="pdfOverlay" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" aria-describedby="pdfStatus">
   <div class="pp-pdf-dialog pp-manual-dialog">
     <div class="pp-pdf-heading">
-      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.21.2</span>
+      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.21.3</span>
         <h2 id="pdfTitle">Imposta la griglia del tuo schema</h2>
         <p id="pdfFilename" class="muted">Seleziona la pagina del diagramma. Le dimensioni della griglia le scegli tu.</p>
       </div>
@@ -297,6 +308,7 @@
 <script src="pdf-project-codec.js" defer></script>
 <script src="dmc-catalog.js" defer></script>
 <script src="dmc-floss-names-it.js" defer></script>
+<script src="pdf-palette-ops.js" defer></script>
 <script src="pdf-tracker.js" defer></script>
 <script src="home-guide.js" defer></script>
 </body>

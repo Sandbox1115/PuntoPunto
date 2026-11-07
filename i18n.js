@@ -1,6 +1,23 @@
 /* PuntoPunto: client-side Italian / English interface. No network or translation services. */
 (function(root){'use strict';
 const DICT={
+  "Motore PDF non disponibile.": "PDF engine unavailable.",
+  "Legenda completa (massimo 100 filati).": "Palette full (max. 100 threads).",
+  "Il filato originale non esiste.": "Source thread not found.",
+  "Aggiungi prima il filato sostitutivo alla legenda.": "Add the replacement thread to the palette first.",
+  "Seleziona un filato differente.": "Choose a different thread.",
+  "Filato non trovato.": "Thread not found.",
+  "Apri menu file": "Open file menu",
+  "Apri un file": "Open a file",
+  "Gestisci": "Manage",
+  "Gestisci filato": "Manage thread",
+  "Per sostituire con un nuovo filato, aggiungilo prima dal catalogo DMC o dai colori personalizzati.": "To replace with a new thread, first add it from the DMC catalog or the custom colors.",
+  "Sostituisci con un filato già presente": "Replace with a thread already in the palette",
+  "Sostituisci in tutto il progetto": "Replace throughout project",
+  "Elimina filato": "Delete thread",
+  "Riempi celle non colorate di bianco": "Fill uncolored cells with white",
+  "Annulla ultima operazione globale": "Undo last bulk action",
+  "Ultima operazione globale annullata.": "Last bulk action undone.",
   "PuntoPunto — il tuo schema, punto dopo punto": "PuntoPunto — your pattern, stitch by stitch",
   "I file restano sul tuo dispositivo": "Your files stay on your device",
   "Licenze": "Licenses",
@@ -855,6 +872,26 @@ Object.assign(DICT, {
 // Version 0.9.8.8.21: parameterized, fully translated runtime messages.
 // These never run through substring replacement; each message is assembled in one language.
 const MESSAGES={
+  "pdf.paletteManageTitle": ["Gestisci filato {code}", "Manage thread {code}"],
+  "pdf.paletteManageInfo": [
+    "{count} caselle assegnate. Per sostituire con un nuovo filato, aggiungilo prima dal catalogo o dai colori personalizzati.",
+    "{count} assigned cells. To replace with a new thread, first add it from the catalog or custom colors."
+  ],
+  "pdf.confirmFillWhite": [
+    "Assegnare DMC bianco (croce intera) a {count} caselle non colorate, comprese {empty} già confermate vuote e {unknown} non definite? I punti colorati non cambiano. La modifica è annullabile prima di altre modifiche.",
+    "Assign white DMC full stitches to {count} uncolored cells, including {empty} confirmed empty and {unknown} undefined cells? Colored stitches stay unchanged. You can undo before making other edits."
+  ],
+  "pdf.filledWhite": ["Assegnate {count} caselle al bianco ({code}).", "Assigned {count} cells to white ({code})."],
+  "pdf.confirmReplaceThread": [
+    "Sostituire il filato {source} con {target} in tutte le {count} caselle assegnate? Il filato vecchio sarà rimosso; tipo di punto e completamenti resteranno invariati.",
+    "Replace thread {source} with {target} in all {count} assigned cells? The old thread will be removed; stitch types and completion progress will stay unchanged."
+  ],
+  "pdf.replacedThread": ["Filato {source} sostituito con {target} in {count} caselle.", "Thread {source} replaced by {target} in {count} cells."],
+  "pdf.confirmDeleteThread": [
+    "Eliminare il filato {code}? I suoi {count} punti diventeranno non definiti e perderanno l'eventuale completamento. Puoi annullare prima di altre modifiche.",
+    "Delete thread {code}? Its {count} stitches will become undefined and lose their completion status. You can undo before making other edits."
+  ],
+  "pdf.deletedThread": ["Filato {code} eliminato: {count} caselle da ridefinire.", "Thread {code} deleted: {count} cells need reassignment."],
   "pdf.physicalWidthCm": ["Larghezza disegno (cm)", "Design width (cm)"],
   "pdf.physicalHeightCm": ["Altezza disegno (cm)", "Design height (cm)"],
   "pdf.physicalWidthIn": ["Larghezza disegno (in)", "Design width (in)"],

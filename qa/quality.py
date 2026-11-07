@@ -8,7 +8,7 @@ from urllib.parse import unquote, urlsplit
 
 SKIP={'.git','dist','__pycache__','.venv','node_modules','.pytest_cache'}
 LOCK_PATHS=['data/dmc-floss.json','vendor/pdf.mjs','vendor/pdf.worker.mjs']
-MANDATORY=['index.html','licenze.html','privacy.html','app.js','i18n.js','dmc-catalog.js','dmc-floss-names-it.js','vendor/pp-pdfjs-bridge.js','data/dmc-floss.json']
+MANDATORY=['index.html','licenze.html','privacy.html','app.js','i18n.js','dmc-catalog.js','dmc-floss-names-it.js','pdf-palette-ops.js','vendor/pp-pdfjs-bridge.js','data/dmc-floss.json']
 
 class HTMLAudit(HTMLParser):
     def __init__(self):
@@ -39,7 +39,7 @@ def check(root:Path,mode:str,*,check_manifest=True)->bool:
     if failures:
         print('\n'.join('FAIL '+v for v in failures),file=sys.stderr);return False
     lock=json.loads((root/'ASSET_LOCK.json').read_text(encoding='utf-8'))
-    valid(lock.get('version')=='0.9.8.8.21.2','Wrong version in lock')
+    valid(lock.get('version')=='0.9.8.8.21.3','Wrong version in lock')
     for name in LOCK_PATHS:
         p=root/name
         if mode=='offline' and name.startswith('vendor/'):
@@ -62,10 +62,10 @@ def check(root:Path,mode:str,*,check_manifest=True)->bool:
             valid(referenced.exists(),f'Broken local {attr} in {name}: {value}')
         if name in ('privacy.html','licenze.html'):
             valid('data-pp-locale="it"' in doc and 'data-pp-locale="en"' in doc,'Missing bilingual legal content '+name)
-    index=(root/'index.html').read_text(encoding='utf-8');valid('VERSIONE 0.9.8.8.21.2' in index,'Wrong visible version in index')
+    index=(root/'index.html').read_text(encoding='utf-8');valid('VERSIONE 0.9.8.8.21.3' in index,'Wrong visible version in index')
     valid('data-pp-description-en=' in index,'Missing EN description')
     for name in ['privacy.html','licenze.html']:
-        valid('0.9.8.8.21.2' in (root/name).read_text(encoding='utf-8'),'Wrong version '+name)
+        valid('0.9.8.8.21.3' in (root/name).read_text(encoding='utf-8'),'Wrong version '+name)
     valid('489' in (root/'dmc-catalog.js').read_text(encoding='utf-8'),'Wrong catalog size')
     for p in sorted(list(root.glob('*.js'))+list(root.glob('vendor/*.js'))+list(root.glob('vendor/*.mjs'))):
         result=subprocess.run(['node','--check',str(p)],capture_output=True,text=True)

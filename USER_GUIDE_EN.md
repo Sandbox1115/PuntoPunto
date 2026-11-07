@@ -71,7 +71,7 @@ Use the IT/EN control on the home page, PDF editor, Privacy and Licenses pages. 
 
 The OXS overlapping-stitch chooser now displays all independent stitches per cell (including both triangular halves), each with a color/position preview and a live completed/total count. No change to exported project data, PDF.js binaries, vendor resources or persistent storage. The feature was tested and approved for the v0.9.8.8.20.2 GitHub Pages release.
 
-### v0.9.8.8.21 — Language switching (included in v0.9.8.8.21.2)
+### v0.9.8.8.21 — Language switching (review candidate)
 
 Switch between IT and EN while viewing an OXS chart, an overlapping-stitch selection, or an active PDF digitization. Counts, descriptions, errors and status messages are displayed in the selected language. Pattern filenames, colors and thread names from source files are preserved. The localization update does not alter OXS exports, progress JSON formats, or saved completion states.
 
@@ -84,3 +84,13 @@ In the OXS editor, recognized DMC threads display canonical English names when E
 ## PDF editor DMC descriptions — v0.9.8.8.21.2
 
 The PDF thread picker and saved-project legend show non-official Italian descriptions in **IT**, and original MakeBead English DMC descriptions in **EN**. Search by code, English name or Italian name. Switching languages changes labels only; the source palette descriptions, codes, HEX colors, custom thread names and export contents remain intact.
+
+### PDF bulk tools (v0.9.8.8.21.3 — published)
+
+- **Confirm all remaining cells empty** means no stitch in those squares. It does not add a thread.
+- **Fill uncolored cells with white** assigns a full cross of DMC B5200 Snow White to every square without a colored stitch (including previously confirmed empty squares). Review the number and click the confirmation only if you want actual white stitches in the exported OXS. Existing colored cells are preserved; the new white stitches start unfinished.
+- For a wrong thread in the PDF legend, click **Manage** next to its name. Choose another thread already in the palette and click **Replace throughout project**. If you need a new DMC/custom thread, add it to the legend first. All assigned cells using the old thread change to the replacement, retaining their stitch type and progress.
+- **Delete thread** deletes the selected legend entry and turns its assigned stitches into undefined cells (and clears their completion markers). Confirm before applying. **Undo last bulk action** restores the previous palette and cells, but is available only until further changes are made.
+- After bulk operations, export a full PDF project JSON backup and compare the OXS export with the source PDF. A technically valid OXS does not prove that your colors/white background are faithful to the printed chart.
+
+**Mobile file opening:** the small header actions are in the **File** dropdown on the upper-right, with full Open OXS, Open PDF and PDF Project labels; the larger Open OXS / Open PDF buttons in the home section remain available. The file dropdown closes on Escape, outside touch or selecting an action.

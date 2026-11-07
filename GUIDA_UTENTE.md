@@ -82,3 +82,13 @@ Nell’editor OXS, con EN selezionato, i filati DMC riconosciuti mostrano il nom
 ## Filati DMC nell'editor PDF — 0.9.8.8.21.2
 
 Nella ricerca e nella legenda dei filati DMC, **IT** mostra le descrizioni italiane non ufficiali e **EN** i nomi inglesi del catalogo MakeBead. Puoi cercare anche per nome italiano (ad esempio «salmone»), in inglese o per codice. Il cambio lingua aggiorna le voci già aggiunte, senza cambiare codici, colori o descrizioni conservate nel progetto. I filati personalizzati mantengono sempre il loro nome.
+
+### Strumenti rapidi PDF (v0.9.8.8.21.3 — pubblicata)
+
+- **Conferma tutte le altre come vuote** crea caselle senza punto, non croci bianche.
+- **Riempi celle non colorate di bianco** assegna invece una croce intera DMC B5200 a tutte le caselle non colorate (incluse quelle già indicate come vuote). I punti già colorati non cambiano. Conferma solo dopo aver verificato che lo schema richieda veramente punti bianchi.
+- Usa **Gestisci** accanto a un filato per sostituirlo in tutto lo schema con un altro filato già presente nella legenda. Se serve un nuovo filato, aggiungilo prima. La sostituzione conserva tipi di punto e avanzamento.
+- **Elimina filato** riporta le caselle assegnate a «da definire» e cancella i completamenti relativi; viene richiesta una conferma. **Annulla ultima operazione globale** ripristina i dati precedenti finché non vengono eseguite altre modifiche.
+- Su telefono apri il menu **File** in alto a destra per i comandi Apri OXS, Apri PDF e Progetto PDF. I grandi pulsanti della home restano disponibili.
+
+Ricorda di salvare un progetto JSON completo ed esaminare il file OXS contro il PDF originale prima di considerare concluso il lavoro.

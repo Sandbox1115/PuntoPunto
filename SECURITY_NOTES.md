@@ -1,4 +1,4 @@
-# PuntoPunto security and dependency status — v0.9.8.8.21.2
+# PuntoPunto security and dependency status — v0.9.8.8.20
 
 ## PDF.js upgraded
 
@@ -31,7 +31,7 @@ A locked-asset, whole-package SHA-256, script-syntax, local-reference, and deter
 
 The OXS overlapping-stitch chooser now displays all independent stitches per cell (including both triangular halves), each with a color/position preview and a live completed/total count. No change to exported project data, PDF.js binaries, vendor resources or persistent storage. Owner-approved hotfix: no changes to project file formats, storage, or third-party binaries. Release quality checks must pass before publishing.
 
-### v0.9.8.8.21 — Localization scope (included in v0.9.8.8.21.2)
+### v0.9.8.8.21 — Localization scope (review candidate)
 
 The new parameterized bilingual messages are rendered as text or DOM attributes, never as HTML. Project data, filenames and user-supplied thread names are preserved as data. No new external network requests, dependencies, telemetry, storage formats or PDF.js changes were introduced. Review the GitHub Pages and file:// distributions independently before publication.
 
@@ -42,3 +42,7 @@ The physical-size form parses bounded decimal values locally and converts them t
 ## v0.9.8.8.21.2 — Italian DMC labels
 
 The additional static `dmc-floss-names-it.js` contains descriptive non-official translations keyed only by public DMC codes, with no user data, tracking, calls to third-party translation services or changes to persistence. Names are applied at display time; original and custom palette descriptions are not rewritten.
+
+## v0.9.8.8.21.3 — bulk PDF edits (published after QA)
+
+The white-fill, global thread replacement and thread removal operations are entirely client-side. Each creates a separate normalized prospective model and applies it only after the user confirms. Already assigned colors are not overwritten by white-fill; thread replacement preserves stitch types/completion; deleting a used thread explicitly reopens its cells and clears associated completion. The previous state can be restored by one bulk undo until another edit changes the project. No user-project content is transmitted and the PDF.js/DMC locked assets are unchanged. These controls cannot certify that automatically inserted white stitches match the source pattern; users must visually verify the OXS against the PDF.

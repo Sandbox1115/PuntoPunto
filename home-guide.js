@@ -32,6 +32,23 @@ brand.addEventListener('click',e=>{
   }
   if(window.PuntoPuntoOXSNavigation?.hasProject())window.PuntoPuntoOXSNavigation.close();
 });
+// Responsive file actions: keep existing button IDs and event handlers, but
+// offer legible 44px-tall commands in one mobile disclosure instead of icons.
+const fileToggle=$('mobileFileMenuToggle'),fileMenu=$('mobileFileMenu');
+if(fileToggle&&fileMenu){
+  const small=window.matchMedia('(max-width:620px)');
+  const setFileMenu=(open,{returnFocus=false}={})=>{
+    const active=!!open&&small.matches;
+    fileMenu.classList.toggle('is-open',active);
+    fileToggle.setAttribute('aria-expanded',String(active));
+    if(returnFocus&&small.matches)fileToggle.focus();
+  };
+  fileToggle.addEventListener('click',()=>setFileMenu(fileToggle.getAttribute('aria-expanded')!=='true'));
+  fileMenu.addEventListener('click',e=>{if(e.target.closest('button'))setFileMenu(false);});
+  document.addEventListener('pointerdown',e=>{if(!fileToggle.contains(e.target)&&!fileMenu.contains(e.target))setFileMenu(false);});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&fileToggle.getAttribute('aria-expanded')==='true'){setFileMenu(false,{returnFocus:true});}});
+  small.addEventListener('change',()=>setFileMenu(false));
+}
 // The tutorial is always opt-in. The home provides a prominent button instead
 // of automatically opening a long overlay on a visitor's first page load.
 })();
