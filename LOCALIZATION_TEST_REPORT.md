@@ -1,3 +1,7 @@
+# Current localization validation — v0.9.8.8.23.1
+
+The release keeps existing IT/EN message and DMC-name regression suites, and adds the responsive craft interface with bilingual controls and typography attribution. Lora and Alegreya Sans include Italian accented glyphs. The historical report below records the earlier localization baseline; current release validation is recorded in `RELEASE_CHECKS.md`.
+
 # PuntoPunto v0.9.8.8.19 — IT/EN localization review report
 
 **Test status:** REVIEW CANDIDATE at the time of these checks; owner subsequently authorized GitHub Pages publication. This report records the **pre-release static checks**, not a live browser certification.  

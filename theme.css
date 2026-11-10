@@ -1,0 +1,88 @@
+/* PuntoPunto 0.9.8.8.22.2 — shared editorial theme for every page and dialog.
+   This stylesheet never changes thread swatches or the source pattern colors. */
+:root{--paper:#fbf7f1;--bg:#f5eee8;--white:#fffcf8;--ink:#4b303d;--muted:#7e6872;--line:#e5d5d2;--green:#a64d6c;--green-d:#74394e;--green-pale:#f3e0e6;--shadow:0 3px 16px #63324409;accent-color:var(--green)}
+body{background-color:var(--paper);color:var(--ink);background-image:repeating-linear-gradient(0deg,#b88d7806 0 1px,transparent 1px 4px),repeating-linear-gradient(90deg,#b88d7806 0 1px,transparent 1px 4px)}
+a{color:var(--green-d)}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,[tabindex="0"]:focus-visible{outline:3px solid #704f91;outline-offset:3px}
+.brand,.pp-privacy-brand{color:var(--ink)}
+.brand-accent{color:var(--green)}
+.brand-mark{background:var(--green)}
+.brand small,.pp-privacy-brand small{color:var(--muted)}
+.privacy-dot{background:var(--green)}
+.pp-language-switch,.pp-language-switch select{color:var(--green-d)}
+.pp-language-switch select{background:var(--white);border-color:var(--line)}
+.btn-soft{background:var(--green);color:#fff;border:1px solid var(--green)}
+.btn-soft:hover:not(:disabled){background:var(--green-d);border-color:var(--green-d);color:#fff}
+.btn-outline{background:var(--white);border-color:var(--line);color:var(--green-d)}
+.btn-outline:hover:not(:disabled){background:var(--green-pale);color:var(--green-d)}
+.btn-plain,.icon-btn,.fit-btn{color:var(--green-d)}
+.icon-btn,.fit-btn{background:var(--white);border-color:var(--line);border-radius:6px}
+.linklike,.demo-link strong,.legal-toplink,.drop-area strong{color:var(--green-d)}
+.pp-file-actions.is-open{background:var(--white);border-color:var(--line);box-shadow:0 12px 30px #4b303d22}
+.pp-mobile-file-toggle{background:var(--white);color:var(--green-d);border-color:var(--line)}
+.searchbox,.searchbox input,.legend-stat,.legend-text small{color:var(--muted)}
+.chip.active,.tool.active{background:var(--green-pale);color:var(--green-d);border-color:#d9b8c6}
+.progress-card,.details-card{background:var(--white);border-color:var(--line)}
+.progress-card h2,.details-card h2,.tips h2{color:var(--green-d);font-family:"Alegreya Sans",sans-serif}
+.pp-oxs-workbar,.pp-oxs-mobile-nav,.mobile-legend,.mobile-stats{background:#fbf1ed;color:var(--green-d);border-color:var(--line)}
+.pp-oxs-tiny-btn,.pp-oxs-mobile-nav .btn{background:var(--white);color:var(--green-d);border-color:var(--line)}
+.editor-edit-controls input,.editor-edit-controls select{background:var(--white);border-color:var(--line);color:var(--ink)}
+.canvas-footer,.canvas-footer strong{color:var(--muted)}
+.pp-home-guide-overlay,.pp-tutorial-overlay,.pp-pdf-overlay{background:#4b303dad}
+.pp-home-guide-card,.pp-tutorial-card{background:var(--white);color:var(--ink);border:1px solid var(--line);box-shadow:0 18px 65px #4b303d33;border-radius:14px}
+.pp-home-guide-card h2,.pp-tutorial-card h2{font-family:"Alegreya Sans",sans-serif;color:var(--green-d);font-weight:500}
+.pp-home-guide-card>p,.pp-home-guide-sections p,.pp-home-guide-footer,.pp-tutorial-card li{color:var(--muted)}
+.pp-home-guide-sections h3{color:var(--green-d)}
+.pp-home-guide-sections strong,.pp-tutorial-card strong{color:var(--ink)}
+.pp-home-guide-sections section,.pp-home-guide-footer{border-color:var(--line)}
+.pp-home-guide-footer{background:var(--white)}
+.pp-home-guide-sections code,.pp-tutorial-note{background:#f7eaf0;color:var(--green-d);border-color:#b66082}
+.pp-home-guide-sections a,.pp-rights-notice a{color:var(--green-d)}
+.pp-pdf-close{color:var(--green-d);background:var(--green-pale)}
+.pp-grid-physical-hint,.pp-palette-manager p{color:var(--muted)}
+#trackerCustomFields input{max-width:none;width:100%;color:var(--ink);background:var(--white);border-color:var(--line)}
+#trackerCustomFields input[type=color]{width:100%;height:40px}
+#trackerPaletteEditor select,#trackerKind{background:var(--white);color:var(--ink);border-color:var(--line)}
+#trackerZoomLabel{color:var(--green-d)}
+/* Legal pages share the same brand bar, paper, headings, cards and links. */
+.pp-privacy-topbar{background:linear-gradient(110deg,#fffaf6,#f6e9e6);border-color:var(--line);gap:20px;flex-wrap:wrap}
+.pp-privacy-nav a{color:var(--muted)}
+.pp-privacy-nav a.current{color:var(--green-d);text-decoration:underline;text-underline-offset:6px}
+.pp-privacy-nav .pp-privacy-back{border-color:var(--line);background:var(--white);color:var(--green-d)}
+.pp-privacy-main,.lic-wrap{max-width:1130px;margin:auto;padding:38px 24px 58px}
+.pp-privacy-hero{background:linear-gradient(120deg,#fffaf6,#f3e0e6);border-color:var(--line);border-radius:16px}
+.pp-privacy-hero h1,.lic-wrap h1{font-family:"Alegreya Sans",sans-serif;font-weight:400;letter-spacing:-1.2px;color:var(--green-d);font-size:clamp(32px,4vw,50px);line-height:1.15}
+.pp-privacy-hero h1 em{color:var(--green)}
+.pp-privacy-eyebrow,.lic-wrap .eyebrow{color:var(--green-d)}
+.pp-privacy-dot{background:var(--green)}
+.pp-privacy-lead,.pp-privacy-lead strong,.pp-privacy-illustration p{color:var(--muted)}
+.pp-privacy-mini-grid{color:var(--green)}
+.pp-privacy-values>div,.pp-privacy-content,.lic-wrap section{background:var(--white);border:1px solid var(--line);border-radius:12px}
+.pp-privacy-values h2,.pp-privacy-section h2,.lic-wrap h2{font-family:"Alegreya Sans",sans-serif;font-weight:500;color:var(--green-d);font-size:23px}
+.pp-privacy-values p,.pp-privacy-section p,.pp-privacy-end p,.lic-wrap p,.lic-wrap li{color:var(--muted);line-height:1.85}
+.pp-privacy-section strong,.lic-wrap strong{color:var(--ink)}
+.pp-privacy-number{color:#a6798a}
+.pp-privacy-section+.pp-privacy-section{border-color:var(--line)}
+.pp-privacy-section a,.pp-privacy-footer a,.lic-wrap a{color:var(--green-d);overflow-wrap:anywhere}
+.pp-privacy-footer{border-color:var(--line);color:var(--muted)}
+.pp-value-symbol,.lic-wrap .lic-back{background:var(--green-pale);color:var(--green-d);border-radius:7px}
+.lic-wrap .lic-disclaimer{background:#f8ecec;border-color:var(--green)}
+.lic-wrap section{padding:25px 30px;margin:20px 0}
+.lic-wrap .lic-back{font-size:12px;margin-bottom:12px}
+.pp-privacy-cta,.pp-privacy-end a{background:var(--green);color:#fff;border-radius:7px}
+.pp-privacy-illustration img{filter:drop-shadow(0 12px 18px #63324422)}
+@media(max-width:700px){
+ .pp-privacy-topbar{padding:14px 16px;gap:12px}
+ .pp-privacy-topbar>.pp-language-switch{margin-left:auto}
+ .pp-privacy-nav{width:100%;justify-content:space-between;gap:10px;flex-wrap:wrap}
+ .pp-privacy-nav a,.pp-privacy-nav a.current,.pp-privacy-nav a[href="licenze.html"],.pp-privacy-nav a:not(.pp-privacy-back){display:inline-flex;align-items:center;min-height:44px}
+ .pp-privacy-nav .pp-privacy-back{font-size:12px;padding:8px 12px}
+ .pp-privacy-brand{font-size:21px;gap:8px}
+ .pp-privacy-brand img{width:34px;height:34px}
+ .pp-privacy-main,.lic-wrap{padding:22px 16px 40px}
+ .lic-wrap section{padding:20px 18px}
+ .pp-privacy-hero{padding:30px 22px}
+ .pp-privacy-values h2,.pp-privacy-section h2,.lic-wrap h2{font-size:21px}
+ .pp-language-switch select{min-height:44px}
+}
+@media(forced-colors:active){button:focus-visible,a:focus-visible,[tabindex="0"]:focus-visible{outline-color:Highlight}.btn,.chip,.tool,.studio-tab{border:1px solid ButtonText}}

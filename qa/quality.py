@@ -39,7 +39,7 @@ def check(root:Path,mode:str,*,check_manifest=True)->bool:
     if failures:
         print('\n'.join('FAIL '+v for v in failures),file=sys.stderr);return False
     lock=json.loads((root/'ASSET_LOCK.json').read_text(encoding='utf-8'))
-    valid(lock.get('version')=='0.9.8.8.21.3','Wrong version in lock')
+    valid(lock.get('version')=='0.9.8.8.23.1','Wrong version in lock')
     for name in LOCK_PATHS:
         p=root/name
         if mode=='offline' and name.startswith('vendor/'):
@@ -48,6 +48,17 @@ def check(root:Path,mode:str,*,check_manifest=True)->bool:
         if p.is_file():
             b=p.read_bytes();asset=lock['assets'][name]
             valid(len(b)==asset['bytes'] and hashlib.sha256(b).hexdigest()==asset['sha256'],'Locked checksum mismatch: '+name)
+    font_sources=json.loads((root/'vendor/FONT_SOURCES.json').read_text(encoding='utf-8'))
+    valid(len(font_sources)==16,'Incomplete font face inventory')
+    for desc in font_sources:
+        asset=root/desc['path']
+        valid(asset.is_file(),'Missing font '+desc['path'])
+        if asset.is_file():
+            data=asset.read_bytes()
+            valid(len(data)==desc['bytes'] and hashlib.sha256(data).hexdigest()==desc['sha256'],'Font integrity mismatch: '+desc['path'])
+    css=(root/'fonts.css').read_text(encoding='utf-8')
+    valid('http://' not in css and 'https://' not in css and '@import' not in css,'Remote font dependency')
+    for desc in font_sources:valid(desc['path'] in css,'Unreferenced font '+desc['path'])
     for name in ['index.html','privacy.html','licenze.html']:
         doc=(root/name).read_text(encoding='utf-8');audit=HTMLAudit();audit.feed(doc)
         valid(not audit.duplicates,'Duplicate DOM IDs in '+name+': '+str(audit.duplicates))
@@ -62,10 +73,10 @@ def check(root:Path,mode:str,*,check_manifest=True)->bool:
             valid(referenced.exists(),f'Broken local {attr} in {name}: {value}')
         if name in ('privacy.html','licenze.html'):
             valid('data-pp-locale="it"' in doc and 'data-pp-locale="en"' in doc,'Missing bilingual legal content '+name)
-    index=(root/'index.html').read_text(encoding='utf-8');valid('VERSIONE 0.9.8.8.21.3' in index,'Wrong visible version in index')
+    index=(root/'index.html').read_text(encoding='utf-8');valid('VERSIONE 0.9.8.8.23.1' in index,'Wrong visible version in index')
     valid('data-pp-description-en=' in index,'Missing EN description')
     for name in ['privacy.html','licenze.html']:
-        valid('0.9.8.8.21.3' in (root/name).read_text(encoding='utf-8'),'Wrong version '+name)
+        valid('0.9.8.8.23.1' in (root/name).read_text(encoding='utf-8'),'Wrong version '+name)
     valid('489' in (root/'dmc-catalog.js').read_text(encoding='utf-8'),'Wrong catalog size')
     for p in sorted(list(root.glob('*.js'))+list(root.glob('vendor/*.js'))+list(root.glob('vendor/*.mjs'))):
         result=subprocess.run(['node','--check',str(p)],capture_output=True,text=True)

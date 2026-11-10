@@ -1,0 +1,16 @@
+# Keep the legacy branch-based Pages publisher free of repository-only files.
+# The custom QA workflow independently uses qa/runtime-files.json.
+exclude:
+  - qa
+  - dist
+  - README.md
+  - CHANGELOG.md
+  - CHANGELOG_IT.md
+  - GUIDA_UTENTE.md
+  - USER_GUIDE_EN.md
+  - LOCALIZATION_TEST_REPORT.md
+  - PUBBLICAZIONE_GITHUB.md
+  - SECURITY_NOTES.md
+  - RELEASE_CHECKS.md
+  - MANIFEST_DISTRIBUZIONE_SHA256.txt
+  - _config.yml

@@ -246,27 +246,27 @@
     ctx.clearRect(0,0,W,H);if(!state.imageReady)return;
     const r=state.rect,L=r.x*W,T=r.y*H,R=(r.x+r.w)*W,B=(r.y+r.h)*H,w=R-L,h=B-T;
     // Dim everything outside the chosen chart rectangle.
-    ctx.fillStyle='rgba(10,25,20,.22)';ctx.fillRect(0,0,W,T);ctx.fillRect(0,T,L,h);ctx.fillRect(R,T,W-R,h);ctx.fillRect(0,B,W,H-B);
-    ctx.fillStyle='rgba(29,154,109,.045)';ctx.fillRect(L,T,w,h);
+    ctx.fillStyle='rgba(75,48,61,.22)';ctx.fillRect(0,0,W,T);ctx.fillRect(0,T,L,h);ctx.fillRect(R,T,W-R,h);ctx.fillRect(0,B,W,H-B);
+    ctx.fillStyle='rgba(166,77,108,.045)';ctx.fillRect(L,T,w,h);
     if(validDimensions()){
       const {cols,rows}=resolvedDimensions();
       ctx.beginPath();
       for(let c=1;c<cols;c++){const x=L+c*w/cols;ctx.moveTo(x,T);ctx.lineTo(x,B);}
       for(let row=1;row<rows;row++){const y=T+row*h/rows;ctx.moveTo(L,y);ctx.lineTo(R,y);}
-      ctx.lineWidth=Math.max(.6,W/1500);ctx.strokeStyle='rgba(11,123,101,.55)';ctx.stroke();
+      ctx.lineWidth=Math.max(.6,W/1500);ctx.strokeStyle='rgba(166,77,108,.55)';ctx.stroke();
       ctx.beginPath();
       for(let c=10;c<cols;c+=10){const x=L+c*w/cols;ctx.moveTo(x,T);ctx.lineTo(x,B);}
       for(let row=10;row<rows;row+=10){const y=T+row*h/rows;ctx.moveTo(L,y);ctx.lineTo(R,y);}
-      ctx.strokeStyle='rgba(0,89,75,.78)';ctx.lineWidth=Math.max(1,W/1000);ctx.stroke();
+      ctx.strokeStyle='rgba(116,57,78,.78)';ctx.lineWidth=Math.max(1,W/1000);ctx.stroke();
     }
-    ctx.strokeStyle='#078a69';ctx.lineWidth=Math.max(2.5,W/620);ctx.setLineDash([12,7]);ctx.strokeRect(L,T,w,h);ctx.setLineDash([]);
+    ctx.strokeStyle='#a64d6c';ctx.lineWidth=Math.max(2.5,W/620);ctx.setLineDash([12,7]);ctx.strokeRect(L,T,w,h);ctx.setLineDash([]);
     const radius=Math.max(6,W/130);
     for(const [x,y] of [[L,T],[R,T],[L,B],[R,B]]){
-      ctx.fillStyle='white';ctx.strokeStyle='#078a69';ctx.lineWidth=Math.max(2,W/800);
+      ctx.fillStyle='white';ctx.strokeStyle='#a64d6c';ctx.lineWidth=Math.max(2,W/800);
       ctx.fillRect(x-radius,y-radius,radius*2,radius*2);ctx.strokeRect(x-radius,y-radius,radius*2,radius*2);
     }
-    ctx.font=`bold ${Math.max(12,W/78)}px system-ui`;ctx.textBaseline='top';
-    ctx.fillStyle='#05664e';const grid=resolvedDimensions();ctx.fillText(grid?`${grid.cols} × ${grid.rows}`:say('pdf.gridLabelMissing'),L+radius,T+radius+4);
+    ctx.font=`bold ${Math.max(12,W/78)}px "Alegreya Sans", sans-serif`;ctx.textBaseline='top';
+    ctx.fillStyle='#74394e';const grid=resolvedDimensions();ctx.fillText(grid?`${grid.cols} × ${grid.rows}`:say('pdf.gridLabelMissing'),L+radius,T+radius+4);
   }
   function point(e){
     const box=ui.preview.getBoundingClientRect();
@@ -373,5 +373,6 @@
     await readFile(file,{project:payload});
   }
   document.addEventListener('puntopunto:languagechange',switchDimensionMode);
+  document.addEventListener('puntopunto:appearancechange',()=>{if(state.imageReady)drawOverlay();});
   window.PuntoPuntoPDFImport={readFile,loadProject};
 })();

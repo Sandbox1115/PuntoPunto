@@ -92,3 +92,8 @@ Nella ricerca e nella legenda dei filati DMC, **IT** mostra le descrizioni itali
 - Su telefono apri il menu **File** in alto a destra per i comandi Apri OXS, Apri PDF e Progetto PDF. I grandi pulsanti della home restano disponibili.
 
 Ricorda di salvare un progetto JSON completo ed esaminare il file OXS contro il PDF originale prima di considerare concluso il lavoro.
+
+
+## Interfaccia e aspetto — 0.9.8.8.23.1
+
+Il layout si adatta a smartphone, tablet e desktop. Apri Aspetto per attivare tela, fili incrociati, griglia e linee principali. Queste preferenze sono salvate localmente e cambiano soltanto la visualizzazione. Nei PDF la resa tessile riguarda i punti assegnati manualmente; la scansione originale resta invariata. Lora per i titoli e Alegreya Sans per i testi mantengono le dimensioni stabilite. Esporta regolarmente backup dei progetti; le preferenze di aspetto sono separate dai dati del progetto.

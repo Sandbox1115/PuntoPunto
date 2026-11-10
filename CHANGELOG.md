@@ -1,5 +1,13 @@
 # PuntoPunto — Change log (English)
 
+## v0.9.8.8.23.1 — 10 November 2026 (GitHub Pages release)
+
+- Integrates the reviewed 22.x/23 responsive craft redesign: cream/burgundy surfaces, floral accents, smartphone dock, tablet layout and wide desktop panels. The PuntoPunto name and logo geometry are retained; Privacy and Licenses use the shared design.
+- Adds optional Aida fabric and crossed-thread rendering in OXS and manually assigned PDF stitches, with locally saved appearance preferences. Existing 21.3 PDF bulk operations, undo, mobile file menu and project formats remain available.
+- Uses Lora for headings and Alegreya Sans for body text, controls and canvas labels, preserving established font sizes, weights, line heights and spacing. Original licensed fonts are served from this site, without a third-party font service.
+- Separates the Pages runtime from repository-only QA, documentation and release tooling. Offline payloads, review reports, screenshots and local test pages are excluded from the web artifact. Build checks cover font integrity and distribution contents as well as existing regression tests.
+- Updates bilingual guides, privacy implementation details, component attribution, release instructions and security notes. Publication authorized by the project owner; no personal contact details are added.
+
 ## v0.9.8.8.21.3 — 7 November 2026 (PDF bulk tools and mobile file menu; published)
 
 - Added a clearly labeled **Fill uncolored cells with white** command to the manual PDF editor. With explicit confirmation it converts undefined and confirmed-empty cells into full-cross Snow White DMC B5200 assignments while preserving every previously colored stitch. The existing **Confirm remaining cells empty** command remains distinct, creating no stitches.

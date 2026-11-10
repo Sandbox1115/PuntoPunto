@@ -5,38 +5,41 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; connect-src 'self'; worker-src 'self' blob:; img-src 'self' data: blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; form-action 'self'; frame-src 'none'">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#f7f7f3">
+  <meta name="theme-color" content="#a64d6c">
   <meta name="description" content="Attribuzioni, licenze e marchi dei componenti impiegati da PuntoPunto." data-pp-description-it="Attribuzioni, licenze e marchi dei componenti impiegati da PuntoPunto." data-pp-description-en="Sources, licenses, trademarks, and attributions for the third-party components used by PuntoPunto.">
   <title>Licenze e attribuzioni — PuntoPunto</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="fonts.css">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    body{background:#f7f8f5;color:#244336;min-height:100vh;margin:0}
-    .lic-wrap{max-width:860px;margin:0 auto;padding:34px 24px 64px}
-    .lic-wrap h1{font-size:30px;letter-spacing:-.9px;margin:12px 0 9px}
-    .lic-wrap h2{font-size:19px;margin:0 0 9px}
-    .lic-wrap p,.lic-wrap li{font-size:14px;line-height:1.72;color:#516b5f}
-    .lic-wrap section{border:1px solid #dfe9e2;border-radius:14px;background:#fff;margin:18px 0;padding:22px 25px}
-    .lic-wrap .eyebrow{font-size:10px;letter-spacing:1.3px;color:#548473;font-weight:800}
-    .lic-wrap a{color:#137457;text-decoration:underline;text-underline-offset:2px}
-    .lic-wrap .lic-back{display:inline-flex;align-items:center;gap:6px;background:#e7f3eb;text-decoration:none;border-radius:8px;padding:10px 13px;font-size:13px;font-weight:700}
-    .lic-wrap .lic-disclaimer{background:#f4f7ee;border-left:3px solid #77a38d;padding:12px;border-radius:7px}
-    @media(max-width:650px){.lic-wrap{padding:20px 12px 40px}.lic-wrap section{padding:16px}}
-
-    /* Complete, language-specific legal copy: never translate isolated fragments. */
-    html[lang="en"] [data-pp-locale="it"],html:not([lang="en"]) [data-pp-locale="en"]{display:none!important}
-    [data-pp-locale]{display:block}
-    </style>
+  <link rel="stylesheet" href="privacy.css">
+  <link rel="stylesheet" href="licenses.css">
 <script src="i18n.js" defer></script>
+  <link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="atelier.css">
+<link rel="stylesheet" href="typography.css">
+<script src="typography.js" defer></script>
 </head>
-<body><main class="lic-wrap">
-  <label class="pp-language-switch pp-language-inline"><span>Lingua</span><select data-pp-language aria-label="Lingua del sito"><option value="it">IT</option><option value="en">EN</option></select></label>
+<body class="pp-legal-page">
+<header class="pp-privacy-topbar">
+    <a class="pp-privacy-brand" href="index.html" aria-label="Torna a PuntoPunto">
+      <img src="favicon.svg" width="38" height="38" alt="" aria-hidden="true">
+      <span>Punto<span class="brand-accent">Punto</span><small>STITCH STUDIO</small></span>
+    </a>
+    <label class="pp-language-switch pp-language-inline"><span>Lingua</span><select data-pp-language aria-label="Lingua del sito"><option value="it">IT</option><option value="en">EN</option></select></label>
+    <nav class="pp-privacy-nav" aria-label="Navigazione delle informazioni">
+      <a href="privacy.html">Privacy</a>
+      <a class="current" href="licenze.html" aria-current="page">Licenze</a>
+      <a class="pp-privacy-back" href="index.html">Torna all'editor <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+<main class="lic-wrap">
+
 
   <div data-pp-locale="it" data-i18n-ignore lang="it">
   <a class="lic-back" href="index.html">← Torna a PuntoPunto</a>
   <a class="lic-back" href="privacy.html" style="margin-left:8px">La nostra privacy →</a>
-  <p class="eyebrow">TRASPARENZA DELLE FONTI · VERSIONE 0.9.8.8.21.3</p>
+  <p class="eyebrow">TRASPARENZA DELLE FONTI · VERSIONE 0.9.8.8.23.1</p>
   <h1>Licenze e attribuzioni</h1>
   <p>Questa pagina indica le banche dati e le librerie di terzi effettivamente impiegate in PuntoPunto, la provenienza dei colori e le condizioni per riutilizzarli.</p>
   <p>Per feedback e assistenza tecnica durante la beta utilizza le <a href="https://github.com/Sandbox1115/PuntoPunto/issues" target="_blank" rel="noopener noreferrer">GitHub Issues di PuntoPunto</a>. Le segnalazioni sono pubbliche: non pubblicare dati personali o progetti riservati. Non usare questo canale per richieste privacy confidenziali.</p>
@@ -52,7 +55,8 @@
     <p><strong>Licenza:</strong> <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener noreferrer">Apache License, Version 2.0</a>. Consulta anche il <a href="vendor/LICENSE-PDFJS.txt">file LICENSE incluso</a> e gli eventuali avvisi dei pacchetti distribuiti da Mozilla.</p>
     <p>PDF.js renderizza i documenti sul dispositivo. La versione inclusa imposta esplicitamente <code>isEvalSupported: false</code>, <code>enableScripting: false</code> e <code>enableXfa: false</code>; non è previsto un CDN alternativo. La versione 6.4.299 è stata integrata con il relativo worker e le risorse locali; gli aggiornamenti futuri saranno verificati prima della distribuzione.</p>
   </section>
-  <section><h2>Codice, editor OXS e personalizzazioni</h2>
+  <section><h2>Caratteri tipografici</h2><p>I titoli usano <strong>Lora</strong> (The Lora Project Authors); testi e controlli usano <strong>Alegreya Sans</strong> (The Alegreya Sans Project Authors). I font sono distribuiti con la <strong>SIL Open Font License 1.1</strong>, distribuiti insieme al sito senza richieste a Google Fonts o ad altri servizi.</p><p>Licenze complete: <a href="vendor/LICENSE-LORA.txt">Lora</a> e <a href="vendor/LICENSE-ALEGREYASANS.txt">Alegreya Sans</a>. I file originali sono distribuiti senza modifiche; font e licenze restano soggetti alle condizioni dei rispettivi autori.</p></section>
+<section><h2>Codice, editor OXS e personalizzazioni</h2>
     <p>Le funzioni specifiche di PuntoPunto (editor OXS, strumenti PDF manuali, progetti JSON e conversione OXS) sono codice del progetto. <strong>Non vengono automaticamente distribuite con la licenza di MakeBead o con quella di PDF.js.</strong> La disponibilità pubblica dei file per il funzionamento del sito non concede automaticamente permessi di riutilizzo, modifica o redistribuzione del codice: le condizioni per tali utilizzi non sono ancora state specificate.</p>
     <p>I filati personalizzati sono creati dall'utente e non provengono dal catalogo di MakeBead. Non vengono caricati sui server di PuntoPunto.</p>
   </section>
@@ -68,11 +72,12 @@
 
   <a class="lic-back" href="index.html">← Back to PuntoPunto</a>
   <a class="lic-back" href="privacy.html" style="margin-left:8px">Our privacy →</a>
-  <p class="eyebrow">SOURCE TRANSPARENCY · VERSION 0.9.8.8.21.3</p>
+  <p class="eyebrow">SOURCE TRANSPARENCY · VERSION 0.9.8.8.23.1</p>
   <h1>Licenses and attributions</h1>
   <p>This page describes the third-party datasets and libraries actually used by PuntoPunto, the sources of its thread colors, and the terms governing their reuse.</p>
   <p>For feedback and technical support during the beta, use <a href="https://github.com/Sandbox1115/PuntoPunto/issues" target="_blank" rel="noopener noreferrer">PuntoPunto GitHub Issues</a>. Issues are public: do not share personal information or confidential projects. Do not use this channel for confidential privacy requests.</p>
-  <section><h2>DMC thread catalog</h2>
+  <section><h2>Typefaces</h2><p>Headings use <strong>Lora</strong> (The Lora Project Authors); body text and controls use <strong>Alegreya Sans</strong> (The Alegreya Sans Project Authors). The fonts are distributed under the <strong>SIL Open Font License 1.1</strong> and distributed with the site, without requests to Google Fonts or other services.</p><p>Full licenses: <a href="vendor/LICENSE-LORA.txt">Lora</a> and <a href="vendor/LICENSE-ALEGREYASANS.txt">Alegreya Sans</a>. Original font files are distributed without modification and remain subject to their authors’ license terms.</p></section>
+<section><h2>DMC thread catalog</h2>
     <p><strong>Data source:</strong> <a href="https://github.com/makebead/craft-color-codes" target="_blank" rel="noopener noreferrer">MakeBead's craft-color-codes</a>, the “DMC Six-Strand Embroidery Floss” catalog containing 489 codes, names, and approximate sRGB/HEX color values. The data is distributed by its author under the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">Creative Commons Attribution 4.0 International (CC BY 4.0)</a> license.</p>
     <p><strong>Required attribution:</strong> Color data: <a href="https://makebead.com/" target="_blank" rel="noopener noreferrer">craft-color-codes by MakeBead</a> (<a href="https://github.com/makebead/craft-color-codes/blob/main/LICENSE-DATA.md" target="_blank" rel="noopener noreferrer">data license and terms</a>).</p>
     <p><strong>Adaptation:</strong> PuntoPunto extracts the code, name, and HEX fields from the catalog, checks them, and displays them in a searchable selector. It does not intentionally alter the source colors. The catalog is included in <code>data/dmc-floss.json</code>, and its integrity is documented in <code>ASSET_LOCK.json</code>. The application makes no automatic requests to CDNs or remote catalogs. PDFs are not sent to any cataloging service.</p>

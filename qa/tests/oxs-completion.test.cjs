@@ -39,7 +39,7 @@ function harness({stitches=[],completed=[],cell=48,pendingOnly=false,activeColor
   state.pattern={width:cols,height:rows,byCell,specialsByCell,
     palette:new Map([[0,{color:'#fff'}]]),ornaments:[],linear:[]};
   const el={canvas:{width:500},wrap:{},coords:{}};
-  const context={state,ctx,matchesFilter,el,keyboardCell:null,
+  const context={window:{},state,ctx,matchesFilter,el,keyboardCell:null,
     document:{activeElement:null},dimensions:()=>({w:cols*cell,h:rows*cell}),
     paintCell:()=>{},paintOrnament:()=>{},paintBack:()=>{},
     visuals:{token:s=>s.kind}};

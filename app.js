@@ -409,7 +409,7 @@
     emptyKinds.textContent='I tipi di punto presenti nello schema.';
     el.kinds.appendChild(emptyKinds);
     viewModeEl.value='color';el.symbols.checked=true;
-    el.donut.style.background='conic-gradient(#25887b 0%, #e7efea 0%)';
+    el.donut.style.background='conic-gradient(var(--green) 0%, var(--green-pale) 0%)';
     el.percent.textContent='0%';el.done.textContent='0';el.remaining.textContent='0';
     el.dimensions.textContent='—';el.colorCount.textContent='—';
     el.stitchCount.textContent='—';el.lastSaved.textContent='—';
@@ -547,7 +547,7 @@
   function updateStats(){
     const p=state.pattern;if(!p)return;
     const done=state.completed.size,total=p.stitches.length,percent=total?100*done/total:0;
-    el.donut.style.background=`conic-gradient(#25887b ${percent}%, #e7efea ${percent}%)`;
+    el.donut.style.background=`conic-gradient(var(--green) ${percent}%, var(--green-pale) ${percent}%)`;
     el.percent.textContent=Math.round(percent)+'%';el.done.textContent=done.toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT');el.remaining.textContent=(total-done).toLocaleString(window.PuntoPuntoI18n?.language==='en'?'en-US':'it-IT');
     updateSavedLabel();
   }
@@ -582,11 +582,15 @@
     if(s.kind==='full')rectanglePath(s.x,s.y);
     else if(s.kind==='part')polygonPath(shapeForPart(s),s.x,s.y);
     else rectanglePath(s.x,s.y);
-    ctx.fillStyle=state.mono?'#fafbf8':c.color;ctx.fill();
+    const woven=window.PuntoPuntoFabric?.settings.threads&&!state.mono&&state.cell>=7&&(s.kind==='full'||s.kind==='half');
+    if(woven){window.PuntoPuntoFabric.stitch(ctx,s.x,s.y,1,1,c.color,s.kind==='full'?'full':s.direction===3?'halfForward':'halfBack');}
+    else{ctx.fillStyle=state.mono?'#fafbf8':c.color;ctx.fill();}
+    // Thread strokes change the current path: rebuild the cell before clipping overlays.
+    if(s.kind==='part')polygonPath(shapeForPart(s),s.x,s.y);else rectanglePath(s.x,s.y);
     ctx.save();ctx.clip();
     if(done){ctx.fillStyle='rgba(250,251,248,.74)';ctx.fillRect(s.x,s.y,1,1);}
     else if(state.showSymbols&&state.cell>=12){
-      ctx.font=`700 ${Math.min(.71,16/state.cell)}px ui-sans-serif,Segoe UI Symbol,sans-serif`;
+      ctx.font=`700 ${Math.min(.71,16/state.cell)}px "Alegreya Sans","Segoe UI Symbol",sans-serif`;
       ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=state.mono?'#213e37':c.ink;
       if(s.kind==='full')ctx.fillText(state.mono?'×':c.symbol,s.x+.5,s.y+.53);
       else if(s.kind==='part')ctx.fillText(state.mono?'◩':c.symbol,s.x+(s.side===1?.31:.69),s.y+.53);
@@ -666,22 +670,23 @@
     const p=state.pattern;if(!p||!el.canvas.width)return;
     const {w,h}=dimensions(),dpr=el.canvas.width/w;
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    ctx.clearRect(0,0,w,h);ctx.fillStyle='#eef2ed';ctx.fillRect(0,0,w,h);
+    ctx.clearRect(0,0,w,h);ctx.fillStyle='#f1e9e1';ctx.fillRect(0,0,w,h);
     const size=state.cell;ctx.save();ctx.translate(state.ox,state.oy);ctx.scale(size,size);
     const fromX=Math.max(0,Math.floor(-state.ox/size)-1),toX=Math.min(p.width,Math.ceil((w-state.ox)/size)+1);
     const fromY=Math.max(0,Math.floor(-state.oy/size)-1),toY=Math.min(p.height,Math.ceil((h-state.oy)/size)+1);
     ctx.fillStyle=(p.palette.get(0)||{}).color||'#ffffff';ctx.fillRect(0,0,p.width,p.height);
+    if(window.PuntoPuntoFabric?.settings.cloth&&!state.mono)window.PuntoPuntoFabric.cloth(ctx,fromX,fromY,toX-fromX,toY-fromY,1);
     for(let y=fromY;y<toY;y++)for(let x=fromX;x<toX;x++){
       const group=p.byCell.get(y*10000+x);if(group)for(const s of group)paintCell(s);
     }
     // Draw grid lines after filled cells, using thicker lines every ten squares.
-    if(size>=5){ctx.beginPath();for(let x=fromX;x<=toX;x++){ctx.moveTo(x,fromY);ctx.lineTo(x,toY);}for(let y=fromY;y<=toY;y++){ctx.moveTo(fromX,y);ctx.lineTo(toX,y);}
-      ctx.strokeStyle=size<9?'rgba(69,85,79,.14)':'rgba(70,85,79,.24)';ctx.lineWidth=Math.max(.025,.7/size);ctx.stroke();}
-    ctx.beginPath();for(let x=Math.ceil(fromX/10)*10;x<=toX;x+=10){ctx.moveTo(x,fromY);ctx.lineTo(x,toY);}for(let y=Math.ceil(fromY/10)*10;y<=toY;y+=10){ctx.moveTo(fromX,y);ctx.lineTo(toX,y);}
-    ctx.strokeStyle='rgba(42,68,59,.58)';ctx.lineWidth=Math.max(.05,1.35/size);ctx.stroke();
+    if(size>=5&&window.PuntoPuntoFabric?.settings.grid!==false){ctx.beginPath();for(let x=fromX;x<=toX;x++){ctx.moveTo(x,fromY);ctx.lineTo(x,toY);}for(let y=fromY;y<=toY;y++){ctx.moveTo(fromX,y);ctx.lineTo(toX,y);}
+      ctx.strokeStyle=size<9?'rgba(126,104,114,.14)':'rgba(126,104,114,.24)';ctx.lineWidth=Math.max(.025,.7/size);ctx.stroke();}
+    if(window.PuntoPuntoFabric?.settings.major!==false){ctx.beginPath();for(let x=Math.ceil(fromX/10)*10;x<=toX;x+=10){ctx.moveTo(x,fromY);ctx.lineTo(x,toY);}for(let y=Math.ceil(fromY/10)*10;y<=toY;y+=10){ctx.moveTo(fromX,y);ctx.lineTo(toX,y);}
+    ctx.strokeStyle='rgba(75,48,61,.58)';ctx.lineWidth=Math.max(.05,1.35/size);ctx.stroke();}
     for(const s of p.ornaments){if(s.x1>=fromX-1&&s.x1<=toX+1&&s.y1>=fromY-1&&s.y1<=toY+1)paintOrnament(s);}
     for(const s of p.linear){if(Math.max(s.x1,s.x2)>=fromX-1&&Math.min(s.x1,s.x2)<=toX+1&&Math.max(s.y1,s.y2)>=fromY-1&&Math.min(s.y1,s.y2)<=toY+1)paintBack(s);}
-    ctx.strokeStyle='#566e65';ctx.lineWidth=Math.max(.08,1.5/size);ctx.strokeRect(0,0,p.width,p.height);
+    ctx.strokeStyle='#7e6872';ctx.lineWidth=Math.max(.08,1.5/size);ctx.strokeRect(0,0,p.width,p.height);
     // Render all completion marks on the top layer using the original tick.
     // The selection index deliberately includes neighbouring squares; here
     // only ornaments actually anchored in this square belong to the mark group.
@@ -703,7 +708,7 @@
     }
     ctx.restore();
     // Fixed top/left index labels, when zoomed in far enough.
-    if(size>=14){ctx.font='600 10px ui-sans-serif, sans-serif';ctx.fillStyle='#58786d';ctx.textBaseline='middle';
+    if(size>=14){ctx.font='600 10px "Alegreya Sans", sans-serif';ctx.fillStyle='#7e6872';ctx.textBaseline='middle';
       for(let x=Math.ceil(fromX/10)*10;x<=toX;x+=10){if(x===0)continue;let sx=state.ox+x*size;if(sx>=18&&sx<w-25){ctx.textAlign='center';ctx.fillText(String(x),sx,Math.max(13,Math.min(h-12,state.oy-10)));}}
       for(let y=Math.ceil(fromY/10)*10;y<=toY;y+=10){if(y===0)continue;let sy=state.oy+y*size;if(sy>=15&&sy<h-15){ctx.textAlign='left';ctx.fillText(String(y),Math.max(6,Math.min(w-30,state.ox-21)),sy);}}
     }
@@ -1137,5 +1142,6 @@
   window.PuntoPuntoOXSNavigation=Object.freeze({hasProject:()=>!!state.pattern,close:closeOXSProject,ready:startupReady});
   window.PuntoPuntoImport={loadPattern,notify}; // accesso limitato per il modulo PDF, senza modificare editor/stato
   document.addEventListener('puntopunto:languagechange',()=>{if(!state.pattern)return;if(keyboardCell&&document.activeElement===el.wrap)keyboardCellAnnouncement();syncOXSWorkbar();if(state.picker)openStitchPicker(state.picker.point,state.picker.stitches);const p=state.pattern;el.meta.textContent=msg('oxs.patternMeta',{width:p.width,height:p.height,filename:state.oxsFilename});renderLegends();updateSavedLabel();});
+  document.addEventListener('puntopunto:appearancechange',()=>draw());
   buildHeroArt();events();
 })();

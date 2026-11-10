@@ -1,4 +1,4 @@
-# PuntoPunto security and dependency status — v0.9.8.8.20
+# PuntoPunto security and dependency status — v0.9.8.8.23.1
 
 ## PDF.js upgraded
 
@@ -46,3 +46,10 @@ The additional static `dmc-floss-names-it.js` contains descriptive non-official 
 ## v0.9.8.8.21.3 — bulk PDF edits (published after QA)
 
 The white-fill, global thread replacement and thread removal operations are entirely client-side. Each creates a separate normalized prospective model and applies it only after the user confirms. Already assigned colors are not overwritten by white-fill; thread replacement preserves stitch types/completion; deleting a used thread explicitly reopens its cells and clears associated completion. The previous state can be restored by one bulk undo until another edit changes the project. No user-project content is transmitted and the PDF.js/DMC locked assets are unchanged. These controls cannot certify that automatically inserted white stitches match the source pattern; users must visually verify the OXS against the PDF.
+
+## Release 0.9.8.8.23.1
+
+- Font binaries are unmodified local assets with SHA-256 recorded in `vendor/FONT_SOURCES.json` and validated during QA. No Google Fonts stylesheet or remote font request is used.
+- The fabric renderer stores only appearance booleans under `pp-appearance-v23`; project schemas and the existing browser-storage recovery flow are unchanged.
+- Both build outputs use a reviewed runtime allowlist (`qa/runtime-files.json`). Repository tests, workflow source, documentation, review reports, screenshots, release archives, environment files and private projects are excluded from Pages. Public third-party copyright notices and license contacts are retained.
+- The publication audit covers the proposed source tree and generated web artifact, including bundled sample metadata. It is not a retrospective audit or purge of Git history, nor a certification of all browser/device combinations. See `RELEASE_CHECKS.md`.

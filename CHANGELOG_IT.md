@@ -1,5 +1,13 @@
 ## 0.9.8.8.21.3 — 7 novembre 2026 (funzioni massive PDF e menu mobile; pubblicata)
 
+## 0.9.8.8.23.1 — 10 novembre 2026 (release GitHub Pages)
+
+- Integra il redesign artigianale responsive delle revisioni 22.x/23: superfici crema/bordeaux, dettagli floreali, dock smartphone, layout tablet e pannelli desktop ampi. Nome e geometria del logo PuntoPunto conservati; Privacy e Licenze uniformate.
+- Aggiunge la resa facoltativa della tela Aida e dei fili incrociati per OXS e punti assegnati manualmente nei PDF, con preferenze grafiche salvate nel browser. Conserva strumenti massivi PDF, annullamento, menu file mobile e formati della 21.3.
+- Applica Lora ai titoli e Alegreya Sans a testi, controlli ed etichette canvas, mantenendo dimensioni, pesi, interlinee e spaziature stabiliti. Font originali con licenze, caricati dallo stesso sito senza servizi esterni.
+- Separa i file necessari a Pages dai test, documenti e strumenti di rilascio del repository. Esclude payload offline, rapporti di revisione, screenshot e pagine di collaudo dalla distribuzione web. Aggiunge controlli di integrità dei font e del contenuto della build alle regressioni esistenti.
+- Aggiorna guide bilingui, dettagli tecnici privacy, attribuzioni, istruzioni di rilascio e note di sicurezza. Pubblicazione autorizzata dal titolare del progetto; nessun recapito personale aggiunto.
+
 - Aggiunto nell'editor PDF il comando «Riempi celle non colorate di bianco», distinto dalla conferma delle caselle vuote: con conferma esplicita assegna croci intere DMC B5200 alle celle non definite e a quelle confermate vuote, senza sovrascrivere i punti già colorati.
 - Introdotta la gestione dei filati della legenda: sostituzione globale con un filato già disponibile, mantenendo tipo di punto e stato di completamento; rimozione del filato, che rimette le relative caselle in «da definire» ed elimina i completamenti associati. Per usare un filato nuovo, prima aggiungerlo alla legenda.
 - Disponibile «Annulla ultima operazione globale», valida finché non si apportano ulteriori modifiche; salvataggi e formati OXS/JSON invariati.

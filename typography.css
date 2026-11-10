@@ -1,0 +1,8 @@
+/* 0.9.8.8.23.1: families only; preserve established font sizes and metrics. */
+body,button,input,select,textarea,code,kbd,samp,pre{font-family:"Alegreya Sans",sans-serif}
+h1,h2,h3,h4,h5,h6,.brand,.pp-privacy-brand,.studio-heading,.atelier-title,
+.atelier-inline-palette>strong,.atelier-palette-preview>strong,
+#pdfTracker .pp-tracker-name,.studio-home-actions .pp-mobile-file-actions>p{
+ font-family:"Lora",serif!important;
+}
+.brand small,.pp-privacy-brand small{font-family:"Alegreya Sans",sans-serif}

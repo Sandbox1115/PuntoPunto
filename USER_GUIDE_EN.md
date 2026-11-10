@@ -94,3 +94,8 @@ The PDF thread picker and saved-project legend show non-official Italian descrip
 - After bulk operations, export a full PDF project JSON backup and compare the OXS export with the source PDF. A technically valid OXS does not prove that your colors/white background are faithful to the printed chart.
 
 **Mobile file opening:** the small header actions are in the **File** dropdown on the upper-right, with full Open OXS, Open PDF and PDF Project labels; the larger Open OXS / Open PDF buttons in the home section remain available. The file dropdown closes on Escape, outside touch or selecting an action.
+
+
+## Interface and appearance — 0.9.8.8.23.1
+
+The layout adapts to smartphone, tablet and desktop widths. Open Appearance to toggle fabric, crossed threads, grid and major grid lines. These preferences are saved locally and affect only the display. PDF cloth/thread styling applies to manually assigned stitches; the original scanned image is preserved. Lora headings and Alegreya Sans text keep the established text sizes. Export project backups regularly; appearance preferences are separate from project data.

@@ -1,0 +1,146 @@
+[
+  {
+    "family": "Lora",
+    "style": "italic",
+    "weight": "400 700",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/lora/Lora-Italic%5Bwght%5D.ttf",
+    "sha256": "22d8d8854b53807aa664ca34f2031a9ed57a1d0dea296b8b96cdd3aad937a2b3",
+    "path": "fonts/Lora-italic-400-700.ttf",
+    "bytes": 221232
+  },
+  {
+    "family": "Lora",
+    "style": "normal",
+    "weight": "400 700",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/lora/Lora%5Bwght%5D.ttf",
+    "sha256": "822a6621ccbe8d97d20ac88c1c41f5615c9c2c202eaa75f272cd452aac6475a7",
+    "path": "fonts/Lora-normal-400-700.ttf",
+    "bytes": 212196
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "normal",
+    "weight": "900",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-Black.ttf",
+    "sha256": "95f06dd3f6e4529f176b371e89be1d5894c3ed0606c31b1d76b092a1308c1fc0",
+    "path": "fonts/AlegreyaSans-normal-900.ttf",
+    "bytes": 267756
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "italic",
+    "weight": "900",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-BlackItalic.ttf",
+    "sha256": "b95a8679d329ec79b5eec84e0de00f3d88ff79c4a1deaebdad77cf4ccb851282",
+    "path": "fonts/AlegreyaSans-italic-900.ttf",
+    "bytes": 275540
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "normal",
+    "weight": "700",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-Bold.ttf",
+    "sha256": "a3055a1893759bdbd7504bb22abc583769e7974c49353176eac0b03792c9fb8e",
+    "path": "fonts/AlegreyaSans-normal-700.ttf",
+    "bytes": 266856
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "italic",
+    "weight": "700",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-BoldItalic.ttf",
+    "sha256": "6a5550f0e4c3021e7e2e83ac4814e8c649a0fe20385489ce7609f00802097b4d",
+    "path": "fonts/AlegreyaSans-italic-700.ttf",
+    "bytes": 274552
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "normal",
+    "weight": "800",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-ExtraBold.ttf",
+    "sha256": "3861f08a77d5c1b3b311055913443b07337a4b7abaff21a8cdb51fc0ae980b9e",
+    "path": "fonts/AlegreyaSans-normal-800.ttf",
+    "bytes": 267996
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "italic",
+    "weight": "800",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-ExtraBoldItalic.ttf",
+    "sha256": "3ed9e028241a8c111982006fa5e9c2ccb1f7d4683789d219cb30e8010746c37e",
+    "path": "fonts/AlegreyaSans-italic-800.ttf",
+    "bytes": 276772
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "italic",
+    "weight": "400",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-Italic.ttf",
+    "sha256": "f49f6f2bdd84df850b25b0f8185d8a051e1d1eb2dd08e2f91b8c7b86d9a9e1a6",
+    "path": "fonts/AlegreyaSans-italic-400.ttf",
+    "bytes": 271096
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "normal",
+    "weight": "300",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-Light.ttf",
+    "sha256": "4c60a844c618502e95117426127746378bf5ac3776e04b7ab65ed3d5dc3ae081",
+    "path": "fonts/AlegreyaSans-normal-300.ttf",
+    "bytes": 261552
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "italic",
+    "weight": "300",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-LightItalic.ttf",
+    "sha256": "4b52d6e2d85f4e6310bc50d45a6acea83077ec8cd87f63b74e853314bcaab128",
+    "path": "fonts/AlegreyaSans-italic-300.ttf",
+    "bytes": 266452
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "normal",
+    "weight": "500",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-Medium.ttf",
+    "sha256": "4b89fe7804fd1485ec2757795a53ffdb66e1206dd56f844c2d72b3c944815b43",
+    "path": "fonts/AlegreyaSans-normal-500.ttf",
+    "bytes": 264612
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "italic",
+    "weight": "500",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-MediumItalic.ttf",
+    "sha256": "0c79da462ae637d7f95f428c935cac7a9c22cb99655c5cd37b87080861dd73ec",
+    "path": "fonts/AlegreyaSans-italic-500.ttf",
+    "bytes": 272856
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "normal",
+    "weight": "400",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-Regular.ttf",
+    "sha256": "8fab634196007afca839f1e5a6fb300976daff55d8528b590ef032f01b14ea10",
+    "path": "fonts/AlegreyaSans-normal-400.ttf",
+    "bytes": 263804
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "normal",
+    "weight": "250",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-Thin.ttf",
+    "sha256": "10a9d38eac06bf5d46930529b254a1bcf235c2ced7ca8fa48437fb7ddf45b674",
+    "path": "fonts/AlegreyaSans-normal-250.ttf",
+    "bytes": 254864
+  },
+  {
+    "family": "Alegreya Sans",
+    "style": "italic",
+    "weight": "250",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/alegreyasans/AlegreyaSans-ThinItalic.ttf",
+    "sha256": "becc50470e3c6b29842da369485cf47523269bb2458820dc8ce7817fa4754041",
+    "path": "fonts/AlegreyaSans-italic-250.ttf",
+    "bytes": 264544
+  }
+]

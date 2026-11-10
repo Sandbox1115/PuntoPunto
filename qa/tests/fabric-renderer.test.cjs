@@ -1,0 +1,7 @@
+const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict');
+const events=[],ops=[];let saved={};const ctx=new Proxy({createPattern(){return {setTransform(){}}}}, {get(o,k){return o[k]??((...args)=>ops.push([k,...args]));},set(o,k,v){o[k]=v;return true;}});
+const env={window:{},localStorage:{getItem:()=>'{"threads":"bad","grid":false}',setItem:(k,v)=>saved=JSON.parse(v)},document:{createElement:()=>({getContext:()=>ctx}),dispatchEvent:e=>events.push(e.type)},CustomEvent:function(type){this.type=type},DOMMatrix:class{scale(){return this}}};vm.runInNewContext(fs.readFileSync(require('node:path').join(__dirname,'../../fabric-renderer.js'),'utf8'),env);const f=env.window.PuntoPuntoFabric;
+assert.equal(f.settings.threads,true);assert.equal(f.settings.grid,false);f.set('grid',true);assert.equal(saved.grid,true);assert.equal(events.at(-1),'puntopunto:appearancechange');const before=JSON.stringify(f.settings);
+const input={x:2,y:3,w:20,h:20,color:'#c45678'};const snapshot=JSON.stringify(input);assert.equal(f.stitch(ctx,input.x,input.y,input.w,input.h,input.color),true);assert.equal(JSON.stringify(input),snapshot);assert.equal(before,JSON.stringify(f.settings));
+assert.equal(ops.filter(x=>x[0]==='save').length,ops.filter(x=>x[0]==='restore').length);assert.equal(f.stitch(ctx,0,0,1,1,'#000','quarterNE'),false);f.set('cloth',false);const length=ops.length;f.cloth(ctx,0,0,10,10);assert.equal(ops.length,length);
+console.log('Renderer: preferenze validate, eventi, disegno senza mutazione, save/restore e disattivazione PASS');

@@ -2,7 +2,7 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **Current release: v0.9.8.8.21.3 — PDF bulk-editing and accessible mobile file menu (published 7 November 2026).** Keep the original pattern and export regular progress backups. Verify generated OXS files against the source PDF.
+> **Current release: v0.9.8.8.23.1.** Keep the original pattern and export regular progress backups. Verify generated OXS files against the source PDF.
 
 ## Use the application
 
@@ -37,13 +37,13 @@ The site source files are publicly readable because they are served by GitHub Pa
 
 ## Hosting and release information
 
-This repository contains only the files needed to run the static site, two sample projects, user instructions, version history and third-party notices. No account credentials, personal contact details, internal test artifacts, screenshots of user projects or private datasets are intended for publication.
+The repository contains the static application, two public samples, documentation, third-party notices and QA/build tooling. The Pages artifact includes only runtime files and required notices; QA, documentation, release reports and archives are not served. No account credentials, personal contact details, internal test artifacts, screenshots of user projects or private datasets are intended for publication.
 
-For deployment instructions see [GitHub Pages setup](PUBBLICAZIONE_GITHUB.md) and for changes see [CHANGELOG](CHANGELOG.md). For a QA-gated deployment choose **Settings → Pages → Source → GitHub Actions** and use the tested quality workflow. Do not assume the existing branch-based Pages workflow is gated by QA. `.nojekyll` is included. This repository is publicly accessible even if its link is shared only with invited testers.
+For deployment instructions see [GitHub Pages setup](PUBBLICAZIONE_GITHUB.md) and for changes see [CHANGELOG](CHANGELOG.md). For a QA-gated deployment choose **Settings → Pages → Source → GitHub Actions** and use the tested quality workflow. Do not assume the existing branch-based Pages workflow is gated by QA. The workflow generates `.nojekyll` in its runtime artifact; `_config.yml` excludes repository-only files from the legacy branch publisher as well. This repository is publicly accessible even if its link is shared only with invited testers.
 
 ### Beta limitations
 
-The bundled PDF.js version is now **6.4.299**. `isEvalSupported:false`, `enableScripting:false` and `enableXfa:false` mitigate known PDF execution risks; the bundled ESM library and module worker are locally integrity-checked. Runtime compatibility on real HTTPS and file:// browsers must still be verified before approval. Consult `SECURITY_NOTES.md`. The current manual PDF-to-OXS workflow may not reproduce special stitch types that have not been explicitly digitized. Always verify exported patterns against their original sources.
+The bundled PDF.js version is now **6.4.299**. `isEvalSupported:false`, `enableScripting:false` and `enableXfa:false` mitigate known PDF execution risks; the bundled ESM library and module worker are locally integrity-checked. Automated checks do not certify every browser or real mobile device. Consult `SECURITY_NOTES.md`. The current manual PDF-to-OXS workflow may not reproduce special stitch types that have not been explicitly digitized. Always verify exported patterns against their original sources.
 
 A confidential privacy contact and formal data-controller information have **not yet been supplied**. These must be addressed before opening the public-hosted beta to testers; do not put personal contact details in the public repository without the owner's express permission.
 
@@ -127,3 +127,11 @@ These changes were integrated into the subsequently published v0.9.8.8.21.2 rele
 Use **Manage** beside a PDF palette entry to replace it across all assigned squares with a different thread already in the legend. Add a new DMC/custom thread to the legend first if needed. Replacement preserves point types and completed progress. **Delete thread** removes the entry and makes its assigned cells undefined, clearing their completed markings; confirmation and one-step bulk undo are provided.
 
 On mobile, the small header file buttons are grouped in a **File** disclosure on the right. It retains Open OXS, Open PDF and PDF Project with full labels and touch-sized controls. The large home buttons are unchanged. This release does not modify any user project schema.
+
+## v0.9.8.8.23.1 — responsive craft interface and typography
+
+The reviewed craft interface is now the web release: a smartphone dock, tablet arrangement and wide desktop panels, with consistent Privacy and Licenses pages. **Lora** headings and **Alegreya Sans** body text retain the established font sizes. Font files are self-hosted under SIL OFL 1.1; see `licenze.html` and `vendor/FONT_SOURCES.json`.
+
+Appearance controls toggle Aida cloth, crossed threads and grid details. The visual preferences stay in localStorage (`pp-appearance-v23`); they do not alter OXS/PDF/JSON data. PDF fabric styling applies to manually assigned stitches, not the source PDF image.
+
+The source and both distributions pass the same quality gate. Pages uses an explicit runtime allowlist in `qa/runtime-files.json`; tests, Git metadata, private patterns, local review files and release ZIPs must never be added to it. See `RELEASE_CHECKS.md` for the scope of release validation.
