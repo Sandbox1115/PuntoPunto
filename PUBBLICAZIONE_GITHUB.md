@@ -1,6 +1,6 @@
-# Pubblicazione PuntoPunto — 0.9.8.8.23.1
+# Pubblicazione PuntoPunto — 0.9.8.8.23.2.1
 
-Repository: `Sandbox1115/PuntoPunto`, ramo `main`. Sito: https://sandbox1115.github.io/PuntoPunto/ . Pubblicazione di questa versione autorizzata dal titolare il 10 novembre 2026.
+Repository: `Sandbox1115/PuntoPunto`, ramo `main`. Sito: https://sandbox1115.github.io/PuntoPunto/ . Pubblicazione della versione 0.9.8.8.23.2.1 autorizzata dal titolare l'11 novembre 2026. La release 23.1 è stata pubblicata il 10 novembre 2026.
 
 ## Preparazione e controlli
 
@@ -29,3 +29,8 @@ Dopo il push verificare il workflow relativo al commit, l'URL HTTPS, la versione
 ## Rollback
 
 Ripristinare tramite un nuovo commit la precedente versione verificata e lasciare che la stessa pipeline la ridistribuisca. Non riscrivere la cronologia pubblica. Conservare i backup dei progetti: l'interfaccia non cambia i formati OXS/JSON, ma i dati del browser dipendono dall'origine e dal dispositivo.
+
+
+## Release 0.9.8.8.23.2.1 — 11 novembre 2026
+
+Il rilascio OXS include i comandi di modifica mostrati solo in modalità Modifica, le preferenze del tessuto in un unico dialogo Vista, la vista ampia mobile e il tasto Schema funzionante, la marcatura con un singolo tap e il trascinamento senza marcature involontarie. Il logo, i font, PDF.js, il catalogo DMC e i salvataggi sono rimasti invariati. I pacchetti sono stati verificati prima del push; l'azione GitHub esegue di nuovo tutti i controlli QA prima del deploy.

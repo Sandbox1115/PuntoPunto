@@ -1,4 +1,4 @@
-# PuntoPunto security and dependency status — v0.9.8.8.23.1
+# PuntoPunto security and dependency status — v0.9.8.8.23.2.1
 
 ## PDF.js upgraded
 
@@ -53,3 +53,8 @@ The white-fill, global thread replacement and thread removal operations are enti
 - The fabric renderer stores only appearance booleans under `pp-appearance-v23`; project schemas and the existing browser-storage recovery flow are unchanged.
 - Both build outputs use a reviewed runtime allowlist (`qa/runtime-files.json`). Repository tests, workflow source, documentation, review reports, screenshots, release archives, environment files and private projects are excluded from Pages. Public third-party copyright notices and license contacts are retained.
 - The publication audit covers the proposed source tree and generated web artifact, including bundled sample metadata. It is not a retrospective audit or purge of Git history, nor a certification of all browser/device combinations. See `RELEASE_CHECKS.md`.
+
+
+## v0.9.8.8.23.2.1 — verified release scope
+
+The OXS UI changes are limited to tools visibility, unified fabric preferences, mobile Wide view navigation and tap-only completion. Project files, saved progress, the PDF engine, its pinned worker, DMC catalog, original logo, 16 local font files and all font licenses are unchanged. The reviewed web runtime excludes project uploads, temporary tests, offline payloads and private files. No credentials, private contact details, or personal workstation paths were detected in modified application files. Browser and automated test coverage cannot guarantee correctness on every physical device or reveal every kind of sensitive information; preserve independent project backups.

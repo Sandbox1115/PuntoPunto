@@ -1,3 +1,11 @@
+## 0.9.8.8.23.2.1 — 11 novembre 2026 (usabilità OXS mobile e touch; pubblicata)
+
+- Il pannello **Filato / Tipo di punto** appare soltanto in modalità **Modifica**, lasciando più spazio allo schema nelle altre modalità.
+- Le impostazioni **Tessuto e visualizzazione** sono raccolte nell'unico dialogo **Vista**, senza duplicazioni.
+- Introdotta la vista ampia per l'editor OXS mobile; corretto il tasto **Schema** nella barra inferiore per aprirla e permetterne l'uscita.
+- I completamenti si segnano con un singolo tap/clic; trascinamenti e pinch spostano o ingrandiscono la tela senza modificare per errore i punti. Restano disponibili punti sovrapposti, tastiera e strumenti di modifica.
+- Logo, font Lora/Alegreya Sans, editor PDF, catalogo DMC, formati di salvataggio e trattamento locale dei file invariati. Controlli QA e privacy effettuati prima della pubblicazione.
+
 ## 0.9.8.8.21.3 — 7 novembre 2026 (funzioni massive PDF e menu mobile; pubblicata)
 
 ## 0.9.8.8.23.1 — 10 novembre 2026 (release GitHub Pages)

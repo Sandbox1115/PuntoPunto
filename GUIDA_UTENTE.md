@@ -97,3 +97,10 @@ Ricorda di salvare un progetto JSON completo ed esaminare il file OXS contro il 
 ## Interfaccia e aspetto — 0.9.8.8.23.1
 
 Il layout si adatta a smartphone, tablet e desktop. Apri Aspetto per attivare tela, fili incrociati, griglia e linee principali. Queste preferenze sono salvate localmente e cambiano soltanto la visualizzazione. Nei PDF la resa tessile riguarda i punti assegnati manualmente; la scansione originale resta invariata. Lora per i titoli e Alegreya Sans per i testi mantengono le dimensioni stabilite. Esporta regolarmente backup dei progetti; le preferenze di aspetto sono separate dai dati del progetto.
+
+
+## 0.9.8.8.23.2.1 — Comandi OXS e navigazione touch sicura
+
+Seleziona **Modifica** per vedere i comandi **Filato / Tipo di punto**. Nelle altre modalità tali controlli rimangono nascosti per liberare spazio. Il comando **Vista** apre l'unico dialogo con le impostazioni di tessuto e visualizzazione.
+
+Su smartphone premi **Schema** nella barra inferiore per entrare nella **vista ampia** e **Esci schermo ampio** per tornare all'editor normale. In **Segna punti** un tap/clic completa un solo punto; trascinare sposta lo schema senza segnare punti, mentre il pinch con due dita modifica lo zoom. Restano attivi il selettore dei punti sovrapposti, i controlli da tastiera e i gesti di disegno delle modalità Modifica/Cancella.

@@ -75,11 +75,11 @@
   // Keep the branded mark and wordmark exactly as supplied. No replacement assets.
   const nav=make('div','studio-header-nav');document.querySelector('.topbar').insertBefore(nav,document.querySelector('.topbar-actions'));
   button(nav,'Guida','Guide',()=>$('openHomeGuide').click(),'btn btn-plain');
-  const edition=label(make('span','studio-edition',document.querySelector('.bottomline')),'Versione · 0.9.8.8.23.1','Version · 0.9.8.8.23.1');
+  const edition=label(make('span','studio-edition',document.querySelector('.bottomline')),'Versione · 0.9.8.8.23.2','Version · 0.9.8.8.23.2');
   function syncMode(){document.body.classList.toggle('studio-home',!welcome.classList.contains('hidden'));}
   new MutationObserver(syncMode).observe(welcome,{attributes:true,attributeFilter:['class']});syncMode();
   // Setup dialog: form and PDF preview side by side, never resize one canvas independently.
-  label($('pdfOverlay').querySelector('.eyebrow'),'PDF INTERATTIVO · 0.9.8.8.23.1','INTERACTIVE PDF · 0.9.8.8.23.1');
+  label($('pdfOverlay').querySelector('.eyebrow'),'PDF INTERATTIVO · 0.9.8.8.23.2','INTERACTIVE PDF · 0.9.8.8.23.2');
   const body=$('pdfOverlay').querySelector('.pp-pdf-body');const setup=make('div','studio-setup-grid',body),form=make('div','studio-setup-form',setup),preview=make('div','studio-setup-preview',setup);
   move(form,body.querySelector('.pp-pdf-fields'),$('pdfStatus'),body.querySelector('.pp-manual-precise'));
   move(preview,body.querySelector('.pp-manual-guide'),$('pdfPreviewShell'));

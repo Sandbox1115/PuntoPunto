@@ -2,7 +2,11 @@
 
 **PuntoPunto** is a free, non-commercial browser-based workspace for cross-stitch enthusiasts. It can open OXS patterns, help track completed stitches, and let you manually digitize supported PDF patterns into OXS files. It does not require an account or collect project contents for profiling.
 
-> **Current release: v0.9.8.8.23.1.** Keep the original pattern and export regular progress backups. Verify generated OXS files against the source PDF.
+> **Current release: v0.9.8.8.23.2.1.** Keep the original pattern and export regular progress backups. Verify generated OXS files against the source PDF.
+
+## v0.9.8.8.23.2.1 — OXS interaction and mobile view
+
+The stitch/thread editor controls appear only in Edit mode; the fabric and appearance settings are centralized under View. The mobile Pattern dock opens the dedicated Wide view (with Exit control). In Mark mode, a tap/click marks one stitch while dragging pans the pattern and never marks a chain of stitches. Pinch, special-stitch chooser, keyboard tools, OXS/JSON formats and PDF workflow are preserved. The original logo, licensed local fonts, offline privacy model and third-party assets are unchanged.
 
 ## Use the application
 

@@ -1,4 +1,4 @@
-# Release checks — PuntoPunto 0.9.8.8.23.1
+# Release checks — PuntoPunto 0.9.8.8.23.2.1
 
 Release date: 10 November 2026. Baseline: `f2eeef6ee46ae880b8b8f9f6d74c29f288d58f3a` (0.9.8.8.21.3). The project owner authorized publication of the reviewed 23.1 interface and typography.
 
@@ -23,3 +23,11 @@ The existing repository also had a branch-based Pages publisher. `_config.yml` e
 ## Limits
 
 This is an audit of the release files, not a retrospective audit or removal of Git history. Browser storage still depends on origin/device and may be cleared; users should keep independent backups. A saved OXS viewport can retain its previous pan/zoom; **Fit** recenters the chart. Existing privacy documentation still identifies the missing formal controller/contact information; no private identity or invented contact was added to fill that gap.
+
+
+## OXS 0.9.8.8.23.2.1 pre-publication validation — 11 November 2026
+
+- Approved 23.2.1 web ZIP compared against the published 23.1 Pages artifact: exactly 8 changed runtime files (including version and manifest), zero added/deleted web assets. Original logo, 16 locally licensed fonts, PDF.js and DMC assets are byte-identical.
+- Chromium UI regressions validated at 320, 393, 620, 900 and 1440 px for the web build; the standalone build passed in-memory testing. Tap-to-mark, drag-without-marking, pinch, overlapped-stitch chooser, Edit-only selector and unique fabric View dialog were tested. The Schema-to-Wide-view-to-Exit flow passed on mobile at 320, 393 and 620 px in both builds. These are browser simulation tests; physical file:// and smartphone tests are not certified.
+- Packaging and checksums: 266 web runtime files, 63 offline files, 200 embedded PDF.js resources and 16 font files verified. No credentials, private emails, personal paths or extraneous project exports detected in modified application source. Existing privacy controller/contact details still need formal completion for public outreach.
+- This release adds a regression test covering OXS touch UI changes; GitHub Actions re-runs both Node and Python QA before deploying Pages. No new remote dependencies, user tracking, storage formats or permissions.

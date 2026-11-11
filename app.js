@@ -492,9 +492,12 @@
     }
     if(['paint','erase','restore'].includes(mode)&&(state.activeColor!==null||state.activeKind!==null)){state.activeColor=null;state.activeKind=null;renderLegends();draw();}
     el.wrap.classList.toggle('panning',mode==='pan');
-    const hints={mark:'Tocca per segnare il punto: in caso di sovrapposizioni scegli quale. Trascina per segnare più caselle.',pan:'Trascina il disegno per spostarti nello schema.',paint:'Tocca o trascina per applicare colore e tipo di punto scelti.',erase:'Tocca o trascina per cancellare i punti dalla griglia. Le linee di contorno non vengono eliminate.',restore:'Tocca o trascina per ripristinare le caselle del disegno originale.'};
+    const hints={mark:'Tocca una volta per segnare il punto. Trascina per spostare la vista senza segnare altri punti.',pan:'Trascina il disegno per spostarti nello schema.',paint:'Tocca o trascina per applicare colore e tipo di punto scelti.',erase:'Tocca o trascina per cancellare i punti dalla griglia. Le linee di contorno non vengono eliminate.',restore:'Tocca o trascina per ripristinare le caselle del disegno originale.'};
     $('canvasHint').textContent=hints[mode]||hints.mark;
-    $('editControls').classList.toggle('is-editing', ['paint','erase','restore'].includes(mode));
+    // Only the Paint/Edit tool needs thread and stitch-kind selectors.
+    // Keep them in the DOM for the editor, but do not consume canvas space otherwise.
+    $('editControls').classList.toggle('hidden', mode!=='paint');
+    $('editControls').classList.toggle('is-editing', mode==='paint');
   }
 
   function refreshEditedView(){
@@ -881,6 +884,10 @@
     setCompleted(s.id,drag.target);
     rememberWorkPoint(g);
   }
+  // v0.9.8.8.23.2: Mark mode is TAP ONLY, for every pointer type.
+  // A drag on the canvas pans the view, without touching any completion state.
+  // Editing tools retain their independent draw/erase drag gestures.
+  const MARK_TAP_TOLERANCE=9;
   function canvasPointerDown(e){
     if(!state.pattern)return;
     if(e.pointerType==='mouse'&&e.button!==0&&e.button!==1)return;
@@ -889,38 +896,35 @@
       touchGesture.points.set(e.pointerId,point);
       try{el.canvas.setPointerCapture(e.pointerId);}catch{}
       if(touchGesture.points.size>=2){
-        // A second finger cancels the pending single-touch stroke without saving edits.
-        touchGesture.pinching=true;markStroke=null;state.drag=null;el.wrap.classList.remove('grabbing');closeStitchPicker();
-        const g=touchPinchGeometry();touchGesture.lastDistance=g.distance;touchGesture.lastCenter=g.center;
-        e.preventDefault();return;
+        // A second finger cancels the single-pointer tap and enters pinch mode.
+        touchGesture.pinching=true;markStroke=null;state.drag=null;
+        el.wrap.classList.remove('grabbing');closeStitchPicker();
+        const g=touchPinchGeometry();touchGesture.lastDistance=g.distance;
+        touchGesture.lastCenter=g.center;e.preventDefault();return;
       }
       if(touchGesture.pinching){e.preventDefault();return;}
     }
     closeStitchPicker();
     const pan=state.mode==='pan'||e.button===1||e.altKey||e.shiftKey;
-    const drag={id:e.pointerId,pan,last:point,start:point,target:null,seen:new Set(),pending:null,preferSpecial:!!e.ctrlKey};
+    const editing=['paint','erase','restore'].includes(state.mode);
+    const drag={id:e.pointerId,pan,last:point,start:point,moved:false,
+      target:null,seen:new Set(),preferSpecial:!!e.ctrlKey,
+      touchTrace:e.pointerType==='touch'&&editing?[point]:null};
     state.drag=drag;
     if(!pan&&state.mode==='mark')markStroke=new Map();
     try{el.canvas.setPointerCapture(e.pointerId);}catch{}
     if(pan)el.wrap.classList.add('grabbing');
-    if(e.pointerType==='touch'){
-      // Defer mark/erase/paint until finger release. The gesture may become a pinch.
-      drag.touchTrace=[point];e.preventDefault();return;
-    }
-    if(pan){}
-    else if(['paint','erase','restore'].includes(state.mode))edits.at(localToGrid(point.x,point.y),state.mode,drag);
-    else if(!drag.preferSpecial){
-      const g=localToGrid(point.x,point.y),hits=stitchChoices(g.x,g.y,false);
-      const choices=hits.length?cellPickerStitches(g.x,g.y,hits):[];
-      if(choices.length>1)drag.pending={point,choices};
-      else markAt(point,drag);
-    }else markAt(point,drag,true);
+    // Never mark on pointerdown: the gesture may turn into a scroll or pinch.
+    if(e.pointerType==='touch'){e.preventDefault();return;}
+    if(!pan&&editing)edits.at(localToGrid(point.x,point.y),state.mode,drag);
     e.preventDefault();
   }
   function canvasPointerMove(e){
     if(!state.pattern)return;
     const pt=pointInCanvas(e),g=localToGrid(pt.x,pt.y);
-    if(g.x>=0&&g.y>=0&&g.x<state.pattern.width&&g.y<state.pattern.height)bind(el.coords,'oxs.coordinates',{col:Math.floor(g.x)+1,row:Math.floor(g.y)+1});else bind(el.coords,'oxs.outsidePattern');
+    if(g.x>=0&&g.y>=0&&g.x<state.pattern.width&&g.y<state.pattern.height)
+      bind(el.coords,'oxs.coordinates',{col:Math.floor(g.x)+1,row:Math.floor(g.y)+1});
+    else bind(el.coords,'oxs.outsidePattern');
     if(e.pointerType==='touch'&&touchGesture.points.has(e.pointerId)){
       touchGesture.points.set(e.pointerId,pt);
       if(touchGesture.pinching){
@@ -933,25 +937,33 @@
             state.oy+=current.center.y-before.y;
             draw();queueViewSave();
           }
-          touchGesture.lastDistance=current.distance;touchGesture.lastCenter=current.center;
+          touchGesture.lastDistance=current.distance;
+          touchGesture.lastCenter=current.center;
         }
         e.preventDefault();return;
       }
     }
     if(!state.drag||state.drag.id!==e.pointerId)return;
     const drag=state.drag;
-    if(drag.pan){state.ox+=pt.x-drag.last.x;state.oy+=pt.y-drag.last.y;draw();queueViewSave();}
-    else if(drag.touchTrace){
+    if(drag.pan){
+      state.ox+=pt.x-drag.last.x;state.oy+=pt.y-drag.last.y;
+      draw();queueViewSave();
+    }else if(state.mode==='mark'){
+      // Remember ANY movement beyond the threshold, even if it returns to the
+      // starting position: dragging must never complete stitches accidentally.
+      if(Math.hypot(pt.x-drag.start.x,pt.y-drag.start.y)>MARK_TAP_TOLERANCE){
+        drag.moved=true;el.wrap.classList.add('grabbing');
+      }
+      if(drag.moved){
+        state.ox+=pt.x-drag.last.x;state.oy+=pt.y-drag.last.y;
+        draw();queueViewSave();
+      }
+    }else if(drag.touchTrace){
       const prev=drag.touchTrace[drag.touchTrace.length-1];
       if(Math.hypot(pt.x-prev.x,pt.y-prev.y)>=2)drag.touchTrace.push(pt);
+    }else if(['paint','erase','restore'].includes(state.mode)){
+      edits.at(g,state.mode,drag);
     }
-    else if(['paint','erase','restore'].includes(state.mode))edits.at(g,state.mode,drag);
-    else if(drag.pending){
-      if(Math.hypot(pt.x-drag.start.x,pt.y-drag.start.y)>9){
-        const origin=drag.pending.point;drag.pending=null;
-        markAt(origin,drag);markAt(pt,drag);
-      }
-    }else markAt(pt,drag,drag.preferSpecial);
     drag.last=pt;
     if(e.pointerType==='touch')e.preventDefault();
   }
@@ -959,44 +971,47 @@
     if(e.pointerType==='touch'&&touchGesture.points.has(e.pointerId)){
       touchGesture.points.delete(e.pointerId);
       if(touchGesture.pinching){
-        // Never interpret fingers lifted after a pinch as stitch taps.
+        // Neither finger lifting from a pinch is interpreted as a tap.
         markStroke=null;state.drag=null;el.wrap.classList.remove('grabbing');
-        if(touchGesture.points.size===0){touchGesture.pinching=false;touchGesture.lastCenter=null;touchGesture.lastDistance=0;}
+        if(touchGesture.points.size===0){
+          touchGesture.pinching=false;touchGesture.lastCenter=null;
+          touchGesture.lastDistance=0;
+        }
         e.preventDefault();return;
       }
     }
     if(state.drag?.id!==e.pointerId)return;
     const drag=state.drag;state.drag=null;el.wrap.classList.remove('grabbing');
-    if(drag.touchTrace){
-      if(e.type!=='pointerup'){finishMarkStroke();return;}
-      const tail=pointInCanvas(e),trace=drag.touchTrace;
-      if(Math.hypot(tail.x-trace[trace.length-1].x,tail.y-trace[trace.length-1].y)>2)trace.push(tail);
-      if(drag.pan){finishMarkStroke();return;}
-      const moved=Math.hypot(tail.x-drag.start.x,tail.y-drag.start.y)>9;
+    if(e.type!=='pointerup'||drag.pan){finishMarkStroke();return;}
+    const tail=pointInCanvas(e);
+    if(state.mode==='mark'){
+      const moved=drag.moved||
+        Math.hypot(tail.x-drag.start.x,tail.y-drag.start.y)>MARK_TAP_TOLERANCE;
       if(!moved){
-        const point=drag.start;
-        if(['paint','erase','restore'].includes(state.mode))edits.at(localToGrid(point.x,point.y),state.mode,drag);
-        else{
-          const g=localToGrid(point.x,point.y),hits=stitchChoices(g.x,g.y,true);
-          const choices=hits.length?cellPickerStitches(g.x,g.y,hits):[];
-          if(choices.length>1){
-            const pattern=state.pattern;
-            state.pickerTimer=setTimeout(()=>{state.pickerTimer=null;if(pattern===state.pattern&&state.mode==='mark')openStitchPicker(point,choices);},85);
-          }else markAt(point,drag);
-        }
-      }else if(['paint','erase','restore'].includes(state.mode)){
-        for(const point of trace)edits.at(localToGrid(point.x,point.y),state.mode,drag);
-      }else for(const point of trace)markAt(point,drag);
+        const point=drag.start,g=localToGrid(point.x,point.y);
+        // Keep the existing chooser for overlapping stitches and Ctrl+tap
+        // for a particular special stitch. No point is marked during drag.
+        const hits=stitchChoices(g.x,g.y,e.pointerType==='touch');
+        const choices=hits.length?cellPickerStitches(g.x,g.y,hits):[];
+        if(!drag.preferSpecial&&choices.length>1){
+          const pattern=state.pattern;
+          state.pickerTimer=setTimeout(()=>{
+            state.pickerTimer=null;
+            if(pattern===state.pattern&&state.mode==='mark')openStitchPicker(point,choices);
+          },85);
+        }else markAt(point,drag,drag.preferSpecial);
+      }
       finishMarkStroke();return;
     }
-    finishMarkStroke();
-    if(e.type==='pointerup'&&drag.pending){
-      const pattern=state.pattern,selection=drag.pending;
-      state.pickerTimer=setTimeout(()=>{
-        state.pickerTimer=null;
-        if(pattern===state.pattern&&state.mode==='mark')openStitchPicker(selection.point,selection.choices);
-      },85);
+    if(drag.touchTrace){
+      const trace=drag.touchTrace;
+      if(Math.hypot(tail.x-trace[trace.length-1].x,tail.y-trace[trace.length-1].y)>2)
+        trace.push(tail);
+      const moved=Math.hypot(tail.x-drag.start.x,tail.y-drag.start.y)>MARK_TAP_TOLERANCE;
+      if(!moved)edits.at(localToGrid(drag.start.x,drag.start.y),state.mode,drag);
+      else for(const point of trace)edits.at(localToGrid(point.x,point.y),state.mode,drag);
     }
+    finishMarkStroke();
   }
   // WCAG keyboard path: arrow keys move the virtual focus (one cell, or ten with Shift).
   // Enter/Space delegates to the same stitch chooser and mutation logic as pointer input.

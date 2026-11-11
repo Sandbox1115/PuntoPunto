@@ -99,3 +99,10 @@ The PDF thread picker and saved-project legend show non-official Italian descrip
 ## Interface and appearance — 0.9.8.8.23.1
 
 The layout adapts to smartphone, tablet and desktop widths. Open Appearance to toggle fabric, crossed threads, grid and major grid lines. These preferences are saved locally and affect only the display. PDF cloth/thread styling applies to manually assigned stitches; the original scanned image is preserved. Lora headings and Alegreya Sans text keep the established text sizes. Export project backups regularly; appearance preferences are separate from project data.
+
+
+## v0.9.8.8.23.2.1 — OXS controls and safe touch navigation
+
+Select **Edit** to show the thread and stitch-type choices. In other modes these choices are hidden to keep the canvas readable. The **View** action opens the single fabric/appearance settings dialog.
+
+On phones, tap **Pattern** in the bottom dock to enter **Wide view** and use **Exit wide view** to restore the regular editor. **Mark** mode completes one stitch per tap/click; dragging the canvas pans the view without marking stitches, while two-finger pinch changes zoom. The overlapping-stitch picker, keyboard shortcuts and separate Paint/Erase editing gestures remain available.

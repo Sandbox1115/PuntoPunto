@@ -1,5 +1,13 @@
 # PuntoPunto — Change log (English)
 
+## v0.9.8.8.23.2.1 — 11 November 2026 (OXS mobile/touch usability; published)
+
+- The OXS thread and stitch-type selector appears only in **Edit** mode, freeing canvas space while marking or navigating.
+- Consolidated Aida fabric and appearance controls in a single **View** dialog, without changing saved display preferences.
+- Added a discoverable mobile **Wide view** and corrected the bottom **Pattern** action to open that view, with a clear Exit control.
+- OXS completion now requires a discrete tap/click; dragging pans the canvas without accidentally marking several stitches. Pinch-to-zoom, overlap selection, keyboard input and editor paint/erase gestures are preserved.
+- Original PuntoPunto logo, Lora/Alegreya Sans fonts, PDF tools, DMC catalogue, saved project formats and private local processing are unchanged. Release QA and privacy scans performed before deployment.
+
 ## v0.9.8.8.23.1 — 10 November 2026 (GitHub Pages release)
 
 - Integrates the reviewed 22.x/23 responsive craft redesign: cream/burgundy surfaces, floral accents, smartphone dock, tablet layout and wide desktop panels. The PuntoPunto name and logo geometry are retained; Privacy and Licenses use the shared design.

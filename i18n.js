@@ -86,6 +86,8 @@ const DICT={
   "Originale": "Original",
   "Adatta": "Fit",
   "⛶ Nascondi interfaccia": "⛶ Hide interface",
+  "Tocca una casella per segnare un punto. Trascina per spostare lo schema, senza segnare altri punti.": "Tap a cell to mark one stitch. Drag to pan the pattern without marking more stitches.",
+  "Tocca una volta per segnare il punto. Trascina per spostare la vista senza segnare altri punti.": "Tap once to mark a stitch. Drag to pan the view without marking more stitches.",
   "☷ Mostra strumenti": "☷ Show controls",
   "Nasconde pannelli e barre per mostrare lo schema a tutto schermo": "Hide panels and toolbars to maximize pattern space",
   "Simboli": "Symbols",

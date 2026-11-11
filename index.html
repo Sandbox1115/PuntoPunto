@@ -101,11 +101,11 @@
             </div>
             <div class="tool-group right-tools">
               <button type="button" class="icon-btn" id="zoomOut" title="Riduci" aria-label="Riduci zoom">−</button><span id="zoomLabel" class="zoom-label">100%</span><button type="button" class="icon-btn" id="zoomIn" title="Ingrandisci" aria-label="Aumenta zoom">＋</button><button type="button" class="fit-btn" id="zoomFit">Adatta</button>
-              <button type="button" class="btn btn-outline pp-oxs-focus-toggle" id="toggleOXSFocus" aria-pressed="false" title="Nasconde pannelli e barre per mostrare lo schema a tutto schermo">⛶ Nascondi interfaccia</button>
+              <button type="button" class="btn btn-outline pp-oxs-focus-toggle" id="toggleOXSFocus" aria-pressed="false" title="Nasconde pannelli e barre per mostrare lo schema a tutto schermo">⛶ Schermo ampio</button>
               <label class="symbols-toggle"><input type="checkbox" id="showSymbols" checked><span>Simboli</span></label><label class="oxs-view-label" for="oxsViewMode">Vista <select id="oxsViewMode"><option value="color">Colori + simboli</option><option value="mono">Solo simboli</option></select></label>
             </div>
           </div>
-          <div class="editor-edit-controls" id="editControls" aria-label="Opzioni di modifica dello schema">
+          <div class="editor-edit-controls hidden" id="editControls" aria-label="Opzioni di modifica dello schema">
             <span class="edit-head">MODIFICA SCHEMA</span>
             <label>Filato <select id="editColor" aria-label="Filato per i nuovi punti"></select></label>
             <label>Tipo di punto <select id="editKind" aria-label="Tipo di punto da applicare">
@@ -128,7 +128,7 @@
             <button type="button" class="pp-oxs-tiny-btn" id="oxsGoLast" disabled>◎ Ultimo punto</button>
           </div>
           <div id="canvasWrap" class="canvas-wrap" tabindex="0" role="group" aria-roledescription="griglia interattiva" aria-label="Griglia interattiva dello schema" aria-describedby="canvasHint oxsKeyboardHelp"><canvas id="patternCanvas"></canvas><div class="canvas-crosshair" id="hoverInfo" aria-hidden="true"></div><div id="stitchPicker" class="oxs-point-picker hidden" role="dialog" aria-labelledby="stitchPickerTitle" aria-describedby="stitchPickerProgress" aria-modal="false" tabindex="-1"><div class="oxs-picker-head"><span class="oxs-picker-title-group"><strong id="stitchPickerTitle">Quale punto vuoi segnare?</strong><span id="stitchPickerProgress" class="oxs-picker-count" aria-live="polite" aria-atomic="true"></span></span><button id="stitchPickerClose" type="button" aria-label="Chiudi selezione punti" class="oxs-picker-close">×</button></div><div id="stitchPickerList" class="oxs-picker-list" role="group" aria-label="Punti disponibili"></div><p class="oxs-picker-note">Seleziona un punto per cambiarne lo stato. Il pannello mostra tutti i punti presenti nella casella.</p></div></div>
-          <div class="canvas-footer"><span id="canvasHint">Tocca una casella per segnare il punto; se ci sono punti sovrapposti, scegli quale. Trascina per segnare più punti.</span><span class="pp-oxs-keyboard-help" id="oxsKeyboardHelp">Tastiera: frecce per spostarti, Invio o Spazio per segnare, Esc per chiudere la scelta.</span><span id="coords">—</span></div><p class="pp-sr-only" id="oxsKeyboardStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+          <div class="canvas-footer"><span id="canvasHint">Tocca una casella per segnare un punto. Trascina per spostare lo schema, senza segnare altri punti.</span><span class="pp-oxs-keyboard-help" id="oxsKeyboardHelp">Tastiera: frecce per spostarti, Invio o Spazio per segnare, Esc per chiudere la scelta.</span><span id="coords">—</span></div><p class="pp-sr-only" id="oxsKeyboardStatus" role="status" aria-live="polite" aria-atomic="true"></p>
         </div>
         <div id="pdfTracker" class="pp-tracker hidden" aria-label="PDF interattivo senza conversione">
           <div class="pp-tracker-bar">
@@ -213,7 +213,7 @@
 <div class="pp-pdf-overlay hidden" id="pdfOverlay" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" aria-describedby="pdfStatus">
   <div class="pp-pdf-dialog pp-manual-dialog">
     <div class="pp-pdf-heading">
-      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.23.1 · PREVIEW LOCALE</span>
+      <div><span class="eyebrow">PDF INTERATTIVO · VERSIONE 0.9.8.8.23.2.1</span>
         <h2 id="pdfTitle">Imposta la griglia del tuo schema</h2>
         <p id="pdfFilename" class="muted">Seleziona la pagina del diagramma. Le dimensioni della griglia le scegli tu.</p>
       </div>
